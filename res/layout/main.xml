@@ -1,54 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="fill_parent"
-             android:layout_height="fill_parent"
-             android:id="@+id/mainLayout" android:orientation="vertical"
-             android:background="#ffedeaff">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/mainLayout" android:orientation="vertical"
+    android:background="@color/main_background_color">
     <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:layout_gravity="center"
-                  android:orientation="vertical" android:gravity="center">
+        android:layout_gravity="center"
+        android:orientation="vertical" android:gravity="center">
         <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="@integer/space_weight"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="@integer/space_weight"/>
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
             <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="@integer/space_weight"/>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="@integer/space_weight"/>
             <Button
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/new_game_button_string"
-                    android:id="@+id/btnNewGame" android:layout_gravity="center_horizontal"
-                    android:layout_weight="@integer/menu_item_weight"/>
-            <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="@integer/space_weight"/>
-        </LinearLayout>
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-            <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="@integer/space_weight"/>
-            <Button
+                android:text="@string/new_game_button_string"
+                android:id="@+id/btnNewGame"
+                android:textColor="@color/main_menu_text_color"
+                android:textSize="@dimen/menu_font_size"
+
+                android:background="@drawable/buttonshape"
+
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/scores_table_button_string"
-                android:id="@+id/btnScores" android:layout_gravity="center_horizontal"
-                android:layout_weight="@integer/menu_item_weight"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="@integer/menu_item_weight"
+                android:alpha="0.95"
+
+                android:onClick="onClick_btnNewGame"
+                />
+
             <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="@integer/space_weight"/>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="@integer/space_weight"/>
+        </LinearLayout>
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_weight="0"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="@integer/space_weight"/>
+            <Button
+                android:text="@string/scores_table_button_string"
+                android:id="@+id/btnScores"
+                android:textColor="@color/main_menu_text_color"
+                android:textSize="@dimen/menu_font_size"
+
+                android:background="@drawable/buttonshape"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="@integer/menu_item_weight"
+                android:alpha="0.95"
+                android:onClick="onClick_btnScores"
+                />
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="@integer/space_weight"/>
         </LinearLayout>
 
         <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="@integer/space_weight"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="@integer/space_weight"/>
 
     </LinearLayout>
 </FrameLayout>

@@ -5,41 +5,40 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import org.spbstu.linegame.R;
+import org.spbstu.linegame.logic.LineGameLogic;
 
-public class LineGameView extends View {
-    private Bitmap background;
-    private int backgoundYshift = 0;
+public class LineGameView extends SurfaceView implements SurfaceHolder.Callback {
+    private LineGameThread gameThread;
 
     public LineGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        getHolder().addCallback(this);
 
-        background =  BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
+        gameThread = new LineGameThread(getHolder(), context);
+        setFocusable(true);
+    }
+
+    public void setLogic(LineGameLogic logic) {
+        gameThread.setGameLogic(logic);
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        background = Bitmap.createScaledBitmap(background,
-                w, h, true);
+    public void surfaceCreated(SurfaceHolder holder) {
+        gameThread.setIsRunning(true);
+        gameThread.start();
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        backgoundYshift = backgoundYshift - 5;
-        int newYshift = background.getHeight() + backgoundYshift;
-        canvas.drawBitmap(background, 0, backgoundYshift, null);
-        if (newYshift <= 0) {
-            backgoundYshift = 0;
-        } else {
-            canvas.drawBitmap(background, 0, newYshift, null);
-        }
-
-        this.invalidate();
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        gameThread.resizeSurface(width, height);
     }
 
-
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        gameThread.pause();
+    }
 }

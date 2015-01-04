@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_menu_btn_color">#4F4F4F</color>
-    <color name="main_menu_btn_stroke_color">#f70303</color>
-    <color name="main_menu_text_color">#e0d8d8</color>
-    <color name="main_background_color">#e0d8d8</color>
+    <color name="main_menu_btn_color">#ff4f4f4f</color>
+    <color name="main_menu_btn_stroke_color">#fff70303</color>
+    <color name="main_menu_text_color">#ffe0d8d8</color>
+    <color name="main_background_color">#ffe0d8d8</color>
 </resources>

@@ -6,7 +6,7 @@
              android:background="@color/main_background_color">
 
     <org.spbstu.linegame.view.LineGameView
-        android:id="@+id/linegame"
+        android:id="@+id/LineGameView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
 

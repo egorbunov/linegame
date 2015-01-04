@@ -14,7 +14,6 @@ public class MainMenuActivity extends Activity {
     }
 
     public void onClick_btnNewGame(View view) {
-        //view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.btn_translate));
         Intent intent = new Intent(this, LineGameActivity.class);
         startActivity(intent);
     }

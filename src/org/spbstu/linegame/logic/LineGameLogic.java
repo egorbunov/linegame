@@ -17,7 +17,7 @@ public class LineGameLogic {
     /**
      * singleton thread for thinning line width if no finger on touch screen
      */
-    private MortalThread lineThinningThread;
+    private MortalThread lineThinningThread; // TODO: u need to kill() that thread at some point
     private static final int LINE_THINNING_THREAD_DELAY = 25;
     private final AtomicBoolean isCurveTapped;
 

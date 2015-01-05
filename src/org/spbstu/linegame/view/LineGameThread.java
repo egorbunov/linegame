@@ -6,11 +6,9 @@ import android.graphics.*;
 import android.view.SurfaceHolder;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
-import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.Point;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameThread extends Thread {
@@ -29,8 +27,6 @@ class LineGameThread extends Thread {
     private final int tappedLineColor;
     private final int mainLineColor;
 
-    private float startingTextSize;
-    private String startingText;
 
     public LineGameThread(SurfaceHolder surfaceHolder, Context context) {
         isThreadRunning = new AtomicBoolean(true);
@@ -45,10 +41,6 @@ class LineGameThread extends Thread {
 
         tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
         mainLineColor = context.getResources().getColor(R.color.main_line_color);
-
-        startingTextSize = context.getResources().getDimension(R.dimen.start_text_size);
-        startingText = context.getResources().getString(R.string.tap_to_start_string);
-
     }
 
     public void kill() {

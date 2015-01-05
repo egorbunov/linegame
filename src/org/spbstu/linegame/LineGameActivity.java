@@ -38,6 +38,7 @@ public class LineGameActivity extends Activity {
     public boolean onTouchEvent(@NotNull MotionEvent event) {
         if (gameLogic.getGameState().equals(LineGameState.STARTING)) {
             gameLogic.setGameState(LineGameState.RUNNING);
+
             startingTextView.clearAnimation();
             startingTextView.setVisibility(View.INVISIBLE);
         }

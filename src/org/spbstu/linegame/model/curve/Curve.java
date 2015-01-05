@@ -10,14 +10,14 @@ package org.spbstu.linegame.model.curve;
 public abstract class Curve implements Iterable<Point> {
     protected static final float WIDTH = 1f;
     protected static final float HEIGHT = 1f;
-    public Curve() {
-    }
+    protected static final float TOLERANCE = 0.05f;
 
-    /**
-     * Checks if given point (x, y) lies on line with specified tolerance -
-     * radius.
-     */
-    public abstract boolean contains(float x, float y, float tolerance);
+    protected float tapX;
+    protected float tapY;
+
+    public Curve() {
+        tapX = tapY = -1f;
+    }
 
     public float getWidth() {
         return WIDTH;
@@ -25,5 +25,27 @@ public abstract class Curve implements Iterable<Point> {
 
     public float getHeight() {
         return HEIGHT;
+    }
+
+    /**
+     * indicates, that point (x, y) was tapped, so the curve may be tapped
+     * on that coordinate since now
+     *
+     * @param x - x-coordinate, in [0, 1]
+     * @param y - y-coordinate, in [0, 1]
+     * @return true, if point lies on line and else false
+     */
+    public boolean tap(float x, float y, float curveWidth) {
+        tapX = x;
+        tapY = y;
+
+        return false;
+    }
+
+    /**
+     * indicates, that curve cannot be tapped (finger is not on the screen)
+     */
+    public void setNotTapped() {
+        tapX = tapY = -1;
     }
 }

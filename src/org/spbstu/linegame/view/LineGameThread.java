@@ -6,10 +6,15 @@ import android.graphics.*;
 import android.view.SurfaceHolder;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
+import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.Point;
 
+import java.lang.reflect.Type;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 class LineGameThread extends Thread {
+    private AtomicBoolean isThreadRunning;
 
     private final SurfaceHolder surfaceHolder;
     private Rect surfaceFrame;
@@ -17,14 +22,18 @@ class LineGameThread extends Thread {
     private LineGameLogic gameLogic;
 
 
-    private int backgroundShift;
+    private float backgroundShift;
     private Bitmap background;
     private int backgroundColor;
-    private boolean isRunning;
 
-    private int backgroundSpeed; // TODO: move it to logic part, or no...
+    private final int tappedLineColor;
+    private final int mainLineColor;
+
+    private float startingTextSize;
+    private String startingText;
 
     public LineGameThread(SurfaceHolder surfaceHolder, Context context) {
+        isThreadRunning = new AtomicBoolean(true);
 
         this.surfaceHolder = surfaceHolder;
         this.context = context;
@@ -32,23 +41,33 @@ class LineGameThread extends Thread {
 
         background =  BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         backgroundColor = context.getResources().getColor(R.color.main_background_color);
-        backgroundShift = 0;
-        backgroundSpeed = 5;
+        backgroundShift = 0f;
 
+        tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
+        mainLineColor = context.getResources().getColor(R.color.main_line_color);
+
+        startingTextSize = context.getResources().getDimension(R.dimen.start_text_size);
+        startingText = context.getResources().getString(R.string.tap_to_start_string);
+
+    }
+
+    public void kill() {
+        isThreadRunning.set(false);
     }
 
     public void setGameLogic(LineGameLogic gameLogic) {
         this.gameLogic = gameLogic;
     }
 
+    /**
+     * Callback function, which is called from LineGameView.surfaceChanged(...) method.
+     * @param width - new width of the view surface
+     * @param height - new height of the view surface
+     */
     public void resizeSurface(int width, int height) {
         background = Bitmap.createScaledBitmap(background,
                 width, height, true);
         surfaceFrame = surfaceHolder.getSurfaceFrame();
-    }
-
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
     }
 
     @Override
@@ -56,38 +75,43 @@ class LineGameThread extends Thread {
         super.run();
         Canvas canvas = null;
 
-        while(isRunning) {
+        while(isThreadRunning.get()) {
+            // drawing all the game stuff
             try {
                 canvas = surfaceHolder.lockCanvas(null);
-                if (canvas != null) {
-                    redrawBackground(canvas);
-                    drawLogic(canvas);
-                }
+                if (canvas == null)
+                    continue;
+
+                canvas.drawColor(backgroundColor);
+                redrawBackground(canvas);
+                drawLogic(canvas);
             } finally {
                 if (canvas != null) {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
             canvas = null;
+
         }
     }
 
-    public void pause() {
-        isRunning = false;
-    }
 
     private void redrawBackground(Canvas canvas) {
         if (canvas == null)
             return;
 
-        canvas.drawColor(backgroundColor);
-        backgroundShift = backgroundShift - backgroundSpeed;
+        // scrolling background
+        backgroundShift = backgroundShift - gameLogic.getScrollSpeed();
         canvas.drawBitmap(background, 0, backgroundShift, null);
         canvas.drawBitmap(background, 0, background.getHeight() + backgroundShift, null);
         if (background.getHeight() + backgroundShift <= 0)
             backgroundShift = 0;
     }
 
+    /**
+     * Drawing line - main object of the view
+     * @param canvas - just canvas
+     */
     private void drawLogic(Canvas canvas) {
         if (canvas == null)
             return;
@@ -97,20 +121,38 @@ class LineGameThread extends Thread {
         paint.setStrokeWidth(gameLogic.getLineThickness());
 
         Point prevPoint = null;
+        float midX, midY;
         for (Point curPoint : curve) {
-            if (prevPoint == null)
-                prevPoint = curPoint;
-            else {
-                canvas.drawLine(scaleWidth(prevPoint.getX()), scaleHeight(prevPoint.getY()),
-                        scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()), paint);
+            if (prevPoint != null) {
+                if (prevPoint.isTapped() == curPoint.isTapped()) {
+                    // if two points (previous and current) are both tapped or not tapped , we draw
+                    // whole segment with one color
+                    paint.setColor(prevPoint.isTapped() ? tappedLineColor : mainLineColor);
+                    canvas.drawLine(scaleWidth(prevPoint.getX()), scaleHeight(prevPoint.getY()),
+                            scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()), paint);
+                } else {
+                    // here we draw the segment with two different colors (half with color
+                    // of the previous point and half with color of current)
+                    midX = (prevPoint.getX() + curPoint.getX()) / 2f;
+                    midY = (prevPoint.getY() + curPoint.getY()) / 2f;
+
+                    paint.setColor(prevPoint.isTapped() ? tappedLineColor : mainLineColor);
+                    canvas.drawLine(scaleWidth(prevPoint.getX()), scaleHeight(prevPoint.getY()),
+                            scaleWidth(midX), scaleHeight(midY), paint);
+
+                    paint.setColor(curPoint.isTapped() ? tappedLineColor : mainLineColor);
+                    canvas.drawLine(scaleWidth(midX), scaleHeight(midY),
+                            scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()), paint);
+                }
             }
+            prevPoint = curPoint;
         }
     }
 
     /**
      * Scales the value in [0, 1] to [0, surface.width()]
      * @param val - value to scale
-     * @return
+     * @return scaled value
      */
     private float scaleWidth(float val) {
         assert val <= 1 && val >= 0;

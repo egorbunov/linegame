@@ -3,4 +3,5 @@
     <string name="app_name">linegame</string>
     <string name="new_game_button_string">New Game</string>
     <string name="scores_table_button_string">Scores</string>
+    <string name="tap_to_start_string">Tap to start!</string>
 </resources>

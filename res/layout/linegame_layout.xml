@@ -9,5 +9,12 @@
         android:id="@+id/LineGameView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"/>
-
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tap_to_start_string"
+            android:textSize="@dimen/start_text_size"
+            android:textColor="@color/main_menu_btn_stroke_color"
+            android:textStyle="bold"
+            android:id="@+id/StartingTextView" android:layout_gravity="center"/>
 </FrameLayout>

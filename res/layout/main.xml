@@ -26,7 +26,7 @@
                 android:background="@drawable/buttonshape"
 
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="@integer/menu_item_weight"
                 android:alpha="0.95"
@@ -57,7 +57,7 @@
                 android:background="@drawable/buttonshape"
 
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="@integer/menu_item_weight"
                 android:alpha="0.95"

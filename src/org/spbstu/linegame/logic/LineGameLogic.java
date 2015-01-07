@@ -1,7 +1,7 @@
 package org.spbstu.linegame.logic;
 
 import org.spbstu.linegame.model.curve.Curve;
-import org.spbstu.linegame.model.curve.StraightLine;
+import org.spbstu.linegame.model.curve.RandomContinuousCurve;
 import org.spbstu.linegame.utils.MortalThread;
 
 import java.util.LinkedList;
@@ -13,6 +13,7 @@ public class LineGameLogic {
     private final static float MAXIMUM_LINE_WIDTH = 150.0f;
     private final static float LINE_WIDTH_DELTA = 1f;
     private final static float STARTING_SPEED = 5f;
+    private final static float STARTING_CURVE_SPEED = 0.01f;
     private final static int SCORE_DELTA = 2;
 
     /**
@@ -30,7 +31,7 @@ public class LineGameLogic {
      * That is a bool var., which indicates if the finger is down on the screen now.
      * If not, accordingly to creator's game logic the line must loose it's thickness.
      */
-    private boolean isCurveTapped;
+    private boolean isGameTapped;
 
 
     private float width; // width of the game surface
@@ -77,9 +78,9 @@ public class LineGameLogic {
         lineThickness = STARTING_LINE_WIDTH;
         scrollSpeed = STARTING_SPEED;
 
-        currentCurve = new StraightLine();
+        currentCurve = new RandomContinuousCurve();
 
-        isCurveTapped = false;
+        isGameTapped = false;
         gameState = LineGameState.STARTING;
         score = 0;
         /*
@@ -110,7 +111,7 @@ public class LineGameLogic {
                     }
 
                     // next call actually make line thinner (if nobody touches the screen)
-                    if (!isCurveTapped && gameState.equals(LineGameState.RUNNING)) {
+                    if (!isGameTapped && gameState.equals(LineGameState.RUNNING)) {
                         currentCurve.setNotTapped();
                         decreaseLineWidth();
                     }
@@ -136,7 +137,7 @@ public class LineGameLogic {
     }
 
     public void tapCurve(float x, float y) {
-        isCurveTapped = true;
+        isGameTapped = true;
 
         if (gameState == LineGameState.STARTING) {
             // starting the game!
@@ -163,7 +164,7 @@ public class LineGameLogic {
     }
 
     public void setCurveNotTapped() {
-        isCurveTapped = false;
+        isGameTapped = false;
     }
 
     public LineGameState getGameState() {
@@ -189,5 +190,8 @@ public class LineGameLogic {
         scrollSpeed = 0;
     }
 
-
+    public void nextCurveFrame() {
+        if (!gameState.equals(LineGameState.PAUSED))
+            currentCurve.nextFrame(STARTING_CURVE_SPEED);
+    }
 }

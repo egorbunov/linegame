@@ -1,14 +1,18 @@
 package org.spbstu.linegame.model.curve;
 
+import org.spbstu.linegame.utils.Point;
+
 import java.util.Iterator;
 
 public class StraightLine extends Curve {
-    private Point[] points;
+    private CurvePoint[] points;
 
     public StraightLine() {
-        points = new Point[2];
-        points[0] = new Point(WIDTH / 2f, 0f);
-        points[1] = new Point(WIDTH / 2f, HEIGHT);
+        super();
+        points = new CurvePoint[2];
+        // straight line direction is (0, 1) vector
+        points[0] = new CurvePoint(new Point(WIDTH / 2f, 0f), new Point(0f, 1f));
+        points[1] = new CurvePoint(new Point(WIDTH / 2f, HEIGHT), new Point(0f, 1f));
     }
 
 
@@ -16,7 +20,7 @@ public class StraightLine extends Curve {
     public boolean tap(float x, float y, float curveWidth) {
         super.tap(x, y, curveWidth);
 
-        if (Math.abs(x - points[0].getX()) < curveWidth / 2f + TOLERANCE) {
+        if (Math.abs(x - points[0].getX()) < curveWidth / 2f + TAP_TOLERANCE) {
             points[0].setTapped();
             points[1].setTapped();
             return true;
@@ -36,10 +40,20 @@ public class StraightLine extends Curve {
         points[1].setNotTapped();
     }
 
+    @Override
+    public CurvePoint getLastPoint() {
+        return points[2];
+    }
 
     @Override
-    public Iterator<Point> iterator() {
-        return new Iterator<Point>() {
+    public void nextFrame(float toSkip) {
+        // there is no next frame for straight line, because it's straight
+    }
+
+
+    @Override
+    public Iterator<CurvePoint> iterator() {
+        return new Iterator<CurvePoint>() {
             private int curIndex = 0;
             @Override
             public boolean hasNext() {
@@ -47,7 +61,7 @@ public class StraightLine extends Curve {
             }
 
             @Override
-            public Point next() {
+            public CurvePoint next() {
                 return points[curIndex++];
             }
 

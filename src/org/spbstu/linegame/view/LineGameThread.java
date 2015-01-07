@@ -7,7 +7,7 @@ import android.view.SurfaceHolder;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
-import org.spbstu.linegame.model.curve.Point;
+import org.spbstu.linegame.model.curve.CurvePoint;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -114,9 +114,9 @@ class LineGameThread extends Thread {
         Paint paint = new Paint();
         paint.setStrokeWidth(gameLogic.getLineThickness());
 
-        Point prevPoint = null;
+        CurvePoint prevPoint = null;
         float midX, midY;
-        for (Point curPoint : curve) {
+        for (CurvePoint curPoint : curve) {
             if (prevPoint != null) {
                 if (prevPoint.isTapped() == curPoint.isTapped()) {
                     // if two points (previous and current) are both tapped or not tapped , we draw
@@ -141,6 +141,7 @@ class LineGameThread extends Thread {
             }
             prevPoint = curPoint;
         }
+        gameLogic.nextCurveFrame();
     }
 
     /**

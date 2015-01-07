@@ -2,29 +2,26 @@ package org.spbstu.linegame.model.curve;
 
 /**
  * That abstract class describes game curve.
- * Class implements Iterable<Point>, which provides user ability to iterate through points
+ * Class implements Iterable<CurvePoint>, which provides user ability to iterate through points
  * of the curve (that is the sense, which I put into "iterability").
  * Also, because of the game logic, we need to detect, does user tapped the line or not,
  * so every Curve class must answer to that question by implementing contains(...) method.
+ *
+ * All points of the curve must be in [0, 1]x[0, 1]
+ *
+ * Also, because of Curve is Iterable, which means some arrangement of Curve points, first point
+ * must have 0 y-coordinate and last must have 1 x-coordinate
  */
-public abstract class Curve implements Iterable<Point> {
+public abstract class Curve implements Iterable<CurvePoint> {
     protected static final float WIDTH = 1f;
     protected static final float HEIGHT = 1f;
-    protected static final float TOLERANCE = 0.05f;
+    protected static final float TAP_TOLERANCE = 0.03f;
 
     protected float tapX;
     protected float tapY;
 
     public Curve() {
         tapX = tapY = -1f;
-    }
-
-    public float getWidth() {
-        return WIDTH;
-    }
-
-    public float getHeight() {
-        return HEIGHT;
     }
 
     /**
@@ -48,4 +45,16 @@ public abstract class Curve implements Iterable<Point> {
     public void setNotTapped() {
         tapX = tapY = -1;
     }
+
+    /**
+     * That method is used for changing various Curves continuously
+     * @return last point of the Curve
+     */
+    public abstract CurvePoint getLastPoint();
+
+    /**
+     * call of that function indicates logically, that curve need to be "continued"
+     * @param toSkip - how much of height should be scrolled, value \in [0, 1]
+     */
+    public abstract void nextFrame(float toSkip);
 }

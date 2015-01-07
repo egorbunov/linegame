@@ -43,8 +43,10 @@ public class LineGameActivity extends Activity implements LogicListener {
         gameView.setLogic(gameLogic);
 
         startingTextView = (TextView) findViewById(R.id.StartingTextView);
+        startingTextView.setVisibility(View.INVISIBLE);
         textPulseAnimation = AnimationUtils.loadAnimation(this, R.anim.text_pulsing);
         startingTextView.startAnimation(textPulseAnimation);
+        startingTextView.setVisibility(View.VISIBLE);
 
         scoreTextView = (TextView) findViewById(R.id.ScoreLineTextView);
         scoreTextView.setVisibility(View.INVISIBLE);
@@ -63,8 +65,8 @@ public class LineGameActivity extends Activity implements LogicListener {
         super.onResume();
 
         if (gameLogic.getGameState().equals(LineGameState.PAUSED)) {
-            onPauseTextView.setVisibility(View.VISIBLE);
             onPauseTextView.startAnimation(textPulseAnimation);
+            onPauseTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -72,7 +74,8 @@ public class LineGameActivity extends Activity implements LogicListener {
     public void onPause() {
         super.onPause();
 
-        gameLogic.pauseGame();
+        if (!gameLogic.getGameState().equals(LineGameState.STARTING))
+            gameLogic.pauseGame();
     }
 
     @Override

@@ -2,20 +2,9 @@ package org.spbstu.linegame.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.TextView;
-import org.jetbrains.annotations.NotNull;
-import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
-import org.spbstu.linegame.logic.LineGameState;
-import org.spbstu.linegame.utils.MortalThread;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static java.lang.Thread.sleep;
 
 public class LineGameView extends SurfaceView implements SurfaceHolder.Callback {
 

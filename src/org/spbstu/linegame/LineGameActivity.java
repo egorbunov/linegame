@@ -12,7 +12,6 @@ import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.logic.LogicListener;
 import org.spbstu.linegame.view.LineGameView;
-import org.w3c.dom.Text;
 
 public class LineGameActivity extends Activity implements LogicListener {
     private static final int SCORE_ANIMATION_VALUE = 1000;

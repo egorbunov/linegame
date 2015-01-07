@@ -170,10 +170,6 @@ public class LineGameLogic {
         return gameState;
     }
 
-    public void setGameState(LineGameState gameState) {
-        this.gameState = gameState;
-    }
-
     public float getScrollSpeed() {
         return scrollSpeed;
     }

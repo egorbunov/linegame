@@ -6,7 +6,6 @@ import android.graphics.*;
 import android.view.SurfaceHolder;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
-import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.Point;
 
@@ -17,7 +16,6 @@ class LineGameThread extends Thread {
 
     private final SurfaceHolder surfaceHolder;
     private Rect surfaceFrame;
-    private final Context context;
     private LineGameLogic gameLogic;
 
 
@@ -33,7 +31,6 @@ class LineGameThread extends Thread {
         isThreadAlive = new AtomicBoolean(true);
 
         this.surfaceHolder = surfaceHolder;
-        this.context = context;
         this.surfaceFrame = surfaceHolder.getSurfaceFrame();
 
         background =  BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
@@ -160,7 +157,7 @@ class LineGameThread extends Thread {
     /**
      * Scales the value in [0, 1] to [0, surface.height()]
      * @param val - value to scale
-     * @return
+     * @return scaled height
      */
     private float scaleHeight(float val) {
         assert val <= 1 && val >= 0;

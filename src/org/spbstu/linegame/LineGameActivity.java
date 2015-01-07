@@ -10,13 +10,24 @@ import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
+import org.spbstu.linegame.logic.LogicListener;
 import org.spbstu.linegame.view.LineGameView;
 import org.w3c.dom.Text;
 
-public class LineGameActivity extends Activity {
+public class LineGameActivity extends Activity implements LogicListener {
+    private static final int SCORE_ANIMATION_VALUE = 1000;
+
     private LineGameLogic gameLogic;
-    private LineGameView gameView;
+
+    // Views
     private TextView startingTextView;
+    private TextView scoreValueTextView;
+    private TextView scoreTextView;
+
+    // Animations
+    Animation scoreAnimation;
+    int lastScoreAnimationValue = 0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,25 +35,25 @@ public class LineGameActivity extends Activity {
         this.setContentView(R.layout.linegame_layout);
 
         gameLogic = new LineGameLogic();
-        gameLogic.setGameState(LineGameState.STARTING);
 
-        gameView = (LineGameView) findViewById(R.id.LineGameView);
+        LineGameView gameView = (LineGameView) findViewById(R.id.LineGameView);
         gameView.setLogic(gameLogic);
 
         startingTextView = (TextView) findViewById(R.id.StartingTextView);
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.text_pulsing);
         startingTextView.startAnimation(animation);
+
+        scoreTextView = (TextView) findViewById(R.id.ScoreLineTextView);
+        scoreTextView.setVisibility(View.INVISIBLE);
+        scoreValueTextView = (TextView) findViewById(R.id.ScoreValueTextView);
+        scoreValueTextView.setVisibility(View.INVISIBLE);
+        scoreAnimation = AnimationUtils.loadAnimation(this, R.anim.text_short_pulsing);
+
+        gameLogic.setListener(this);
     }
 
     @Override
     public boolean onTouchEvent(@NotNull MotionEvent event) {
-        if (gameLogic.getGameState().equals(LineGameState.STARTING)) {
-            gameLogic.setGameState(LineGameState.RUNNING);
-
-            startingTextView.clearAnimation();
-            startingTextView.setVisibility(View.INVISIBLE);
-        }
-
         if (gameLogic == null)
             return true;
         if (event.getPointerId(event.getActionIndex()) != 0)
@@ -61,5 +72,30 @@ public class LineGameActivity extends Activity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onGameEnd() {
+        gameLogic.destroy();
+    }
+
+    @Override
+    public void onGameStarted() {
+        startingTextView.clearAnimation();
+        startingTextView.setVisibility(View.INVISIBLE);
+        scoreValueTextView.setVisibility(View.VISIBLE);
+        scoreTextView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onScoreChanged(int newScore) {
+        if (scoreValueTextView != null) {
+            scoreValueTextView.setText(Integer.toString(newScore));
+            if (newScore - lastScoreAnimationValue >= SCORE_ANIMATION_VALUE) {
+                scoreValueTextView.startAnimation(scoreAnimation);
+                lastScoreAnimationValue = newScore;
+            }
+        }
+
     }
 }

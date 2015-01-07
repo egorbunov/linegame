@@ -4,6 +4,7 @@ import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.StraightLine;
 import org.spbstu.linegame.utils.MortalThread;
 
+import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LineGameLogic {
@@ -12,32 +13,94 @@ public class LineGameLogic {
     private final static float MAXIMUM_LINE_WIDTH = 150.0f;
     private final static float LINE_WIDTH_DELTA = 1f;
     private final static float STARTING_SPEED = 5f;
+    private final static int SCORE_DELTA = 2;
 
+    /**
+     * Listeners will be notified if any important event happens
+     */
+    LinkedList<LogicListener> logicListeners;
 
     /**
      * singleton thread for thinning line width if no finger on touch screen
      */
     private MortalThread lineThinningThread; // TODO: u need to kill() that thread at some point
     private static final int LINE_THINNING_THREAD_DELAY = 25;
-    private final AtomicBoolean isCurveTapped;
 
-    private float width;
-    private float height;
+    /**
+     * That is a bool var., which indicates if the finger is down on the screen now.
+     * If not, accordingly to creator's game logic the line must loose it's thickness.
+     */
+    private boolean isCurveTapped;
 
+
+    private float width; // width of the game surface
+    private float height; // height of the game surface
+
+
+    /**
+     * Curve, that currently draw on the game field. That is the main logic object
+     */
     private Curve currentCurve;
     private float lineThickness;
     private LineGameState gameState;
-    private float scrollSpeed;
+
+    private float scrollSpeed; // maybe that value will increase with time...
+
+    /**
+     * Game score is stored in that variable.
+     */
+    private int score;
 
     public LineGameLogic() {
+        logicListeners = new LinkedList<LogicListener>();
+
         width = height = 1f;
         lineThickness = STARTING_LINE_WIDTH;
-        currentCurve = new StraightLine();
         scrollSpeed = STARTING_SPEED;
 
-        isCurveTapped = new AtomicBoolean(false);
-        lineThinningThread = null;
+        currentCurve = new StraightLine();
+
+        isCurveTapped = false;
+        gameState = LineGameState.STARTING;
+        score = 0;
+        /*
+            Running task, which will check if nobody touches the screen and
+            if so, call setCurveNotTapped() method (which actually makes line width less)
+
+            Creating and running that task in onTouchEvent(...) method guarantees that at the
+            start (just after "NewGame" button pushed) the line stays with it's starting width and
+            game is actually starts only after first tap.
+         */
+        lineThinningThread = new MortalThread() {
+
+            private AtomicBoolean isThreadRunning = new AtomicBoolean(true);
+
+            @Override
+            public void kill() {
+                isThreadRunning.set(false);
+            }
+
+            @Override
+            public void run() {
+                super.run();
+                while (isThreadRunning.get()) {
+                    try {
+                        Thread.sleep(LINE_THINNING_THREAD_DELAY);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace(); // TODO: is it ok just to print stack trace?
+                    }
+
+                    // next call actually make line thinner (if nobody touches the screen)
+                    if (!isCurveTapped && gameState.equals(LineGameState.RUNNING)) {
+                        currentCurve.setNotTapped();
+                        decreaseLineWidth();
+                    }
+                }
+            }
+        };
+        lineThinningThread.start();
     }
+
 
     public void fieldResize(float width, float height) {
         if (width < 0 || height < 0)
@@ -55,58 +118,29 @@ public class LineGameLogic {
     }
 
     public void tapCurve(float x, float y) {
-        isCurveTapped.set(true);
+        isCurveTapped = true;
 
-        if (currentCurve.tap(x / width, y / height, lineThickness / width))
+        if (gameState == LineGameState.STARTING) {
+            // starting the game!
+            gameState = LineGameState.RUNNING;
+            for (LogicListener listener : logicListeners)
+                listener.onGameStarted();
+        }
+
+        if (currentCurve.tap(x / width, y / height, lineThickness / width)) {
             increaseLineWidth();
+
+            score += SCORE_DELTA;
+            // notifying listeners, that score changed
+            for (LogicListener listener : logicListeners)
+                listener.onScoreChanged(score);
+        }
         else
             decreaseLineWidth();
     }
 
     public void setCurveNotTapped() {
-        isCurveTapped.set(false);
-
-        if (lineThinningThread == null) {
-            /*
-                Running task, which will check if nobody touches the screen and
-                if so, call setCurveNotTapped() method (which actually makes line width less)
-
-                Creating and running that task in onTouchEvent(...) method guarantees that at the
-                start (just after "NewGame" button pushed) the line stays with it's starting width and
-                game is actually starts only after first tap.
-             */
-            lineThinningThread = new MortalThread() {
-
-                private AtomicBoolean isThreadRunning = new AtomicBoolean(true);
-
-                @Override
-                public void kill() {
-                    isThreadRunning.set(false);
-                }
-
-                @Override
-                public void run() {
-                    super.run();
-                    while (isThreadRunning.get()) {
-                        try {
-                            Thread.sleep(LINE_THINNING_THREAD_DELAY);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace(); // TODO: is it ok just to print stack trace?
-                        }
-
-                        // next call actually make line thinner (if nobody touches the screen)
-                        if (!isCurveTapped.get()) {
-                            currentCurve.setNotTapped();
-                            decreaseLineWidth();
-                        }
-                    }
-                }
-            };
-
-            // starting thinning task
-            lineThinningThread.start();
-        }
-
+        isCurveTapped = false;
     }
 
     private void increaseLineWidth() {
@@ -129,5 +163,14 @@ public class LineGameLogic {
 
     public float getScrollSpeed() {
         return scrollSpeed;
+    }
+
+    public void destroy() {
+        if (lineThinningThread != null)
+            lineThinningThread.kill();
+    }
+
+    public void setListener(LogicListener newListener) {
+        logicListeners.addLast(newListener);
     }
 }

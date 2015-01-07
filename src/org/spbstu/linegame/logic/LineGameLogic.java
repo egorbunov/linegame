@@ -45,11 +45,30 @@ public class LineGameLogic {
     private LineGameState gameState;
 
     private float scrollSpeed; // maybe that value will increase with time...
+    private float lastScrollSpeed;
 
     /**
      * Game score is stored in that variable.
      */
     private int score;
+
+    private void resumeGame() {
+        scrollSpeed = lastScrollSpeed;
+        gameState = LineGameState.RUNNING;
+        for (LogicListener listener : logicListeners)
+            listener.onGameContinued();
+    }
+
+    private void increaseLineWidth() {
+        if (lineThickness < MAXIMUM_LINE_WIDTH)
+            lineThickness += LINE_WIDTH_DELTA;
+    }
+
+    private void decreaseLineWidth() {
+        if (lineThickness > MINIMUM_LINE_WIDTH)
+            lineThickness -= LINE_WIDTH_DELTA;
+    }
+
 
     public LineGameLogic() {
         logicListeners = new LinkedList<LogicListener>();
@@ -101,7 +120,6 @@ public class LineGameLogic {
         lineThinningThread.start();
     }
 
-
     public void fieldResize(float width, float height) {
         if (width < 0 || height < 0)
             throw new IllegalArgumentException();
@@ -127,6 +145,11 @@ public class LineGameLogic {
                 listener.onGameStarted();
         }
 
+        if (gameState == LineGameState.PAUSED) {
+            // resuming the game!
+            resumeGame();
+        }
+
         if (currentCurve.tap(x / width, y / height, lineThickness / width)) {
             increaseLineWidth();
 
@@ -141,16 +164,6 @@ public class LineGameLogic {
 
     public void setCurveNotTapped() {
         isCurveTapped = false;
-    }
-
-    private void increaseLineWidth() {
-        if (lineThickness < MAXIMUM_LINE_WIDTH)
-            lineThickness += LINE_WIDTH_DELTA;
-    }
-
-    private void decreaseLineWidth() {
-        if (lineThickness > MINIMUM_LINE_WIDTH)
-            lineThickness -= LINE_WIDTH_DELTA;
     }
 
     public LineGameState getGameState() {
@@ -173,4 +186,12 @@ public class LineGameLogic {
     public void setListener(LogicListener newListener) {
         logicListeners.addLast(newListener);
     }
+
+    public void pauseGame() {
+        gameState = LineGameState.PAUSED;
+        lastScrollSpeed = scrollSpeed;
+        scrollSpeed = 0;
+    }
+
+
 }

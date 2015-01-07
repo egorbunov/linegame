@@ -45,5 +45,14 @@
         android:layout_gravity="end|top"
         android:layout_marginTop="@dimen/score_value_layout_margin_top" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tap_to_continue_string"
+        android:textSize="@dimen/start_text_size"
+        android:textColor="@color/pausing_text_color"
+        android:textStyle="bold"
+        android:id="@+id/OnPauseTextView" android:layout_gravity="center"/>
+
 
 </FrameLayout>

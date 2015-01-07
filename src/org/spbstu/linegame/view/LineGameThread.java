@@ -6,13 +6,14 @@ import android.graphics.*;
 import android.view.SurfaceHolder;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
+import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.Point;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameThread extends Thread {
-    private AtomicBoolean isThreadRunning;
+    private AtomicBoolean isThreadAlive;
 
     private final SurfaceHolder surfaceHolder;
     private Rect surfaceFrame;
@@ -29,7 +30,7 @@ class LineGameThread extends Thread {
 
 
     public LineGameThread(SurfaceHolder surfaceHolder, Context context) {
-        isThreadRunning = new AtomicBoolean(true);
+        isThreadAlive = new AtomicBoolean(true);
 
         this.surfaceHolder = surfaceHolder;
         this.context = context;
@@ -44,10 +45,14 @@ class LineGameThread extends Thread {
     }
 
     public void kill() {
-        isThreadRunning.set(false);
+        isThreadAlive.set(false);
     }
 
     public void setGameLogic(LineGameLogic gameLogic) {
+        if (gameLogic == null) {
+            throw new NullPointerException();
+        }
+
         this.gameLogic = gameLogic;
     }
 
@@ -67,7 +72,7 @@ class LineGameThread extends Thread {
         super.run();
         Canvas canvas = null;
 
-        while(isThreadRunning.get()) {
+        while(isThreadAlive.get()) {
             // drawing all the game stuff
             try {
                 canvas = surfaceHolder.lockCanvas(null);
@@ -92,7 +97,7 @@ class LineGameThread extends Thread {
         if (canvas == null)
             return;
 
-        // scrolling background
+        // scrolling background if needed
         backgroundShift = backgroundShift - gameLogic.getScrollSpeed();
         canvas.drawBitmap(background, 0, backgroundShift, null);
         canvas.drawBitmap(background, 0, background.getHeight() + backgroundShift, null);

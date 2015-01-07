@@ -22,25 +22,30 @@ public class LineGameView extends SurfaceView implements SurfaceHolder.Callback 
 
     private LineGameThread gameThread;
     private LineGameLogic gameLogic;
+    private Context context;
 
     public LineGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         getHolder().addCallback(this);
 
-
-        gameThread = new LineGameThread(getHolder(), context);
         gameLogic = null;
+        gameThread = null;
         setFocusable(true);
     }
 
     public void setLogic(LineGameLogic logic) {
         gameLogic = logic;
-        gameThread.setGameLogic(logic);
+        if (gameThread != null)
+            gameThread.setGameLogic(logic);
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        // starting main draw thread
+        gameThread = new LineGameThread(holder, context);
         gameThread.start();
+        gameThread.setGameLogic(gameLogic);
     }
 
     @Override

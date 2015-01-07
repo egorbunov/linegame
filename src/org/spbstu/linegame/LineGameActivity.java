@@ -18,15 +18,19 @@ public class LineGameActivity extends Activity implements LogicListener {
     private static final int SCORE_ANIMATION_VALUE = 1000;
 
     private LineGameLogic gameLogic;
+    LineGameView gameView;
 
     // Views
     private TextView startingTextView;
     private TextView scoreValueTextView;
     private TextView scoreTextView;
+    private TextView onPauseTextView;
 
     // Animations
-    Animation scoreAnimation;
+    private Animation scoreAnimation;
+    private Animation textPulseAnimation;
     int lastScoreAnimationValue = 0;
+
 
 
     @Override
@@ -36,12 +40,12 @@ public class LineGameActivity extends Activity implements LogicListener {
 
         gameLogic = new LineGameLogic();
 
-        LineGameView gameView = (LineGameView) findViewById(R.id.LineGameView);
+        gameView = (LineGameView) findViewById(R.id.LineGameView);
         gameView.setLogic(gameLogic);
 
         startingTextView = (TextView) findViewById(R.id.StartingTextView);
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.text_pulsing);
-        startingTextView.startAnimation(animation);
+        textPulseAnimation = AnimationUtils.loadAnimation(this, R.anim.text_pulsing);
+        startingTextView.startAnimation(textPulseAnimation);
 
         scoreTextView = (TextView) findViewById(R.id.ScoreLineTextView);
         scoreTextView.setVisibility(View.INVISIBLE);
@@ -49,7 +53,27 @@ public class LineGameActivity extends Activity implements LogicListener {
         scoreValueTextView.setVisibility(View.INVISIBLE);
         scoreAnimation = AnimationUtils.loadAnimation(this, R.anim.text_short_pulsing);
 
+        onPauseTextView = (TextView) findViewById(R.id.OnPauseTextView);
+        onPauseTextView.setVisibility(View.INVISIBLE);
+
         gameLogic.setListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (gameLogic.getGameState().equals(LineGameState.PAUSED)) {
+            onPauseTextView.setVisibility(View.VISIBLE);
+            onPauseTextView.startAnimation(textPulseAnimation);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        gameLogic.pauseGame();
     }
 
     @Override
@@ -88,6 +112,12 @@ public class LineGameActivity extends Activity implements LogicListener {
     }
 
     @Override
+    public void onGameContinued() {
+        onPauseTextView.clearAnimation();
+        onPauseTextView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
     public void onScoreChanged(int newScore) {
         if (scoreValueTextView != null) {
             scoreValueTextView.setText(Integer.toString(newScore));
@@ -96,6 +126,5 @@ public class LineGameActivity extends Activity implements LogicListener {
                 lastScoreAnimationValue = newScore;
             }
         }
-
     }
 }

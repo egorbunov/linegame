@@ -5,10 +5,17 @@ import org.spbstu.linegame.utils.MyMath;
 import org.spbstu.linegame.utils.Point;
 
 import java.util.Iterator;
+import java.util.Random;
 
 public class RandomContinuousCurve extends Curve {
-    // min dist between ordinates of successive points
+    /**
+     * minimal distance between ordinates of successive points
+     */
     private static final float MINIMAL_Y_DISTANCE = 0.0005f;
+
+    /**
+     * array of curve points
+     */
     PointsCycledArray points;
 
     public RandomContinuousCurve() {
@@ -37,30 +44,71 @@ public class RandomContinuousCurve extends Curve {
 
     private void generatePoints() {
         CurvePoint lastPoint = points.getLast();
+        float y = points.getLast().getY();
+        float dy = 0.02f;
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            points.addLast(new CurvePoint(new Point(lastPoint.getX(), lastPoint.getY() + 0.005f),
-                    lastPoint.getDirection()));
+            points.addLast(new CurvePoint((float) ((Math.sin(y) + 1.5) * 0.3), y));
             lastPoint = points.getLast();
+            y += dy;
         }
+        /*final Point xBound = new Point(0.35f, 0.65f); //x - left bound, y - right bound
+        final Random random = new Random(System.currentTimeMillis());
+        final float eps = 0.1f;
+
+        boolean flag = true;
+
+        CurvePoint lastPoint = points.getLast();
+        Point newPoint;
+        Point newDirection;
+
+        float angleDelta = 0.2f;
+        float targetAngle = (float) (random.nextFloat() * Math.PI / 2 + Math.PI / 4);
+        while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
+            float curAngle = MyMath.angle(lastPoint.getDirection());
+
+            if (Math.abs(targetAngle - curAngle) > eps) {
+                newDirection = MyMath.rotate(lastPoint.getDirection(),
+                        (curAngle - targetAngle > 0 ? -1f : 1f) * angleDelta);
+                newPoint = MyMath.move(lastPoint.getPoint(), newDirection, 0.009f);
+
+                points.addLast(new CurvePoint(newPoint, newDirection));
+                lastPoint = points.getLast();
+            }
+
+            if (flag && (lastPoint.getX() <= xBound.getX() || lastPoint.getX() >= xBound.getY())) {
+                lastPoint.setDirection(new Point(0, 1));
+                flag = false;
+                if (lastPoint.getX() <= xBound.getX()) {
+                    targetAngle -= Math.PI / 2;
+                }
+                if (lastPoint.getX() >= xBound.getY()) {
+                    targetAngle += Math.PI / 2;
+                }
+            } else {
+                flag = true;
+                if (Math.abs(targetAngle - curAngle) <= eps) {
+                    targetAngle = (float) (random.nextFloat() * Math.PI / 2 + Math.PI / 4);
+                }
+            }
+        }*/
     }
 
     @Override
     public boolean tap(float x, float y, float curveWidth) {
         super.tap(x, y, curveWidth);
-        if (points.getFirst() == null) {
-            Log.e(this.getClass().getName(), "NUUUULUUUUUUULLLL!!! WWWWWIIIIIIII!!!! ");
-        }
+        if (points.size() < 1) // TODO: think about that sometimes that condition is true!
+        	return false;
         return points.setTapped(new Point(x, y + points.getFirst().getY()), Curve.TAP_TOLERANCE, curveWidth);
     }
 
     @Override
-    public void setNotTapped() {
-        super.setNotTapped();
-    }
-
-    @Override
     public CurvePoint getLastPoint() {
-        return null;
+        CurvePoint res = new CurvePoint(new Point(points.getLast().getX(),
+                points.getLast().getY() - points.getFirst().getY()),
+                points.getLast().getDirection());
+        if (points.getLast().isTapped())
+            res.setTapped();
+        return res;
     }
 
     @Override

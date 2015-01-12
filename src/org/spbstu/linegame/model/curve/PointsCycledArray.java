@@ -1,6 +1,5 @@
 package org.spbstu.linegame.model.curve;
 
-import android.util.Log;
 import org.spbstu.linegame.utils.MyMath;
 import org.spbstu.linegame.utils.Point;
 
@@ -19,11 +18,10 @@ import java.util.Iterator;
  */
 public class PointsCycledArray implements Iterable<CurvePoint> {
     private CurvePoint[] points;
-
     // because array is cycled we need to store end and start
     // start can be > end
     private int start;
-    private int end; // points to empty element after last filled
+    private int end;
     private int elementCount;
     private int capacity;
 
@@ -94,24 +92,30 @@ public class PointsCycledArray implements Iterable<CurvePoint> {
     }
 
     public CurvePoint getLast() {
-        if (points[lastElementIndex()] == null) {
-            Log.e(this.getClass().getName(), "Error. Last null; start = " + Integer.toString(start) +
-                    "; end = " + Integer.toString(end));
-        }
         return points[lastElementIndex()];
     }
 
     public CurvePoint getFirst() {
-        if (points[start] == null) {
-            Log.e(this.getClass().getName(), "Error. First null; start = " + Integer.toString(start) +
-                    "; end = " + Integer.toString(end));
-        }
         return points[start];
     }
 
+    /**
+     * That method sets all of the Curve points (which stored in array), which
+     * are "near" to specified point (tap)
+     *
+     * Because that method is based on binary search and number of points
+     * in neighbourhood of specified point should be small (not more than 10-20, I'm sure),
+     * so the complexity is O(log(2, n)), where n - number of points in the frame (curve)
+     *
+     * @param tap - point to compare array points to
+     * @param tolerance - permissible variation
+     * @param curveWidth - width of the actual curve on the screen
+     * @return true, if at least one point of the curve is "near" given point
+     */
     public boolean setTapped(Point tap, float tolerance, float curveWidth) {
         int nearest;
         CurvePoint toSearch = new CurvePoint(tap.getX(), tap.getY());
+
         // binary search and choosing bound...TODO: try to avoid some if statements maybe
         if (start <= end) {
             nearest = Arrays.binarySearch(points, start, end, toSearch, CurvePoint.ORDINATE_COMPARATOR);
@@ -173,10 +177,6 @@ public class PointsCycledArray implements Iterable<CurvePoint> {
                 if (!hasNext)
                     throw new UnresolvedAddressException();
                 CurvePoint toReturn = points[curIndex];
-                if (toReturn == null) {
-                    Log.e(this.getClass().getName(), "BAAD =) start = " + Integer.toString(start) +
-                            "; end = " + Integer.toString(end) + "; curIndex (returned) = " + Integer.toString(curIndex) + ";");
-                }
                 curIndex += 1;
                 if (curIndex >= points.length)
                     curIndex = 0;

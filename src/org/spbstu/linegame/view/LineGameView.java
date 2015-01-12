@@ -9,7 +9,7 @@ import org.spbstu.linegame.logic.LineGameLogic;
 public class LineGameView extends SurfaceView implements SurfaceHolder.Callback {
 
 
-    private LineGameThread gameThread;
+    private LineGameDrawingThread gameThread;
     private LineGameLogic gameLogic;
     private Context context;
 
@@ -32,7 +32,7 @@ public class LineGameView extends SurfaceView implements SurfaceHolder.Callback 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // starting main draw thread
-        gameThread = new LineGameThread(holder, context);
+        gameThread = new LineGameDrawingThread(holder, context);
         gameThread.start();
         gameThread.setGameLogic(gameLogic);
     }

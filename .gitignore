@@ -36,5 +36,9 @@ build/
 related_files/
 *.psd
 
-
+# ...
 .navigation/
+.settings/
+*.eml
+*.userlibraries
+out/

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 
 public class MainMenuActivity extends Activity {
     @Override
@@ -19,6 +18,5 @@ public class MainMenuActivity extends Activity {
     }
 
     public void onClick_btnScores(View view) {
-        //view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.btn_translate));
     }
 }

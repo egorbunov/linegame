@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import org.jetbrains.annotations.NotNull;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.logic.LogicListener;
@@ -79,7 +78,7 @@ public class LineGameActivity extends Activity implements LogicListener {
     }
 
     @Override
-    public boolean onTouchEvent(@NotNull MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
         if (gameLogic == null)
             return true;
         if (event.getPointerId(event.getActionIndex()) != 0)

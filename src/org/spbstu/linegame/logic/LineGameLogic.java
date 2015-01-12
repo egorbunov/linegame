@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LineGameLogic {
-    private final static float STARTING_LINE_WIDTH = 30.0f;
+    private final static float STARTING_LINE_WIDTH = 40.0f;
     private final static float MINIMUM_LINE_WIDTH = 5.0f;
-    private final static float MAXIMUM_LINE_WIDTH = 150.0f;
+    private final static float MAXIMUM_LINE_WIDTH = 130.0f;
     private final static float LINE_WIDTH_DELTA = 1f;
     private final static float STARTING_SPEED = 5f;
     private final static float STARTING_CURVE_SPEED = 0.01f;
@@ -28,7 +28,7 @@ public class LineGameLogic {
     private static final int LINE_THINNING_THREAD_DELAY = 25;
 
     /**
-     * That is a bool var., which indicates if the finger is down on the screen now.
+     * That is a boolean variable., which indicates if the finger is down on the screen now.
      * If not, accordingly to creator's game logic the line must loose it's thickness.
      */
     private boolean isGameTapped;

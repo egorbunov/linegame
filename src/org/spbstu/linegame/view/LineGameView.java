@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import org.spbstu.linegame.logic.LineGameLogic;
 
 public class LineGameView extends SurfaceView implements SurfaceHolder.Callback {

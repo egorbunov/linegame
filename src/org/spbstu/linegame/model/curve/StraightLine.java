@@ -11,8 +11,8 @@ public class StraightLine extends Curve {
         super();
         points = new CurvePoint[2];
         // straight line direction is (0, 1) vector
-        points[0] = new CurvePoint(new Point(WIDTH / 2f, 0f), new Point(0f, 1f));
-        points[1] = new CurvePoint(new Point(WIDTH / 2f, HEIGHT), new Point(0f, 1f));
+        points[0] = new CurvePoint(WIDTH / 2f, 0f);
+        points[1] = new CurvePoint(WIDTH / 2f, HEIGHT);
     }
 
 

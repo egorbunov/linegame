@@ -26,6 +26,9 @@ class LineGameDrawingThread extends Thread {
     private final int mainLineColor;
     private final int backgroundColor;
 
+    private final Paint mainCurvePaint;
+    private final Paint tappedCurvePaint;
+
 
     public LineGameDrawingThread(SurfaceHolder surfaceHolder, Context context) {
         isThreadAlive = new AtomicBoolean(true);
@@ -36,6 +39,22 @@ class LineGameDrawingThread extends Thread {
         backgroundColor = context.getResources().getColor(R.color.main_background_color);
         tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
         mainLineColor = context.getResources().getColor(R.color.main_line_color);
+
+        mainCurvePaint = new Paint();
+
+        mainCurvePaint.setDither(true);
+        mainCurvePaint.setStyle(Paint.Style.STROKE);
+        mainCurvePaint.setStrokeJoin(Paint.Join.ROUND);
+        mainCurvePaint.setStrokeCap(Paint.Cap.ROUND);
+        mainCurvePaint.setColor(mainLineColor);
+
+        tappedCurvePaint = new Paint();
+
+        tappedCurvePaint.setDither(true);
+        tappedCurvePaint.setStyle(Paint.Style.STROKE);
+        tappedCurvePaint.setStrokeJoin(Paint.Join.ROUND);
+        tappedCurvePaint.setStrokeCap(Paint.Cap.ROUND);
+        tappedCurvePaint.setColor(tappedLineColor);
     }
 
     public void kill() {
@@ -93,74 +112,35 @@ class LineGameDrawingThread extends Thread {
             return;
 
         Curve curve = gameLogic.getCurve();
-        Paint paint = new Paint();
 
         CurvePoint prevPoint = null;
+        Path mainPath = new Path();
+        Path tappedPath = new Path();
         for (CurvePoint curPoint : curve) {
-        	// If width of the curve is big, line looks angular,
-        	// if it's drew with segments. But if it's tiny and drawn with circles
-        	// it become disconnected, so if the line is thick I draw only circles
-        	// and add segments if not.
+            if (prevPoint == null) {
+                mainPath.moveTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
+                tappedPath.moveTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
+            }
+            else {
+                mainPath.lineTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
+            }
+
         	if (curPoint.isTapped()) {
-        		paint.setColor(tappedLineColor);
-        	} else {
-        		paint.setColor(mainLineColor);
-        	}
-        	canvas.drawCircle(scaleWidth(curPoint.getX()), 
-        			scaleHeight(curPoint.getY()), 
-        			gameLogic.getLineThickness() / 2, 
-        			paint);
-        	
-        	if (gameLogic.getLineThickness() < 75) {
-        		paint.setStrokeWidth(gameLogic.getLineThickness());
-	            if (prevPoint != null) {
-	            	if (prevPoint.isTapped() == curPoint.isTapped()) {
-	                    // if two points (previous and current) are both tapped or not tapped , we draw
-	                    // whole segment with one color
-	                    drawFullyColoredSegment(prevPoint, curPoint, canvas, paint);
-	                } else {
-	                    // here we draw the segment with two different colors (half with color
-	                    // of the previous point and half with color of current)
-	                	drawSemiColoredSegment(prevPoint, curPoint, canvas, paint);
-	                }
-	            }
-        	}
+                tappedPath.lineTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
+            } else {
+                tappedPath.moveTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
+            }
+
             prevPoint = curPoint;
         }
+        mainCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
+        canvas.drawPath(mainPath, mainCurvePaint);
+
+        tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
+        canvas.drawPath(tappedPath, tappedCurvePaint);
+
         gameLogic.nextCurveFrame();
     }
-    
-    private void drawFullyColoredSegment(CurvePoint from, CurvePoint to, Canvas canvas, Paint paint) {
-		if (from == null || to == null)
-			throw new NullPointerException();
-		
-        // if two points (previous and current) are both tapped or not tapped , we draw
-        // whole segment with one color
-        paint.setColor(from.isTapped() ? tappedLineColor : mainLineColor);
-        canvas.drawLine(scaleWidth(from.getX()), scaleHeight(from.getY()),
-                scaleWidth(to.getX()), scaleHeight(to.getY()), paint);
-    }
-
-	private void drawSemiColoredSegment(CurvePoint from, CurvePoint to,
-			Canvas canvas, Paint paint) {
-		if (from == null || to == null)
-			throw new NullPointerException();
-		
-		float midX;
-		float midY;
-		// here we draw the segment with two different colors (half with color
-		// of the previous point and half with color of current)
-		midX = (from.getX() + to.getX()) / 2f;
-		midY = (from.getY() + to.getY()) / 2f;
-
-		paint.setColor(from.isTapped() ? tappedLineColor : mainLineColor);
-		canvas.drawLine(scaleWidth(from.getX()), scaleHeight(from.getY()),
-		        scaleWidth(midX), scaleHeight(midY), paint);
-
-		paint.setColor(to.isTapped() ? tappedLineColor : mainLineColor);
-		canvas.drawLine(scaleWidth(midX), scaleHeight(midY),
-		        scaleWidth(to.getX()), scaleHeight(to.getY()), paint);
-	}
 
     /**
      * Scales the value in [0, 1] to [0, surface.width()]

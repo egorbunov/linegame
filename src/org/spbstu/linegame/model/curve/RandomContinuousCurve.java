@@ -16,20 +16,19 @@ public class RandomContinuousCurve extends Curve {
     /**
      * array of curve points
      */
-    PointsCycledArray points;
+    private PointsCycledArray points;
+
+    /**
+     * To make it random!
+     */
+    private Random randomizer;
 
     public RandomContinuousCurve() {
         super();
+        randomizer = new Random();
         points = new PointsCycledArray((int) (HEIGHT / MINIMAL_Y_DISTANCE));
-        generatePoints(new CurvePoint(new Point(WIDTH / 2, 0), new Point(0f, 1f)));
+        generatePoints(new CurvePoint(WIDTH / 2.0f, 0.0f));
     }
-
-    public RandomContinuousCurve(CurvePoint startingPoint) {
-        super();
-        points = new PointsCycledArray((int) (HEIGHT / MINIMAL_Y_DISTANCE));
-        generatePoints(startingPoint);
-    }
-
 
     /**
      * That method is generates new curve points and adds them to
@@ -42,55 +41,48 @@ public class RandomContinuousCurve extends Curve {
         generatePoints();
     }
 
+
+    /**
+     * Generate 2d Bezier curve points (something like De Casteljau's algorithm)
+     * @param p1 first control point
+     * @param p2 handle point
+     * @param p3 second control point
+     */
+    private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
+
+        float dt = 0.025f;
+
+        final float p1p2x = p2.getX() - p1.getX();
+        final float p1p2y = p2.getY() - p1.getY();
+        final float cx = p3.getX() - 2 * p2.getX() + p1.getX();
+        final float cy = p3.getY() - 2 * p2.getY() + p1.getY();
+        float ax, ay, abx, aby;
+        points.addLast(new CurvePoint(p1));
+        for (float t = dt; t < 1.0f; t += dt) {
+            ax = p1p2x * t + p1.getX();
+            ay = p1p2y * t + p1.getY();
+            abx = cx * t + p1p2x;
+            aby = cy * t + p1p2y;
+            points.addLast(new CurvePoint(abx * t + ax, aby * t + ay));
+        }
+        points.addLast(new CurvePoint(p3));
+    }
+
+    private float dirSign = 1.0f;
+
     private void generatePoints() {
         CurvePoint lastPoint = points.getLast();
-        float y = points.getLast().getY();
-        float dy = 0.02f;
+        float dir;
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            points.addLast(new CurvePoint((float) ((Math.sin(y) + 1.5) * 0.3), y));
+            dir = randomizer.nextFloat();
+            generateBezier2DCurve(lastPoint.getPoint(),
+                    new Point(lastPoint.getX() + dir * dirSign, lastPoint.getY() + 0.2f),
+                    new Point(lastPoint.getX(), lastPoint.getY() + 0.4f)
+                    );
+            // points.addLast(new CurvePoint((float) ((Math.sin(y) + 1.5) * 0.3), y));
             lastPoint = points.getLast();
-            y += dy;
+            dirSign = -dirSign;
         }
-        /*final Point xBound = new Point(0.35f, 0.65f); //x - left bound, y - right bound
-        final Random random = new Random(System.currentTimeMillis());
-        final float eps = 0.1f;
-
-        boolean flag = true;
-
-        CurvePoint lastPoint = points.getLast();
-        Point newPoint;
-        Point newDirection;
-
-        float angleDelta = 0.2f;
-        float targetAngle = (float) (random.nextFloat() * Math.PI / 2 + Math.PI / 4);
-        while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            float curAngle = MyMath.angle(lastPoint.getDirection());
-
-            if (Math.abs(targetAngle - curAngle) > eps) {
-                newDirection = MyMath.rotate(lastPoint.getDirection(),
-                        (curAngle - targetAngle > 0 ? -1f : 1f) * angleDelta);
-                newPoint = MyMath.move(lastPoint.getPoint(), newDirection, 0.009f);
-
-                points.addLast(new CurvePoint(newPoint, newDirection));
-                lastPoint = points.getLast();
-            }
-
-            if (flag && (lastPoint.getX() <= xBound.getX() || lastPoint.getX() >= xBound.getY())) {
-                lastPoint.setDirection(new Point(0, 1));
-                flag = false;
-                if (lastPoint.getX() <= xBound.getX()) {
-                    targetAngle -= Math.PI / 2;
-                }
-                if (lastPoint.getX() >= xBound.getY()) {
-                    targetAngle += Math.PI / 2;
-                }
-            } else {
-                flag = true;
-                if (Math.abs(targetAngle - curAngle) <= eps) {
-                    targetAngle = (float) (random.nextFloat() * Math.PI / 2 + Math.PI / 4);
-                }
-            }
-        }*/
     }
 
     @Override
@@ -103,12 +95,7 @@ public class RandomContinuousCurve extends Curve {
 
     @Override
     public CurvePoint getLastPoint() {
-        CurvePoint res = new CurvePoint(new Point(points.getLast().getX(),
-                points.getLast().getY() - points.getFirst().getY()),
-                points.getLast().getDirection());
-        if (points.getLast().isTapped())
-            res.setTapped();
-        return res;
+        return points.getLast();
     }
 
     @Override
@@ -126,8 +113,7 @@ public class RandomContinuousCurve extends Curve {
         // adding first point if needed
         if (curPoint.getY() - startPoint.getY() != toSkip) {
             float ratio = (startPoint.getY() - prevPoint.getY() + toSkip) / (curPoint.getY() - prevPoint.getY());
-            CurvePoint toAdd = new CurvePoint(MyMath.segmentPoint(prevPoint.getPoint(), curPoint.getPoint(), ratio),
-                    prevPoint.getDirection());
+            CurvePoint toAdd = new CurvePoint(MyMath.segmentPoint(prevPoint.getPoint(), curPoint.getPoint(), ratio));
             if (prevPoint.isTapped())
                 toAdd.setTapped();
             points.addFirst(toAdd);
@@ -150,10 +136,10 @@ public class RandomContinuousCurve extends Curve {
                 CurvePoint notTransformed = arrayIterator.next();
                 if (notTransformed == null) {
                     Log.e(this.getClass().getName(), "NULL!!!!!!!!!!! WHY?????????????????????? HOOOORSEEEE!!!!!!!!");
+                    return null;
                 }
                 CurvePoint toReturn = new CurvePoint(new Point(notTransformed.getX(),
-                        notTransformed.getY() - points.getFirst().getY()),
-                        notTransformed.getDirection());
+                        notTransformed.getY() - points.getFirst().getY()));
                 if (notTransformed.isTapped())
                     toReturn.setTapped();
                 return toReturn;

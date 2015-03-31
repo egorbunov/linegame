@@ -13,7 +13,7 @@ public class LineGameLogic {
     private final static float MAXIMUM_LINE_WIDTH = 130.0f;
     private final static float LINE_WIDTH_DELTA = 1f;
     private final static float STARTING_SPEED = 5f;
-    private final static float STARTING_CURVE_SPEED = 0.01f;
+    private final static float STARTING_CURVE_SPEED = 0.006f;
     private final static int SCORE_DELTA = 2;
 
     /**
@@ -72,7 +72,7 @@ public class LineGameLogic {
 
 
     public LineGameLogic() {
-        logicListeners = new LinkedList<LogicListener>();
+        logicListeners = new LinkedList<>();
 
         width = height = 1f;
         lineThickness = STARTING_LINE_WIDTH;

@@ -14,27 +14,14 @@ public class CurvePoint extends TapableObject implements Comparable<CurvePoint> 
 
     final Point point;
 
-    // direction here stands for tangent vector, which
-    // specifies line-direction
-    Point direction;
-
     public CurvePoint(float x, float y) {
         super();
         point = new Point(x, y);
-        direction = new Point(0f, 0f);
     }
 
-    public CurvePoint(Point point, Point direction) {
+    public CurvePoint(Point point) {
         super();
         this.point = point;
-        this.direction = direction;
-    }
-
-    public void setDirection(Point direction) {
-        this.direction = direction;
-    }
-    public Point getDirection() {
-        return direction;
     }
 
     public float getX() {return point.getX();}

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">linegame</string>
-    <string name="new_game_button_string">New Game</string>
+    <string name="new_game_button_string">New game</string>
     <string name="scores_table_button_string">Scores</string>
     <string name="tap_to_start_string">Tap and hold to play!</string>
     <string name="tap_to_continue_string">Tap to continue!</string>
+    <string name="game_over_string">Game over!</string>
     <string name="score_text_string">score</string>
     <string name="score_number_at_start">0</string>
 </resources>

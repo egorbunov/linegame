@@ -42,11 +42,13 @@ public class LineGameLogic {
      * Curve, that currently draw on the game field. That is the main logic object
      */
     private Curve currentCurve;
-    private float lineThickness;
     private LineGameState gameState;
+    private float lastScrollSpeed; // I use that variable to correctly pause the game
 
-    private float scrollSpeed; // maybe that value will increase with time...
-    private float lastScrollSpeed;
+
+    // variables responsible for game hardness
+    private float lineThickness;
+    private float scrollSpeed;
 
     /**
      * Game score is stored in that variable.
@@ -70,7 +72,6 @@ public class LineGameLogic {
             lineThickness -= LINE_WIDTH_DELTA;
     }
 
-
     public LineGameLogic() {
         logicListeners = new LinkedList<>();
 
@@ -83,6 +84,7 @@ public class LineGameLogic {
         isGameTapped = false;
         gameState = LineGameState.STARTING;
         score = 0;
+
         /*
             Running task, which will check if nobody touches the screen and
             if so, call setCurveNotTapped() method (which actually makes line width less)
@@ -113,7 +115,7 @@ public class LineGameLogic {
                     // next call actually make line thinner (if nobody touches the screen)
                     if (!isGameTapped && gameState.equals(LineGameState.RUNNING)) {
                         currentCurve.setNotTapped();
-                        decreaseLineWidth();
+                        tapMissed();
                     }
                 }
             }
@@ -152,15 +154,33 @@ public class LineGameLogic {
         }
 
         if (currentCurve.tap(x / width, y / height, lineThickness / width)) {
-            increaseLineWidth();
-
-            score += SCORE_DELTA;
-            // notifying listeners, that score changed
-            for (LogicListener listener : logicListeners)
-                listener.onScoreChanged(score);
+            curveTapped();
         }
         else
-            decreaseLineWidth();
+            tapMissed();
+    }
+
+    /**
+     * There all the bad for player stuff happens. More tapMissed() => closer the game over
+     */
+    private void tapMissed() {
+        decreaseLineWidth();
+    }
+
+    /**
+     * If curve tapped some things happen to player...Some good things and also things, that
+     * make the game harder
+     */
+    private void curveTapped() {
+        increaseLineWidth();
+        increaseScore();
+    }
+
+    private void increaseScore() {
+        score += SCORE_DELTA;
+        // notifying listeners, that score changed
+        for (LogicListener listener : logicListeners)
+            listener.onScoreChanged(score);
     }
 
     public void setCurveNotTapped() {
@@ -169,10 +189,6 @@ public class LineGameLogic {
 
     public LineGameState getGameState() {
         return gameState;
-    }
-
-    public float getScrollSpeed() {
-        return scrollSpeed;
     }
 
     public void destroy() {
@@ -192,6 +208,6 @@ public class LineGameLogic {
 
     public void nextCurveFrame() {
         if (!gameState.equals(LineGameState.PAUSED))
-            currentCurve.nextFrame(STARTING_CURVE_SPEED);
+            currentCurve.nextFrame(scrollSpeed);
     }
 }

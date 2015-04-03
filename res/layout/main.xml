@@ -17,20 +17,16 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="@integer/space_weight"/>
-            <Button
+            <org.spbstu.linegame.custom.GravityButton
                 android:text="@string/new_game_button_string"
                 android:id="@+id/btnNewGame"
-                android:textColor="@color/main_menu_text_color"
-                android:textSize="@dimen/menu_font_size"
-
-                android:background="@drawable/buttonshape"
-
+                android:textAppearance="@style/MainMenuTextAppearance"
+                android:background="@drawable/cool_button"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="@integer/menu_item_weight"
                 android:alpha="0.95"
-
                 android:onClick="onClick_btnNewGame"
                 />
 
@@ -48,14 +44,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="@integer/space_weight"/>
-            <Button
+            <org.spbstu.linegame.custom.GravityButton
                 android:text="@string/scores_table_button_string"
                 android:id="@+id/btnScores"
-                android:textColor="@color/main_menu_text_color"
-                android:textSize="@dimen/menu_font_size"
-
-                android:background="@drawable/buttonshape"
-
+                android:textAppearance="@style/MainMenuTextAppearance"
+                android:background="@drawable/cool_button"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"

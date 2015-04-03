@@ -4,8 +4,8 @@ package org.spbstu.linegame.utils;
  * Simple point with float coordinates, \in R^2
  */
 public class Point {
-    final private float x;
-    final private float y;
+    private float x;
+    private float y;
 
     public Point(float x, float y) {
         this.x = x;
@@ -18,5 +18,13 @@ public class Point {
 
     public float getY() {
         return y;
+    }
+
+    public void normalize() {
+        float dist = (float) Math.sqrt(x * x + y * y);
+        if (dist == 0.0f)
+            return;
+        x = x / dist;
+        y = y / dist;
     }
 }

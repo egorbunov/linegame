@@ -70,6 +70,18 @@ public class LineGameActivity extends Activity implements LogicListener {
     }
 
     @Override
+    public void onBackPressed() {
+        if (!gameLogic.getGameState().equals(LineGameState.STARTING) &&
+                !gameLogic.getGameState().equals(LineGameState.PAUSED)) {
+            gameLogic.pauseGame();
+            onPauseTextView.startAnimation(textPulseAnimation);
+            onPauseTextView.setVisibility(View.VISIBLE);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
 

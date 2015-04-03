@@ -69,26 +69,36 @@ public class RandomContinuousCurve extends Curve {
     }
 
     private float dirSign = 1.0f;
+    private Point lastTangentVec = new Point(0f, 1f);
 
     private void generatePoints() {
         CurvePoint lastPoint = points.getLast();
         float dir;
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            dir = randomizer.nextFloat();
+            dir = randomizer.nextFloat() / 1.5f + 0.01f;
+
+            Point handlePoint = new Point(lastPoint.getX() + dir * lastTangentVec.getX(),
+                    lastPoint.getY() + dir * lastTangentVec.getY());
+
+            float nextCornerX = lastPoint.getX() + 0.1f * dirSign;
+            float nextCornerY = handlePoint.getY() + randomizer.nextFloat() / 3f + 0.01f;
+
             generateBezier2DCurve(lastPoint.getPoint(),
-                    new Point(lastPoint.getX() + dir * dirSign, lastPoint.getY() + 0.2f),
-                    new Point(lastPoint.getX(), lastPoint.getY() + 0.4f)
-                    );
-            // points.addLast(new CurvePoint((float) ((Math.sin(y) + 1.5) * 0.3), y));
+                    handlePoint,
+                    new Point(nextCornerX, nextCornerY));
+
             lastPoint = points.getLast();
             dirSign = -dirSign;
+
+            lastTangentVec = new Point(lastPoint.getX() - handlePoint.getX(), lastPoint.getY() - handlePoint.getY());
+            lastTangentVec.normalize();
         }
     }
 
     @Override
     public boolean tap(float x, float y, float curveWidth) {
         super.tap(x, y, curveWidth);
-        if (points.size() < 1) // TODO: think about that sometimes that condition is true!
+        if (points.size() < 1 || points.getFirst() == null) // TODO: think about that sometimes that condition is true!
         	return false;
         return points.setTapped(new Point(x, y + points.getFirst().getY()), Curve.TAP_TOLERANCE, curveWidth);
     }

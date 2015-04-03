@@ -3,14 +3,12 @@ package org.spbstu.linegame.view;
 
 import android.content.Context;
 import android.graphics.*;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.CurvePoint;
-import org.spbstu.linegame.utils.MyMath;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,8 +20,6 @@ class LineGameDrawingThread extends Thread {
     private LineGameLogic gameLogic;
 
 
-    private final int tappedLineColor;
-    private final int mainLineColor;
     private final int backgroundColor;
 
     private final Paint mainCurvePaint;
@@ -37,8 +33,8 @@ class LineGameDrawingThread extends Thread {
         this.surfaceFrame = surfaceHolder.getSurfaceFrame();
         
         backgroundColor = context.getResources().getColor(R.color.main_background_color);
-        tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
-        mainLineColor = context.getResources().getColor(R.color.main_line_color);
+        int tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
+        int mainLineColor = context.getResources().getColor(R.color.main_line_color);
 
         mainCurvePaint = new Paint();
 

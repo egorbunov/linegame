@@ -5,6 +5,7 @@ import org.spbstu.linegame.utils.Point;
 
 import java.nio.channels.UnresolvedAddressException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Iterator;
  * segment will be: [start, end) := [0, 0), so the previous element
  * for 0 is size - 1
  */
-public class PointsCycledArray implements Iterable<CurvePoint> {
+public final class PointsCycledArray implements Iterable<CurvePoint> {
     private CurvePoint[] points;
     // because array is cycled we need to store end and start
     // start can be > end
@@ -41,8 +42,11 @@ public class PointsCycledArray implements Iterable<CurvePoint> {
             throw new NullPointerException();
         }
 
-        // array must be sorted by y-coordinate
         if (size() > 0) {
+            // I want all elements to be unique
+            if (points[lastElementIndex()].compareTo(point) == 0)
+                return;
+            // array must be sorted by y-coordinate
             if (points[lastElementIndex()].compareTo(point) > 0)
                 throw new IllegalArgumentException();
         }
@@ -91,12 +95,52 @@ public class PointsCycledArray implements Iterable<CurvePoint> {
         return toReturn;
     }
 
+    public CurvePoint skipYDist(float distToSkip) {
+        int nearest = binarySearch(new CurvePoint(0, points[start].getY() + distToSkip),
+                CurvePoint.ORDINATE_COMPARATOR);
+
+        //if (points[nearest].getY())
+        return null;
+    }
+
     public CurvePoint getLast() {
         return points[lastElementIndex()];
     }
 
     public CurvePoint getFirst() {
         return points[start];
+    }
+
+    /**
+     * Performs binary search on cycled array
+     * @param toSearch point to search
+     * @return index of nearest to given one point in array
+     */
+    private int binarySearch(CurvePoint toSearch, Comparator<CurvePoint> comparator) {
+        int nearest;
+        if (start <= end) {
+            nearest = Arrays.binarySearch(points, start, end, toSearch, comparator);
+            nearest = nearest < 0 ? -(nearest + 1) : nearest;
+            if (nearest < start)
+                nearest = start;
+            if (nearest >= end)
+                nearest = lastElementIndex();
+        } else {
+            int tmp = Arrays.binarySearch(points, start, points.length, toSearch, comparator);
+            tmp = tmp < 0 ? -(tmp + 1) : tmp;
+            nearest = Arrays.binarySearch(points, 0, end, toSearch, comparator);
+            nearest = nearest < 0 ? -(nearest + 1) : nearest;
+            if (tmp < start)
+                tmp = start;
+            if (tmp >= start && tmp < points.length)
+                nearest = tmp;
+            else if (nearest < 0) {
+                nearest = points.length - 1;
+            } else if (nearest >= end) {
+                nearest = lastElementIndex();
+            }
+        }
+        return nearest;
     }
 
     /**
@@ -113,44 +157,31 @@ public class PointsCycledArray implements Iterable<CurvePoint> {
      * @return true, if at least one point of the curve is "near" given point
      */
     public boolean setTapped(Point tap, float tolerance, float curveWidth) {
-        int nearest;
+
         CurvePoint toSearch = new CurvePoint(tap.getX(), tap.getY());
 
-        // binary search and choosing bound...TODO: try to avoid some if statements maybe
-        if (start <= end) {
-            nearest = Arrays.binarySearch(points, start, end, toSearch, CurvePoint.ORDINATE_COMPARATOR);
-            nearest = -(nearest + 1);
-            if (nearest < start)
-                nearest = start;
-            if (nearest >= end)
-                nearest = lastElementIndex();
-        } else {
-            int tmp = Arrays.binarySearch(points, start, points.length, toSearch, CurvePoint.ORDINATE_COMPARATOR);
-            tmp = -(tmp + 1);
-            nearest = Arrays.binarySearch(points, 0, end, toSearch, CurvePoint.ORDINATE_COMPARATOR);
-            nearest = -(nearest + 1);
-            if (tmp < start)
-                tmp = start;
-            if (tmp >= start && tmp < points.length)
-                nearest = tmp;
-            else if (nearest < 0) {
-                nearest = points.length - 1;
-            } else if (nearest >= end) {
-                nearest = lastElementIndex();
-            }
-        }
+        // Here is some heuristic applied: I searching for the closest point
+        // by Ordinate in array. It fast, but it's not a Euclidean distance
+        // (and it cant be so for sorted array). So that means, that if you
+        // consider a single tap near sharp part of curve it may not be recognized as
+        // a curve hit, but for now It seem to work really good for the dynamically
+        // changing curve and for it's properties.
+        // TO EGOR FROM THE FUTURE: if that became a problem, I think, it will be okay
+        // solution to just scan some fixed number of points near closest by Ordinate.
+        // So asymptotic will be kept...
+        int nearest = binarySearch(toSearch, CurvePoint.ORDINATE_COMPARATOR);
         assert points[nearest] != null;
 
         boolean result = false;
         int cur = nearest;
-        // going to the left
+        // going to the left (setting all point above nearest and also close to given one to be tapped)
         while (cur >= start && MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
             result = true;
             points[cur--].setTapped();
             if (cur < 0 && end < start)
                 cur = points.length - 1;
         }
-        // going to the right
+        // going to the right (setting all point below nearest and also close to given one to be tapped)
         cur = nearest;
         while (cur < end && MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
             result = true;

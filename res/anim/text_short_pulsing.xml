@@ -5,6 +5,8 @@
         android:fromYScale="1.0"
         android:toXScale="1.3"
         android:toYScale="1.3"
+        android:pivotX="100%"
+        android:pivotY="0%"
         android:repeatCount="2"
         android:duration="300"
         android:repeatMode="reverse"

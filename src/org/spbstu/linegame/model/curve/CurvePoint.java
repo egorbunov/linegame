@@ -1,5 +1,6 @@
 package org.spbstu.linegame.model.curve;
 
+import org.spbstu.linegame.utils.MyMath;
 import org.spbstu.linegame.utils.Point;
 
 import java.util.Comparator;
@@ -9,6 +10,14 @@ public class CurvePoint extends TapableObject implements Comparable<CurvePoint> 
         @Override
         public int compare(CurvePoint a, CurvePoint b) {
             return a.compareTo(b);
+        }
+    };
+
+    public static final Comparator<CurvePoint> L2_COMPARATOR = new Comparator<CurvePoint>() {
+        final float SCALE_FACTOR = 500.0f; // TODO: Think about scale factor here
+        @Override
+        public int compare(CurvePoint a, CurvePoint b) {
+            return (int) (MyMath.distance(a.getPoint(), b.getPoint()) * SCALE_FACTOR);
         }
     };
 

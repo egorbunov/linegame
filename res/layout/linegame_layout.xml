@@ -17,7 +17,8 @@
             android:layout_height="wrap_content"
             android:text="@string/tap_to_start_string"
             android:textSize="@dimen/start_text_size"
-            android:textColor="@color/main_menu_btn_stroke_color"
+            android:gravity="center"
+            android:textColor="@color/tap_to_play_string_color"
             android:textStyle="bold"
             android:id="@+id/StartingTextView" android:layout_gravity="center"/>
 
@@ -26,20 +27,24 @@
         android:layout_width="@dimen/score_text_layout_width"
         android:layout_height="@dimen/score_text_layout_height"
         android:text="@string/score_text_string"
-        android:textStyle="bold"
+        android:layout_marginRight="@dimen/score_text_right_margin"
         android:textSize="@dimen/score_text_size"
+        android:gravity="end"
         android:textColor="@color/score_text_color"
+        android:textStyle="bold"
         android:id="@+id/ScoreLineTextView"
         android:layout_gravity="end|top" />
 
     <!-- Score number -->
     <TextView
-        android:layout_width="@dimen/score_text_layout_width"
+        android:layout_width="fill_parent"
         android:layout_height="@dimen/score_value_layout_height"
+        android:layout_marginRight="@dimen/score_text_right_margin"
         android:text="@string/score_number_at_start"
-        android:textStyle="bold"
         android:textSize="@dimen/score_text_size"
+        android:gravity="end"
         android:textColor="@color/score_text_color"
+        android:textStyle="bold"
         android:id="@+id/ScoreValueTextView"
         android:layout_gravity="end|top"
         android:layout_marginTop="@dimen/score_value_layout_margin_top" />
@@ -47,6 +52,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="@string/tap_to_continue_string"
         android:textSize="@dimen/start_text_size"
         android:textColor="@color/pausing_text_color"

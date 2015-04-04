@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.*;
 import android.view.SurfaceHolder;
 
+import android.widget.TextView;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
@@ -26,12 +27,13 @@ class LineGameDrawingThread extends Thread {
     private final Paint tappedCurvePaint;
 
 
-    public LineGameDrawingThread(SurfaceHolder surfaceHolder, Context context) {
+
+    public LineGameDrawingThread(SurfaceHolder surfaceHolder, final Context context) {
         isThreadAlive = new AtomicBoolean(true);
 
         this.surfaceHolder = surfaceHolder;
         this.surfaceFrame = surfaceHolder.getSurfaceFrame();
-        
+
         backgroundColor = context.getResources().getColor(R.color.main_background_color);
         int tappedLineColor = context.getResources().getColor(R.color.tapped_line_color);
         int mainLineColor = context.getResources().getColor(R.color.main_line_color);

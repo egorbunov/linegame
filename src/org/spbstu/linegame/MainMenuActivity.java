@@ -9,7 +9,7 @@ public class MainMenuActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.game_menu_layout);
     }
 
     public void onClick_btnNewGame(View view) {
@@ -18,5 +18,8 @@ public class MainMenuActivity extends Activity {
     }
 
     public void onClick_btnScores(View view) {
+    }
+
+    public void onClick_btnRules(View view) {
     }
 }

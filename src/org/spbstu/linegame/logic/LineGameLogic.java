@@ -12,7 +12,6 @@ public class LineGameLogic {
     private final static float MINIMUM_LINE_WIDTH = 5.0f;
     private final static float MAXIMUM_LINE_WIDTH = 130.0f;
     private final static float LINE_WIDTH_DELTA = 1f;
-    private final static float STARTING_SPEED = 5f;
     private final static float STARTING_CURVE_SPEED = 0.006f;
     private final static int SCORE_DELTA = 2;
 
@@ -48,6 +47,9 @@ public class LineGameLogic {
 
     // variables responsible for game hardness
     private float lineThickness;
+    /**
+     * must be in [0, HEIGHT)
+     */
     private float scrollSpeed;
 
     /**
@@ -77,7 +79,7 @@ public class LineGameLogic {
 
         width = height = 1f;
         lineThickness = STARTING_LINE_WIDTH;
-        scrollSpeed = STARTING_SPEED;
+        scrollSpeed = STARTING_CURVE_SPEED;
 
         currentCurve = new RandomContinuousCurve();
 
@@ -204,6 +206,10 @@ public class LineGameLogic {
         gameState = LineGameState.PAUSED;
         lastScrollSpeed = scrollSpeed;
         scrollSpeed = 0;
+
+        for (LogicListener listener : logicListeners)
+            listener.onGamePaused();
+
     }
 
     public void nextCurveFrame() {

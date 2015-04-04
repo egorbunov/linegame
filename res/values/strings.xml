@@ -8,4 +8,5 @@
     <string name="game_over_string">Game over!</string>
     <string name="score_text_string">score</string>
     <string name="score_number_at_start">0</string>
+    <string name="rules_btn_string">Rules</string>
 </resources>

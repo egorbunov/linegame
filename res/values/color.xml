@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="main_menu_btn_color">#ffffa124</color>
-    <color name="main_menu_btn_stroke_color">#ffe87f00</color>
+    <color name="main_menu_btn_stroke_color">#ffe07000</color>
     <color name="main_menu_text_color">#fffff7f7</color>
     <color name="main_background_color">#ff00e0dc</color>
     <color name="tapped_line_color">#ffff9100</color>
     <color name="main_line_color">#fffffcfc</color>
     <color name="score_text_color">#ff000000</color>
-    <color name="pausing_text_color">#ff5700ff</color>
+    <color name="pausing_text_color">#ff0073c8</color>
+    <color name="tap_to_play_string_color">#ff000000</color>
 </resources>

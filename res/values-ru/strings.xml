@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Линия</string>
+    <string name="new_game_button_string">Новая игра</string>
+    <string name="scores_table_button_string">Рекорды</string>
+    <string name="rules_btn_string">Правила</string>
+    <string name="tap_to_start_string">Каснись экрана чтобы начать!</string>
+    <string name="tap_to_continue_string">Каснись экрана для продолжения!</string>
+    <string name="game_over_string">Ты проиграл :D</string>
+    <string name="score_text_string">очки</string>
+    <string name="score_number_at_start">0</string>
+</resources>

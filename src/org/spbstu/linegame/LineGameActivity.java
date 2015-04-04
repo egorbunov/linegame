@@ -1,6 +1,7 @@
 package org.spbstu.linegame;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,24 +13,12 @@ import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.logic.LogicListener;
 import org.spbstu.linegame.view.LineGameView;
 
-public class LineGameActivity extends Activity implements LogicListener {
-    private static final int SCORE_ANIMATION_VALUE = 1000;
+public class LineGameFragment extends Fragment {
 
     private LineGameLogic gameLogic;
     LineGameView gameView;
 
     // Views
-    private TextView startingTextView;
-    private TextView scoreValueTextView;
-    private TextView scoreTextView;
-    private TextView onPauseTextView;
-
-    // Animations
-    private Animation scoreAnimation;
-    private Animation textPulseAnimation;
-    int lastScoreAnimationValue = 0;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,33 +29,13 @@ public class LineGameActivity extends Activity implements LogicListener {
 
         gameView = (LineGameView) findViewById(R.id.LineGameView);
         gameView.setLogic(gameLogic);
+        gameLogic.setListener(gameView);
 
-        startingTextView = (TextView) findViewById(R.id.StartingTextView);
-        startingTextView.setVisibility(View.INVISIBLE);
-        textPulseAnimation = AnimationUtils.loadAnimation(this, R.anim.text_pulsing);
-        startingTextView.startAnimation(textPulseAnimation);
-        startingTextView.setVisibility(View.VISIBLE);
-
-        scoreTextView = (TextView) findViewById(R.id.ScoreLineTextView);
-        scoreTextView.setVisibility(View.INVISIBLE);
-        scoreValueTextView = (TextView) findViewById(R.id.ScoreValueTextView);
-        scoreValueTextView.setVisibility(View.INVISIBLE);
-        scoreAnimation = AnimationUtils.loadAnimation(this, R.anim.text_short_pulsing);
-
-        onPauseTextView = (TextView) findViewById(R.id.OnPauseTextView);
-        onPauseTextView.setVisibility(View.INVISIBLE);
-
-        gameLogic.setListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (gameLogic.getGameState().equals(LineGameState.PAUSED)) {
-            onPauseTextView.startAnimation(textPulseAnimation);
-            onPauseTextView.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -74,8 +43,6 @@ public class LineGameActivity extends Activity implements LogicListener {
         if (!gameLogic.getGameState().equals(LineGameState.STARTING) &&
                 !gameLogic.getGameState().equals(LineGameState.PAUSED)) {
             gameLogic.pauseGame();
-            onPauseTextView.startAnimation(textPulseAnimation);
-            onPauseTextView.setVisibility(View.VISIBLE);
         } else {
             super.onBackPressed();
         }
@@ -109,35 +76,5 @@ public class LineGameActivity extends Activity implements LogicListener {
                 break;
         }
         return true;
-    }
-
-    @Override
-    public void onGameEnd() {
-        gameLogic.destroy();
-    }
-
-    @Override
-    public void onGameStarted() {
-        startingTextView.clearAnimation();
-        startingTextView.setVisibility(View.INVISIBLE);
-        scoreValueTextView.setVisibility(View.VISIBLE);
-        scoreTextView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onGameContinued() {
-        onPauseTextView.clearAnimation();
-        onPauseTextView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onScoreChanged(int newScore) {
-        if (scoreValueTextView != null) {
-            scoreValueTextView.setText(Integer.toString(newScore));
-            if (newScore - lastScoreAnimationValue >= SCORE_ANIMATION_VALUE) {
-                scoreValueTextView.startAnimation(scoreAnimation);
-                lastScoreAnimationValue = newScore;
-            }
-        }
     }
 }

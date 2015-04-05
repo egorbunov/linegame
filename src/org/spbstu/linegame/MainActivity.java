@@ -9,6 +9,8 @@ import android.view.View;
  * Created by Egor Gorbunov on 04.04.2015.
  * Email: egor-mailbox@ya.ru
  * Github username: egorbunov
+ *
+ * That's main activity which starting fragment is game menu fragment {@link MenuFragment}.
  */
 public class MainActivity extends FragmentActivity {
     private final String LINE_GAME_FRAGMENT_TAG = "LINE_GAME_FRAGMENT";
@@ -48,7 +50,7 @@ public class MainActivity extends FragmentActivity {
     public void onBackPressed() {
         LineGameFragment lineGameFragment = (LineGameFragment) getSupportFragmentManager()
                 .findFragmentByTag(LINE_GAME_FRAGMENT_TAG);
-        if (lineGameFragment.isVisible()) {
+        if (lineGameFragment != null && lineGameFragment.isVisible()) {
             if (!lineGameFragment.onBackPressed())
                 super.onBackPressed();
         } else {

@@ -2,6 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@color/splash_screen_main_background_color">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/splash_screen_head_string"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        style="@style/splash_screen_text_style"
+        android:textAppearance="@style/splash_screen_text_style"
+        android:gravity="center"
+        android:background="@drawable/splash_text_back"
+        />
 </LinearLayout>

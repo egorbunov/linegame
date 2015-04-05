@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="splash_screen_head_string">Кафедра прикладной математики, СПбГПУ</string>
     <string name="app_name">Линия</string>
     <string name="new_game_button_string">Новая игра</string>
     <string name="scores_table_button_string">Рекорды</string>

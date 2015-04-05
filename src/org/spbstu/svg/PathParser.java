@@ -1,6 +1,7 @@
 package org.spbstu.svg;
 
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 
 import java.util.Iterator;
 
@@ -40,14 +41,15 @@ public class PathParser {
 
             boolean isRel = true;
 
-            if (Character.isUpperCase(tokens[i].charAt(0))) {
+            char command = tokens[i++].charAt(0);
+
+            if (Character.isUpperCase(command)) {
                 // absolute
                 isRel = false;
                 lastX = 0f;
                 lastY = 0f;
             }
 
-            char command = tokens[i++].charAt(0);
 
             float x = lastX, y = lastY;
             while (!isAlphabetic(tokens[i].charAt(0))) {
@@ -91,6 +93,11 @@ public class PathParser {
             lastX = x;
             lastY = y;
         }
+
+        PathMeasure pm = new PathMeasure(path, false);
+        float p[] = {0f, 0f};
+        pm.getPosTan(0.0f, p, null);
+        path.lineTo(p[0], p[1]);
 
         return path;
     }

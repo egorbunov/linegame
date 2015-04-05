@@ -209,11 +209,18 @@ public class LineGameLogic {
         increaseScore();
     }
 
+    private int tmp_sc = 1000;
+
     private void increaseScore() {
         score += SCORE_DELTA;
         // notifying listeners, that score changed
         for (LogicListener listener : logicListeners)
             listener.onScoreChanged(score);
+
+        if (score > tmp_sc) {
+            scrollSpeed += 0.01;
+            tmp_sc += 1000;
+        }
     }
 
     public void setCurveNotTapped() {

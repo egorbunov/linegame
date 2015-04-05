@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">linegame</string>
+    <string name="splash_screen_head_string">Department of Applied Mathematics, SPbPU</string>
+    <string name="app_name">LineGame</string>
     <string name="new_game_button_string">New game</string>
     <string name="scores_table_button_string">Scores</string>
     <string name="tap_to_start_string">Tap and hold to play!</string>

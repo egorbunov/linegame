@@ -1,25 +1,14 @@
 package org.spbstu.linegame.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.text.Layout;
 import android.util.AttributeSet;
 import android.view.*;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
-import org.spbstu.linegame.logic.LogicListener;
 
 public class LineGameView extends SurfaceView implements SurfaceHolder.Callback {
     private LineGameDrawingThread gameThread;
     private LineGameLogic gameLogic;
     private final Context context;
-
-
-
 
     public LineGameView(final Context context, AttributeSet attrs) {
         super(context, attrs);

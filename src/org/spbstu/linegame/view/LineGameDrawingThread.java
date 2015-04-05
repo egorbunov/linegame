@@ -10,6 +10,7 @@ import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.CurvePoint;
+import org.spbstu.svg.PathParser;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,6 +26,9 @@ class LineGameDrawingThread extends Thread {
 
     private final Paint mainCurvePaint;
     private final Paint tappedCurvePaint;
+
+    private final String applePathString;
+    private final Path applePath;
 
     public LineGameDrawingThread(SurfaceHolder surfaceHolder, final Context context) {
         isThreadAlive = new AtomicBoolean(true);
@@ -51,6 +55,14 @@ class LineGameDrawingThread extends Thread {
         tappedCurvePaint.setStrokeJoin(Paint.Join.ROUND);
         tappedCurvePaint.setStrokeCap(Paint.Cap.ROUND);
         tappedCurvePaint.setColor(tappedLineColor);
+
+        applePathString = context.getString(R.string.apple_leaf);
+
+        applePath = PathParser.parsePath(applePathString);
+        Matrix matrix = new Matrix();
+        matrix.setScale(0.5f, 0.5f);
+        applePath.transform(matrix);
+
     }
 
     public void kill() {
@@ -134,6 +146,13 @@ class LineGameDrawingThread extends Thread {
 
         tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
         canvas.drawPath(tappedPath, tappedCurvePaint);
+
+
+
+        canvas.drawPath(applePath, tappedCurvePaint);
+
+
+
     }
 
     /**

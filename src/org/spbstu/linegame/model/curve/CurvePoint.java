@@ -37,6 +37,9 @@ public class CurvePoint extends TapableObject implements Comparable<CurvePoint> 
     public float getY() {return point.getY();}
     public Point getPoint() {return point; }
 
+    public void setX(float x) { point.setX(x);}
+    public void setY(float y) { point.setY(y);}
+
 
     @Override
     public int compareTo(CurvePoint another) {

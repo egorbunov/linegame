@@ -1,18 +1,23 @@
 package org.spbstu.linegame.model.curve;
 
-import org.spbstu.linegame.utils.Point;
-
 import java.util.Iterator;
 
 public class StraightLine extends Curve {
+    static final int POINT_NUM = 120;
     private CurvePoint[] points;
 
     public StraightLine() {
         super();
-        points = new CurvePoint[2];
-        // straight line direction is (0, 1) vector
+
+
+        points = new CurvePoint[POINT_NUM];
         points[0] = new CurvePoint(WIDTH / 2f, 0f);
-        points[1] = new CurvePoint(WIDTH / 2f, HEIGHT);
+
+        float dy = HEIGHT / (float) POINT_NUM;
+        for (int i = 1; i < POINT_NUM - 1; ++i) {
+            points[i] = new CurvePoint(points[i - 1].getX(), points[i - 1].getY() + dy);
+        }
+        points[POINT_NUM - 1] = new CurvePoint(WIDTH / 2f, HEIGHT);
     }
 
 
@@ -20,24 +25,17 @@ public class StraightLine extends Curve {
     public boolean tap(float x, float y, float curveWidth) {
         super.tap(x, y, curveWidth);
 
-        if (Math.abs(x - points[0].getX()) < curveWidth / 2f + TAP_TOLERANCE) {
-            points[0].setTapped();
-            points[1].setTapped();
-            return true;
+        boolean ans = false;
+        for (CurvePoint p : points) {
+            if (Math.abs(x - points[0].getX()) < curveWidth / 2f + TAP_TOLERANCE) {
+                ans = true;
+                p.setTapped();
+            } else {
+                p.setNotTapped();
+            }
         }
-        else {
-            points[0].setNotTapped();
-            points[1].setNotTapped();
-            return false;
-        }
-    }
 
-    @Override
-    public void setNotTapped() {
-        super.setNotTapped();
-
-        points[0].setNotTapped();
-        points[1].setNotTapped();
+        return ans;
     }
 
     @Override

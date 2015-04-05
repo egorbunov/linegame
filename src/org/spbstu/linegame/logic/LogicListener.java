@@ -6,4 +6,5 @@ public interface LogicListener {
     void onGameStarted();
     void onScoreChanged(int newScore);
     void onGameContinued();
+    void onGameInitialized();
 }

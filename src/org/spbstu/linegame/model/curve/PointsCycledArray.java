@@ -147,18 +147,49 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
      * That method sets all of the Curve points (which stored in array), which
      * are "near" to specified point (tap)
      *
-     * Because that method is based on binary search and number of points
-     * in neighbourhood of specified point should be small (not more than 10-20, I'm sure),
-     * so the complexity is O(log(2, n)), where n - number of points in the frame (curve)
-     *
      * @param tap - point to compare array points to
      * @param tolerance - permissible variation
      * @param curveWidth - width of the actual curve on the screen
      * @return true, if at least one point of the curve is "near" given point
      */
     public boolean setTapped(Point tap, float tolerance, float curveWidth) {
+        return linearTapSearch(tap, tolerance, curveWidth);
+    }
 
-        CurvePoint toSearch = new CurvePoint(tap.getX(), tap.getY());
+    /**
+     * Simple search for points closest to given one
+     */
+    private boolean linearTapSearch(Point tap, float tolerance, float curveWidth) {
+        boolean res = false;
+        int r = start < end ? end : points.length;
+        for (int cur = start; cur < r; ++cur) {
+            if (MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
+                res = true;
+                points[cur].setTapped();
+            }
+        }
+        if (start >= end) {
+            for (int cur = 0; cur < end; ++cur) {
+                if (MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
+                    res = true;
+                    points[cur].setTapped();
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Binary search of points close to given one
+     *
+     * Because that method is based on binary search and number of points
+     * in neighbourhood of specified point should be small (not more than 10-20, I'm sure),
+     * so the complexity is O(log(2, n)), where n - number of points in the frame (curve)
+     *
+     * Unf., it doesn't gain a lot.
+     */
+    private boolean binaryTapSearch(Point tap, float tolerance, float curveWidth) {
+        CurvePoint toSearch = new CurvePoint(tap);
 
         // Here is some heuristic applied: I searching for the closest point
         // by Ordinate in array. It fast, but it's not a Euclidean distance

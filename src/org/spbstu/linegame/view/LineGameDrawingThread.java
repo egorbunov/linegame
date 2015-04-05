@@ -26,8 +26,6 @@ class LineGameDrawingThread extends Thread {
     private final Paint mainCurvePaint;
     private final Paint tappedCurvePaint;
 
-
-
     public LineGameDrawingThread(SurfaceHolder surfaceHolder, final Context context) {
         isThreadAlive = new AtomicBoolean(true);
 
@@ -136,8 +134,6 @@ class LineGameDrawingThread extends Thread {
 
         tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
         canvas.drawPath(tappedPath, tappedCurvePaint);
-
-        gameLogic.nextCurveFrame();
     }
 
     /**

@@ -20,6 +20,14 @@ public class Point {
         return y;
     }
 
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
     public void normalize() {
         float dist = (float) Math.sqrt(x * x + y * y);
         if (dist == 0.0f)

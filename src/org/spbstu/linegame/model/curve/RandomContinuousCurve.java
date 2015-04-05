@@ -23,6 +23,22 @@ public class RandomContinuousCurve extends Curve {
      */
     private Random randomizer;
 
+    public RandomContinuousCurve(Curve startingCurve) {
+        super();
+
+        if (startingCurve == null)
+            throw new NullPointerException();
+
+        randomizer = new Random();
+        points = new PointsCycledArray((int) (HEIGHT / MINIMAL_Y_DISTANCE));
+
+        for (CurvePoint p : startingCurve) {
+            points.addLast(p);
+        }
+
+        nextFrame(0.0f);
+    }
+
     public RandomContinuousCurve() {
         super();
         randomizer = new Random();
@@ -41,7 +57,6 @@ public class RandomContinuousCurve extends Curve {
         generatePoints();
     }
 
-
     /**
      * Generate 2d Bezier curve points (something like De Casteljau's algorithm)
      * @param p1 first control point
@@ -49,8 +64,7 @@ public class RandomContinuousCurve extends Curve {
      * @param p3 second control point
      */
     private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
-
-        float dt = 0.025f;
+        final float T_STEP = 0.025f;
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -58,7 +72,7 @@ public class RandomContinuousCurve extends Curve {
         final float cy = p3.getY() - 2 * p2.getY() + p1.getY();
         float ax, ay, abx, aby;
         points.addLast(new CurvePoint(p1));
-        for (float t = dt; t < 1.0f; t += dt) {
+        for (float t = T_STEP; t < 1.0f; t += T_STEP) {
             ax = p1p2x * t + p1.getX();
             ay = p1p2y * t + p1.getY();
             abx = cx * t + p1p2x;
@@ -66,6 +80,7 @@ public class RandomContinuousCurve extends Curve {
             points.addLast(new CurvePoint(abx * t + ax, aby * t + ay));
         }
         points.addLast(new CurvePoint(p3));
+
     }
 
     private float dirSign = 1.0f;
@@ -73,6 +88,20 @@ public class RandomContinuousCurve extends Curve {
 
     private void generatePoints() {
         CurvePoint lastPoint = points.getLast();
+
+        /**
+         * Because points y-coordinate is always increasing, overflow is possible (it's will take
+         * a lot of time to produce that overflow, but it still possible), so we need to renew y-coordinate
+         * sometimes
+         */
+        final float BIG_FLOAT = Float.MAX_VALUE - 1000f;
+        if (points.getFirst().getY() > BIG_FLOAT) {
+            float toSub = points.getFirst().getY();
+            for (CurvePoint p : points) {
+                p.setY(p.getY() - toSub);
+            }
+        }
+
         float dir;
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
             dir = randomizer.nextFloat() / 1.5f + 0.01f;

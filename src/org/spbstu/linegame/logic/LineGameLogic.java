@@ -2,6 +2,7 @@ package org.spbstu.linegame.logic;
 
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.RandomContinuousCurve;
+import org.spbstu.linegame.model.curve.StraightLine;
 import org.spbstu.linegame.utils.MortalThread;
 
 import java.util.LinkedList;
@@ -36,7 +37,6 @@ public class LineGameLogic {
     private float width; // width of the game surface
     private float height; // height of the game surface
 
-
     /**
      * Curve, that currently draw on the game field. That is the main logic object
      */
@@ -58,6 +58,7 @@ public class LineGameLogic {
     private int score;
 
     private void resumeGame() {
+        createThinningThread();
         scrollSpeed = lastScrollSpeed;
         gameState = LineGameState.RUNNING;
         for (LogicListener listener : logicListeners)
@@ -74,27 +75,58 @@ public class LineGameLogic {
             lineThickness -= LINE_WIDTH_DELTA;
     }
 
-    public LineGameLogic() {
-        logicListeners = new LinkedList<>();
 
-        width = height = 1f;
+    /**
+     * Method must be called on the very beginning of the game. Game
+     * after call is not starting, it's just initialized.
+     *
+     * Game is actually started only after private method startGame() called from
+     * tapCurve() method
+     */
+    public void initializeGame() {
         lineThickness = STARTING_LINE_WIDTH;
         scrollSpeed = STARTING_CURVE_SPEED;
 
-        currentCurve = new RandomContinuousCurve();
+        currentCurve = new StraightLine();
 
         isGameTapped = false;
         gameState = LineGameState.STARTING;
         score = 0;
 
-        /*
-            Running task, which will check if nobody touches the screen and
-            if so, call setCurveNotTapped() method (which actually makes line width less)
+        for (LogicListener listener : logicListeners)
+            listener.onGameInitialized();
+    }
 
-            Creating and running that task in onTouchEvent(...) method guarantees that at the
-            start (just after "NewGame" button pushed) the line stays with it's starting width and
-            game is actually starts only after first tap.
-         */
+    private void startGame() {
+        lineThickness = STARTING_LINE_WIDTH;
+        scrollSpeed = STARTING_CURVE_SPEED;
+
+        currentCurve = new RandomContinuousCurve(currentCurve);
+
+        isGameTapped = false;
+        gameState = LineGameState.STARTING;
+        score = 0;
+
+        gameState = LineGameState.RUNNING;
+        createThinningThread();
+
+        for (LogicListener listener : logicListeners)
+            listener.onGameStarted();
+    }
+
+    public LineGameLogic() {
+        logicListeners = new LinkedList<>();
+        width = height = 1f;
+    }
+
+    /**
+     * Running task, which will check if nobody touches the screen and
+     * if so, call setCurveNotTapped() method (which actually makes line width less)
+     * Creating and running that task in onTouchEvent(...) method guarantees that at the
+     * start (just after "NewGame" button pushed) the line stays with it's starting width and
+     * game is actually starts only after first tap.
+     */
+    private void createThinningThread() {
         lineThinningThread = new MortalThread() {
 
             private AtomicBoolean isThreadRunning = new AtomicBoolean(true);
@@ -133,6 +165,7 @@ public class LineGameLogic {
     }
 
     public Curve getCurve() {
+        this.nextCurveFrame();
         return currentCurve;
     }
 
@@ -145,9 +178,7 @@ public class LineGameLogic {
 
         if (gameState == LineGameState.STARTING) {
             // starting the game!
-            gameState = LineGameState.RUNNING;
-            for (LogicListener listener : logicListeners)
-                listener.onGameStarted();
+            startGame();
         }
 
         if (gameState == LineGameState.PAUSED) {
@@ -194,8 +225,7 @@ public class LineGameLogic {
     }
 
     public void destroy() {
-        if (lineThinningThread != null)
-            lineThinningThread.kill();
+        destroyThinningThread();
     }
 
     public void setListener(LogicListener newListener) {
@@ -203,17 +233,26 @@ public class LineGameLogic {
     }
 
     public void pauseGame() {
-        gameState = LineGameState.PAUSED;
-        lastScrollSpeed = scrollSpeed;
-        scrollSpeed = 0;
+        if (!gameState.equals(LineGameState.PAUSED)) {
+            destroyThinningThread();
+            gameState = LineGameState.PAUSED;
+            lastScrollSpeed = scrollSpeed;
+            scrollSpeed = 0;
 
-        for (LogicListener listener : logicListeners)
-            listener.onGamePaused();
-
+            for (LogicListener listener : logicListeners)
+                listener.onGamePaused();
+        }
     }
 
     public void nextCurveFrame() {
         if (!gameState.equals(LineGameState.PAUSED))
             currentCurve.nextFrame(scrollSpeed);
+    }
+
+    private void destroyThinningThread() {
+        if (lineThinningThread != null) {
+            lineThinningThread.kill();
+            lineThinningThread = null; // TODO: it's ok?
+        }
     }
 }

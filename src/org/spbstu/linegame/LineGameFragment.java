@@ -1,29 +1,23 @@
 package org.spbstu.linegame;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.TextView;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
-import org.spbstu.linegame.logic.LogicListener;
 import org.spbstu.linegame.view.LineGameView;
 
 public class LineGameFragment extends Fragment {
 
+    /*
     private LineGameLogic gameLogic;
     LineGameView gameView;
 
     // Views
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.linegame_layout);
+        this.setContentView(R.layout.game_fragment_layout);
 
         gameLogic = new LineGameLogic();
 
@@ -31,11 +25,6 @@ public class LineGameFragment extends Fragment {
         gameView.setLogic(gameLogic);
         gameLogic.setListener(gameView);
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -77,4 +66,6 @@ public class LineGameFragment extends Fragment {
         }
         return true;
     }
+
+    */
 }

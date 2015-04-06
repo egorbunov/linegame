@@ -218,7 +218,7 @@ public class LineGameLogic {
             listener.onScoreChanged(score);
 
         if (score > tmp_sc) {
-            scrollSpeed += 0.01;
+            scrollSpeed += 0.00;
             tmp_sc += 1000;
         }
     }

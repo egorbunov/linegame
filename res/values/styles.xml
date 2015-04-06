@@ -10,8 +10,8 @@
     </style>
 
     <style name="splash_screen_text_style">
-        <item name="android:textColor">@color/splash_screen_text_color</item>
-        <item name="android:textSize">@dimen/menu_font_size</item>
+        <item name="android:textSize">@dimen/splash_screen_font_size</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/splash_text_color</item>
     </style>
 </resources>

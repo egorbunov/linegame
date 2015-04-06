@@ -11,15 +11,27 @@
     <color name="pausing_text_color">#ff000000</color>
     <color name="tap_to_play_string_color">#ff000000</color>
 
+
+    <!--
     <color name="splash_screen_text_color">#ffff1300</color>
     <color name="splash_screen_main_background_color">#ffffa124</color>
+    <color name="splash_scr_rect_color">#ffffa124</color>
+    <color name="splash_scr_rect_stroke_color">#ffe07000</color>
     <color name="splash_text_back_color">#ff00e0dc</color>
+    <color name="splash_text_back_stroke_color">#ff009e9a</color>
+    <color name="splash_text_color">#fffff7f7</color>
+    -->
 
+    <color name="splash_screen_text_color">#ffff1300</color>
+    <color name="splash_screen_main_background_color">#ffffa124</color>
+    <color name="splash_scr_rect_color">#7fb442</color>
+    <color name="splash_scr_rect_stroke_color">#42a748</color>
+    <color name="splash_text_back_color">#ff00e0dc</color>
+    <color name="splash_text_back_stroke_color">#ff009e9a</color>
+    <color name="splash_text_color">#663300</color>
 
-
-
-
-
-
+    <color name="apple_main_color">#42a748</color>
+    <color name="apple_leaf_color">#7fb442</color>
+    <color name="apple_stick_color">#663300</color>
 
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="splash_screen_font_size">26sp</dimen>
+    <dimen name="splash_screen_font_size">24sp</dimen>
     <dimen name="menu_font_size">23sp</dimen>
     <dimen name="start_text_size">30sp</dimen>
     <dimen name="score_text_size">25sp</dimen>
@@ -13,5 +13,11 @@
     <dimen name="score_value_layout_height">40dp</dimen>
     <dimen name="score_value_layout_margin_top">30dp</dimen>
     <dimen name="score_text_right_margin">7dp</dimen>
+    <dimen name="splash_text_h_margin">20dp</dimen>
+
+    <dimen name="splash_text_height">60dp</dimen>
+    <dimen name="splash_text_v_margin">20dp</dimen>
+    <dimen name="splash_text_v_padding">5dp</dimen>
+
 
 </resources>

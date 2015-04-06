@@ -10,4 +10,5 @@
     <string name="score_text_string">score</string>
     <string name="score_number_at_start">0</string>
     <string name="rules_btn_string">Rules</string>
+    <string name="go_to_site_btn_string">To site</string>
 </resources>

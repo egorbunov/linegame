@@ -35,18 +35,6 @@
                 android:layout_marginBottom="@dimen/main_menu_btn_v_margin"
                 />
             <org.spbstu.linegame.custom.GravityButton
-                android:text="@string/scores_table_button_string"
-                android:id="@+id/btnScores"
-                android:textAppearance="@style/main_menu_text_style"
-                android:background="@drawable/menu_button"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/main_menu_btn_height"
-                android:layout_gravity="center_horizontal"
-                android:alpha="0.95"
-                android:onClick="onClick_btnScores"
-                android:layout_marginBottom="@dimen/main_menu_btn_v_margin"
-                />
-            <org.spbstu.linegame.custom.GravityButton
                 android:text="@string/rules_btn_string"
                 android:id="@+id/btnRules"
                 android:textAppearance="@style/main_menu_text_style"

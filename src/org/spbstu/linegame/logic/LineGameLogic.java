@@ -9,12 +9,7 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LineGameLogic {
-    private final static float STARTING_LINE_WIDTH = 40.0f;
-    private final static float MINIMUM_LINE_WIDTH = 5.0f;
-    private final static float MAXIMUM_LINE_WIDTH = 130.0f;
-    private final static float LINE_WIDTH_DELTA = 1f;
-    private final static float STARTING_CURVE_SPEED = 0.006f;
-    private final static int SCORE_DELTA = 2;
+    final Rules rules;
 
     /**
      * Listeners will be notified if any important event happens
@@ -66,13 +61,13 @@ public class LineGameLogic {
     }
 
     private void increaseLineWidth() {
-        if (lineThickness < MAXIMUM_LINE_WIDTH)
-            lineThickness += LINE_WIDTH_DELTA;
+        if (lineThickness < Rules.MAXIMUM_LINE_WIDTH)
+            lineThickness += Rules.LINE_WIDTH_DELTA;
     }
 
     private void decreaseLineWidth() {
-        if (lineThickness > MINIMUM_LINE_WIDTH)
-            lineThickness -= LINE_WIDTH_DELTA;
+        if (lineThickness > Rules.MINIMUM_LINE_WIDTH)
+            lineThickness -= Rules.LINE_WIDTH_DELTA;
     }
 
 
@@ -84,8 +79,8 @@ public class LineGameLogic {
      * tapCurve() method
      */
     public void initializeGame() {
-        lineThickness = STARTING_LINE_WIDTH;
-        scrollSpeed = STARTING_CURVE_SPEED;
+        lineThickness = Rules.STARTING_LINE_WIDTH;
+        scrollSpeed = Rules.STARTING_CURVE_SPEED;
 
         currentCurve = new StraightLine();
 
@@ -98,8 +93,8 @@ public class LineGameLogic {
     }
 
     private void startGame() {
-        lineThickness = STARTING_LINE_WIDTH;
-        scrollSpeed = STARTING_CURVE_SPEED;
+        lineThickness = Rules.STARTING_LINE_WIDTH;
+        scrollSpeed = Rules.STARTING_CURVE_SPEED;
 
         currentCurve = new RandomContinuousCurve(currentCurve);
 
@@ -117,6 +112,8 @@ public class LineGameLogic {
     public LineGameLogic() {
         logicListeners = new LinkedList<>();
         width = height = 1f;
+        rules = new Rules();
+
     }
 
     /**
@@ -162,6 +159,7 @@ public class LineGameLogic {
             throw new IllegalArgumentException();
         this.width = width;
         this.height = height;
+        rules.setSizes(width, height);
     }
 
     public Curve getCurve() {
@@ -209,18 +207,11 @@ public class LineGameLogic {
         increaseScore();
     }
 
-    private int tmp_sc = 1000;
-
     private void increaseScore() {
-        score += SCORE_DELTA;
+        score += Rules.SCORE_DELTA;
         // notifying listeners, that score changed
         for (LogicListener listener : logicListeners)
             listener.onScoreChanged(score);
-
-        if (score > tmp_sc) {
-            scrollSpeed += 0.00;
-            tmp_sc += 1000;
-        }
     }
 
     public void setCurveNotTapped() {

@@ -27,7 +27,7 @@
     <TextView
         android:layout_width="@dimen/score_text_layout_width"
         android:layout_height="@dimen/score_text_layout_height"
-        android:text="@string/score_text_string"
+        android:text="@string/dist_text_string"
         android:visibility="gone"
         android:layout_marginRight="@dimen/score_text_right_margin"
         android:textSize="@dimen/score_text_size"
@@ -42,7 +42,7 @@
         android:layout_width="fill_parent"
         android:layout_height="@dimen/score_value_layout_height"
         android:layout_marginRight="@dimen/score_text_right_margin"
-        android:text="@string/score_number_at_start"
+        android:text="@string/dist_val_at_start"
         android:visibility="gone"
         android:textSize="@dimen/score_text_size"
         android:gravity="end"

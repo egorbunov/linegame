@@ -40,9 +40,6 @@ public class MainActivity extends FragmentActivity {
         transaction.commit();
     }
 
-    public void onClick_btnScores(View view) {
-    }
-
     public void onClick_btnRules(View view) {
     }
 

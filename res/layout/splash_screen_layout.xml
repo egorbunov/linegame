@@ -5,7 +5,7 @@
     android:layout_centerInParent="true"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/main_background_color"
+    android:background="@color/splash_screen_main_background_color"
     android:weightSum="100">
 
     <TextView
@@ -29,6 +29,7 @@
 
     <org.spbstu.linegame.view.AppleView
         android:layout_weight="95"
+        android:id="@+id/appleView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -48,5 +49,6 @@
         android:layout_marginTop="@dimen/splash_text_v_margin"
         android:textAppearance="@style/splash_screen_text_style"
         android:textColor="@color/splash_text_color"
-        android:alpha="0.9"/>
+        android:alpha="0.9"
+        android:onClick="onClick_btnToSite"/>
 </LinearLayout>

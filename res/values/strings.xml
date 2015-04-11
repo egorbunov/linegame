@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="dep_site">http://amd.stu.neva.ru/</string>
     <string name="splash_screen_head_string">Department of Applied Mathematics, SPbPU</string>
     <string name="app_name">LineGame</string>
     <string name="new_game_button_string">New game</string>

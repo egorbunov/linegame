@@ -3,13 +3,13 @@ package org.spbstu.linegame.logic;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.RandomContinuousCurve;
 import org.spbstu.linegame.model.curve.StraightLine;
-import org.spbstu.linegame.utils.MortalThread;
+import org.spbstu.linegame.utils.MortalRunnable;
 
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LineGameLogic {
-    final Rules rules;
+    final GameConstraints gameConstraints;
 
     /**
      * Listeners will be notified if any important event happens
@@ -17,9 +17,9 @@ public class LineGameLogic {
     LinkedList<LogicListener> logicListeners;
 
     /**
-     * singleton thread for thinning line width if no finger on touch screen
+     * singleton runnable for thinning line width if no finger on touch screen
      */
-    private MortalThread lineThinningThread; // TODO: u need to kill() that thread at some point
+    private MortalRunnable lineThinningTask;
     private static final int LINE_THINNING_THREAD_DELAY = 25;
 
     /**
@@ -39,35 +39,43 @@ public class LineGameLogic {
     private LineGameState gameState;
     private float lastScrollSpeed; // I use that variable to correctly pause the game
 
-
-    // variables responsible for game hardness
-    private float lineThickness;
     /**
-     * must be in [0, HEIGHT)
+     * Game passedDistance is stored in that variable.
      */
-    private float scrollSpeed;
+    private int passedDistance;
 
     /**
-     * Game score is stored in that variable.
+     * How much height of one screen is already skipped
      */
-    private int score;
+    private float heightSkipped;
+
 
     private void resumeGame() {
         createThinningThread();
-        scrollSpeed = lastScrollSpeed;
+        gameConstraints.setScrollSpeed(lastScrollSpeed);
         gameState = LineGameState.RUNNING;
         for (LogicListener listener : logicListeners)
             listener.onGameContinued();
     }
 
     private void increaseLineWidth() {
-        if (lineThickness < Rules.MAXIMUM_LINE_WIDTH)
-            lineThickness += Rules.LINE_WIDTH_DELTA;
+        if (gameConstraints.getLineThickness() < GameConstraints.MAXIMUM_LINE_WIDTH)
+            gameConstraints.incLineThickness();
+    }
+
+    public void finishTheGame() {
+        destroyThinningThread();
+        gameConstraints.setScrollSpeed(0.0f);
+        gameState = LineGameState.FINISHED;
+        for (LogicListener listener : logicListeners)
+            listener.onGameEnd();
     }
 
     private void decreaseLineWidth() {
-        if (lineThickness > Rules.MINIMUM_LINE_WIDTH)
-            lineThickness -= Rules.LINE_WIDTH_DELTA;
+        gameConstraints.decLineThickness();
+        if (gameConstraints.getLineThickness() <= GameConstraints.GAME_OVER_LINE_WIDTH) {
+            finishTheGame();
+        }
     }
 
 
@@ -79,28 +87,25 @@ public class LineGameLogic {
      * tapCurve() method
      */
     public void initializeGame() {
-        lineThickness = Rules.STARTING_LINE_WIDTH;
-        scrollSpeed = Rules.STARTING_CURVE_SPEED;
+        gameConstraints.setLineThickness(GameConstraints.STARTING_LINE_WIDTH);
+        gameConstraints.setScrollSpeed(GameConstraints.STARTING_CURVE_SPEED);
 
         currentCurve = new StraightLine();
 
         isGameTapped = false;
         gameState = LineGameState.STARTING;
-        score = 0;
+        passedDistance = 0;
 
         for (LogicListener listener : logicListeners)
             listener.onGameInitialized();
     }
 
     private void startGame() {
-        lineThickness = Rules.STARTING_LINE_WIDTH;
-        scrollSpeed = Rules.STARTING_CURVE_SPEED;
-
         currentCurve = new RandomContinuousCurve(currentCurve);
 
         isGameTapped = false;
         gameState = LineGameState.STARTING;
-        score = 0;
+        passedDistance = 0;
 
         gameState = LineGameState.RUNNING;
         createThinningThread();
@@ -112,7 +117,7 @@ public class LineGameLogic {
     public LineGameLogic() {
         logicListeners = new LinkedList<>();
         width = height = 1f;
-        rules = new Rules();
+        gameConstraints = new GameConstraints();
 
     }
 
@@ -124,7 +129,7 @@ public class LineGameLogic {
      * game is actually starts only after first tap.
      */
     private void createThinningThread() {
-        lineThinningThread = new MortalThread() {
+        lineThinningTask = new MortalRunnable() {
 
             private AtomicBoolean isThreadRunning = new AtomicBoolean(true);
 
@@ -135,14 +140,12 @@ public class LineGameLogic {
 
             @Override
             public void run() {
-                super.run();
                 while (isThreadRunning.get()) {
                     try {
                         Thread.sleep(LINE_THINNING_THREAD_DELAY);
                     } catch (InterruptedException e) {
                         e.printStackTrace(); // TODO: is it ok just to print stack trace?
                     }
-
                     // next call actually make line thinner (if nobody touches the screen)
                     if (!isGameTapped && gameState.equals(LineGameState.RUNNING)) {
                         currentCurve.setNotTapped();
@@ -151,7 +154,7 @@ public class LineGameLogic {
                 }
             }
         };
-        lineThinningThread.start();
+        lineThinningTask.run();
     }
 
     public void fieldResize(float width, float height) {
@@ -159,7 +162,7 @@ public class LineGameLogic {
             throw new IllegalArgumentException();
         this.width = width;
         this.height = height;
-        rules.setSizes(width, height);
+        gameConstraints.setSizes(width, height);
     }
 
     public Curve getCurve() {
@@ -168,7 +171,7 @@ public class LineGameLogic {
     }
 
     public float getLineThickness() {
-        return lineThickness;
+        return gameConstraints.getLineThickness();
     }
 
     public void tapCurve(float x, float y) {
@@ -184,7 +187,7 @@ public class LineGameLogic {
             resumeGame();
         }
 
-        if (currentCurve.tap(x / width, y / height, lineThickness / width)) {
+        if (currentCurve.tap(x / width, y / height, gameConstraints.getLineThickness() / width)) {
             curveTapped();
         }
         else
@@ -208,10 +211,10 @@ public class LineGameLogic {
     }
 
     private void increaseScore() {
-        score += Rules.SCORE_DELTA;
-        // notifying listeners, that score changed
+        passedDistance += GameConstraints.SCORE_DELTA;
+        // notifying listeners, that passedDistance changed
         for (LogicListener listener : logicListeners)
-            listener.onScoreChanged(score);
+            listener.onScoreChanged(passedDistance);
     }
 
     public void setCurveNotTapped() {
@@ -222,10 +225,6 @@ public class LineGameLogic {
         return gameState;
     }
 
-    public void destroy() {
-        destroyThinningThread();
-    }
-
     public void setListener(LogicListener newListener) {
         logicListeners.addLast(newListener);
     }
@@ -234,8 +233,8 @@ public class LineGameLogic {
         if (!gameState.equals(LineGameState.PAUSED)) {
             destroyThinningThread();
             gameState = LineGameState.PAUSED;
-            lastScrollSpeed = scrollSpeed;
-            scrollSpeed = 0;
+            lastScrollSpeed = gameConstraints.getScrollSpeed();
+            gameConstraints.setScrollSpeed(0.0f);
 
             for (LogicListener listener : logicListeners)
                 listener.onGamePaused();
@@ -244,13 +243,13 @@ public class LineGameLogic {
 
     public void nextCurveFrame() {
         if (!gameState.equals(LineGameState.PAUSED))
-            currentCurve.nextFrame(scrollSpeed);
+            currentCurve.nextFrame(gameConstraints.getScrollSpeed());
     }
 
     private void destroyThinningThread() {
-        if (lineThinningThread != null) {
-            lineThinningThread.kill();
-            lineThinningThread = null; // TODO: it's ok?
+        if (lineThinningTask != null) {
+            lineThinningTask.kill();
+            lineThinningTask = null; // TODO: it's ok?
         }
     }
 }

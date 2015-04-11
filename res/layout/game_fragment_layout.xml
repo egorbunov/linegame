@@ -11,21 +11,20 @@
         android:layout_height="fill_parent"
         />
 
-    <!-- Text, which appears before start -->
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:text="@string/tap_to_start_string"
-            android:textSize="@dimen/start_text_size"
-            android:gravity="center"
-            android:textColor="@color/tap_to_play_string_color"
-            android:textStyle="bold"
-            android:id="@+id/StartingTextView" android:layout_gravity="center"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="@string/tap_to_start_string"
+        android:textSize="@dimen/start_text_size"
+        android:gravity="center"
+        android:textColor="@color/tap_to_play_string_color"
+        android:textStyle="bold"
+        android:id="@+id/CenteredText" android:layout_gravity="center"/>
 
     <!-- Text heading line with score number -->
     <TextView
-        android:layout_width="@dimen/score_text_layout_width"
+        android:layout_width="fill_parent"
         android:layout_height="@dimen/score_text_layout_height"
         android:text="@string/dist_text_string"
         android:visibility="gone"
@@ -51,17 +50,6 @@
         android:id="@+id/ScoreValueTextView"
         android:layout_gravity="end|top"
         android:layout_marginTop="@dimen/score_value_layout_margin_top" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="@string/tap_to_continue_string"
-        android:textSize="@dimen/start_text_size"
-        android:textColor="@color/pausing_text_color"
-        android:textStyle="bold"
-        android:id="@+id/OnPauseTextView" android:layout_gravity="center"/>
 
 
 </FrameLayout>

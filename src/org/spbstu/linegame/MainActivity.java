@@ -10,11 +10,15 @@ import android.view.View;
  * Email: egor-mailbox@ya.ru
  * Github username: egorbunov
  *
- * That's main activity which starting fragment is game menu fragment {@link MenuFragment}.
+ * That's main activity whose starting fragment is game menu fragment {@link MenuFragment}.
  */
 public class MainActivity extends FragmentActivity {
-    private final String LINE_GAME_FRAGMENT_TAG = "LINE_GAME_FRAGMENT";
-    private final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT";
+    private static final String LINE_GAME_FRAGMENT_TAG = "LINE_GAME_FRAGMENT";
+    private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT";
+
+    LineGameFragment lineGameFragment;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +34,13 @@ public class MainActivity extends FragmentActivity {
 
         // Add menuFragment to layout
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment, MENU_FRAGMENT_TAG).commit();
+        lineGameFragment = new LineGameFragment();
     }
 
+
     public void onClick_btnNewGame(View view) {
-        LineGameFragment gameFragment = new LineGameFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, gameFragment, LINE_GAME_FRAGMENT_TAG);
+        transaction.replace(R.id.fragment_container, lineGameFragment, LINE_GAME_FRAGMENT_TAG);
         transaction.addToBackStack(null);
         transaction.commit();
     }

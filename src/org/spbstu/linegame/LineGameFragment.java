@@ -1,6 +1,5 @@
 package org.spbstu.linegame;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,14 +22,14 @@ public class LineGameFragment extends Fragment implements LogicListener {
     LineGameView gameView;
 
     // nested Views
-    private TextView startingTextView;
+    private TextView centeredTextView;
     private TextView scoreValueTextView;
     private TextView scoreTextView;
-    private TextView onPauseTextView;
 
     // Animations
     private Animation scoreAnimation;
     private Animation textPulseAnimation;
+    private Animation gameOverTextAnimation;
 
 
     public void onCreate (Bundle savedInstanceState) {
@@ -38,6 +37,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
 
         textPulseAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.text_pulsing);
         scoreAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.text_short_pulsing);
+        gameOverTextAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.text_scale_rotate);
 
         gameLogic = new LineGameLogic();
         gameLogic.setListener(this);
@@ -49,10 +49,8 @@ public class LineGameFragment extends Fragment implements LogicListener {
         View view = inflater.inflate(R.layout.game_fragment_layout, container, false);
 
         // Getting nested views...
-
-        startingTextView = (TextView) view.findViewById(R.id.StartingTextView);
-        startingTextView.setVisibility(View.GONE);
-
+        centeredTextView = (TextView) view.findViewById(R.id.CenteredText);
+        centeredTextView.setVisibility(View.GONE);
 
         scoreTextView = (TextView) view.findViewById(R.id.ScoreLineTextView);
         scoreTextView.setVisibility(View.GONE);
@@ -60,15 +58,12 @@ public class LineGameFragment extends Fragment implements LogicListener {
         scoreValueTextView = (TextView) view.findViewById(R.id.ScoreValueTextView);
         scoreValueTextView.setVisibility(View.GONE);
 
-        onPauseTextView = (TextView) view.findViewById(R.id.OnPauseTextView);
-        onPauseTextView.setVisibility(View.GONE);
-
         gameView = (LineGameView)view.findViewById(R.id.LineGameView);
 
         gameView.setLogic(gameLogic);
 
         // Setting touch listener
-        view.setOnTouchListener(new View.OnTouchListener() {
+        gameView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 if (gameLogic == null)
                     return true;
@@ -125,22 +120,40 @@ public class LineGameFragment extends Fragment implements LogicListener {
             gameLogic.pauseGame();
     }
 
+    /**
+     * There is a problem with callback methods, which are invoked from some place (current fragment
+     * is listening to LineGameLogic class instance, but that instance is actually a black box for the fragment.
+     * We can't be sure that there is no thread, which is created inside LineGameLogic and invokes any of that
+     * listening methods (for now there is one...) that causes an exception, because views, that are changed in
+     * methods below can be touched only from Thread, which created that views.
+     */
     @Override
     public void onGameEnd() {
+        centeredTextView.setText(getResources().getString(R.string.game_over_string));
+        centeredTextView.setTextColor(getResources().getColor(R.color.game_over_text_color));
+        centeredTextView.startAnimation(gameOverTextAnimation);
+        centeredTextView.setVisibility(View.VISIBLE);
 
+        gameView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                getActivity().getSupportFragmentManager().popBackStack();
+                return true;
+            }
+        });
     }
 
     @Override
     public void onGamePaused() {
-        onPauseTextView.startAnimation(textPulseAnimation);
-        onPauseTextView.setVisibility(View.VISIBLE);
+        centeredTextView.setText(getResources().getString(R.string.tap_to_continue_string));
+        centeredTextView.setTextColor(getResources().getColor(R.color.pausing_text_color));
+        centeredTextView.startAnimation(textPulseAnimation);
+        centeredTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onGameStarted() {
-        startingTextView.clearAnimation();
-        startingTextView.setVisibility(View.GONE);
-
+        centeredTextView.clearAnimation();
+        centeredTextView.setVisibility(View.GONE);
         scoreValueTextView.setVisibility(View.VISIBLE);
         scoreTextView.setVisibility(View.VISIBLE);
     }
@@ -158,14 +171,14 @@ public class LineGameFragment extends Fragment implements LogicListener {
 
     @Override
     public void onGameContinued() {
-        onPauseTextView.clearAnimation();
-        onPauseTextView.setVisibility(View.GONE);
+        centeredTextView.clearAnimation();
+        centeredTextView.setVisibility(View.GONE);
     }
 
     @Override
     public void onGameInitialized() {
-        startingTextView.clearAnimation();
-        startingTextView.startAnimation(textPulseAnimation); // It's here, because ...
-        startingTextView.setVisibility(View.VISIBLE);
+        centeredTextView.clearAnimation();
+        centeredTextView.startAnimation(textPulseAnimation); // It's here, because ...
+        centeredTextView.setVisibility(View.VISIBLE);
     }
 }

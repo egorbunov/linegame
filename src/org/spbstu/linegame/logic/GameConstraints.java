@@ -41,7 +41,7 @@ class GameConstraints {
     }
 
     /**
-     * must be in [0, HEIGHT)
+     * must be in [0, 1)
      */
     private float scrollSpeed;
 

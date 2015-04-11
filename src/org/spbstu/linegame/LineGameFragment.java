@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import org.spbstu.LogicEventToUiSender;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.logic.LogicListener;
@@ -40,7 +41,10 @@ public class LineGameFragment extends Fragment implements LogicListener {
         gameOverTextAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.text_scale_rotate);
 
         gameLogic = new LineGameLogic();
-        gameLogic.setListener(this);
+
+        LogicEventToUiSender logicEventToUiSender = new LogicEventToUiSender();
+        logicEventToUiSender.setHandlerLogicListener(this);
+        gameLogic.setListener(logicEventToUiSender);
     }
 
 
@@ -79,7 +83,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        gameLogic.setCurveNotTapped();
+                        gameLogic.setGameNotTapped();
                         break;
                 }
                 return true;
@@ -105,7 +109,8 @@ public class LineGameFragment extends Fragment implements LogicListener {
      */
     public boolean onBackPressed() {
         if (!gameLogic.getGameState().equals(LineGameState.STARTING) &&
-                !gameLogic.getGameState().equals(LineGameState.PAUSED)) {
+                !gameLogic.getGameState().equals(LineGameState.PAUSED) &&
+                !gameLogic.getGameState().equals(LineGameState.FINISHED)) {
             gameLogic.pauseGame();
             return true;
         }
@@ -116,23 +121,19 @@ public class LineGameFragment extends Fragment implements LogicListener {
     public void onPause() {
         super.onPause();
 
-        if (!gameLogic.getGameState().equals(LineGameState.STARTING))
+        if (!gameLogic.getGameState().equals(LineGameState.STARTING) &&
+                !gameLogic.getGameState().equals(LineGameState.PAUSED) &&
+                !gameLogic.getGameState().equals(LineGameState.FINISHED))
             gameLogic.pauseGame();
     }
 
-    /**
-     * There is a problem with callback methods, which are invoked from some place (current fragment
-     * is listening to LineGameLogic class instance, but that instance is actually a black box for the fragment.
-     * We can't be sure that there is no thread, which is created inside LineGameLogic and invokes any of that
-     * listening methods (for now there is one...) that causes an exception, because views, that are changed in
-     * methods below can be touched only from Thread, which created that views.
-     */
     @Override
     public void onGameEnd() {
         centeredTextView.setText(getResources().getString(R.string.game_over_string));
         centeredTextView.setTextColor(getResources().getColor(R.color.game_over_text_color));
         centeredTextView.startAnimation(gameOverTextAnimation);
         centeredTextView.setVisibility(View.VISIBLE);
+
 
         gameView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -159,12 +160,12 @@ public class LineGameFragment extends Fragment implements LogicListener {
     }
 
     @Override
-    public void onScoreChanged(int newScore) {
+    public void onDistanceChanged(int newDistance) {
         if (scoreValueTextView != null) {
-            scoreValueTextView.setText(Integer.toString(newScore));
-            if (newScore - lastScoreAnimationValue >= SCORE_ANIMATION_VALUE) {
+            scoreValueTextView.setText(Integer.toString(newDistance));
+            if (newDistance - lastScoreAnimationValue >= SCORE_ANIMATION_VALUE) {
                 scoreValueTextView.startAnimation(scoreAnimation);
-                lastScoreAnimationValue = newScore;
+                lastScoreAnimationValue = newDistance;
             }
         }
     }

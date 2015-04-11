@@ -4,7 +4,7 @@ public interface LogicListener {
     void onGameEnd();
     void onGamePaused();
     void onGameStarted();
-    void onScoreChanged(int newScore);
+    void onDistanceChanged(int newDistance);
     void onGameContinued();
     void onGameInitialized();
 }

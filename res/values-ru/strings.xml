@@ -7,7 +7,7 @@
     <string name="rules_btn_string">Правила</string>
     <string name="tap_to_start_string">Коснись экрана чтобы начать!</string>
     <string name="tap_to_continue_string">Коснись экрана для продолжения!</string>
-    <string name="game_over_string">Ты проиграл :D</string>
+    <string name="game_over_string">Вы проиграли!</string>
     <string name="dist_text_string">расстояние</string>
     <string name="dist_val_at_start">0</string>
     <string name="go_to_site_btn_string">На сайт</string>

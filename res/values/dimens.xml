@@ -17,6 +17,7 @@
     <dimen name="splash_text_height">60dp</dimen>
     <dimen name="splash_text_v_margin">20dp</dimen>
     <dimen name="splash_text_v_padding">5dp</dimen>
+    <dimen name="game_centered_text_height">150dp</dimen>
 
 
 </resources>

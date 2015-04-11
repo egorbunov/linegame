@@ -17,8 +17,8 @@ import java.util.Iterator;
  * segment will be: [start, end) := [0, 0), so the previous element
  * for 0 is size - 1
  */
-public final class PointsCycledArray implements Iterable<CurvePoint> {
-    private CurvePoint[] points;
+public final class PointsCycledArray implements Iterable<GameCurvePoint> {
+    private GameCurvePoint[] points;
     // because array is cycled we need to store end and start
     // start can be > end
     private int start;
@@ -32,12 +32,12 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
         if (capacity < 1)
             throw new IllegalArgumentException();
 
-        points = new CurvePoint[capacity];
+        points = new GameCurvePoint[capacity];
         start = end = 0;
         elementCount = 0;
     }
 
-    public void addLast(CurvePoint point) {
+    public void addLast(GameCurvePoint point) {
         if (point == null) {
             throw new NullPointerException();
         }
@@ -60,7 +60,7 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
             end = 0;
     }
 
-    public void addFirst(CurvePoint point) {
+    public void addFirst(GameCurvePoint point) {
         if (point == null) {
             throw new NullPointerException();
         }
@@ -80,12 +80,12 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
         points[start] = point;
     }
 
-    public CurvePoint deleteFirst() {
+    public GameCurvePoint deleteFirst() {
         if (start == end)
             return null;
         elementCount -= 1;
 
-        CurvePoint toReturn = points[start];
+        GameCurvePoint toReturn = points[start];
         points[start] = null;
         start += 1;
 
@@ -95,19 +95,19 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
         return toReturn;
     }
 
-    public CurvePoint skipYDist(float distToSkip) {
-        int nearest = binarySearch(new CurvePoint(0, points[start].getY() + distToSkip),
-                CurvePoint.ORDINATE_COMPARATOR);
+    public GameCurvePoint skipYDist(float distToSkip) {
+        int nearest = binarySearch(new GameCurvePoint(0, points[start].getY() + distToSkip),
+                GameCurvePoint.ORDINATE_COMPARATOR);
 
         //if (points[nearest].getY())
         return null;
     }
 
-    public CurvePoint getLast() {
+    public GameCurvePoint getLast() {
         return points[lastElementIndex()];
     }
 
-    public CurvePoint getFirst() {
+    public GameCurvePoint getFirst() {
         return points[start];
     }
 
@@ -116,7 +116,7 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
      * @param toSearch point to search
      * @return index of nearest to given one point in array
      */
-    private int binarySearch(CurvePoint toSearch, Comparator<CurvePoint> comparator) {
+    private int binarySearch(GameCurvePoint toSearch, Comparator<GameCurvePoint> comparator) {
         int nearest;
         if (start <= end) {
             nearest = Arrays.binarySearch(points, start, end, toSearch, comparator);
@@ -189,7 +189,7 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
      * Unf., it doesn't gain a lot.
      */
     private boolean binaryTapSearch(Point tap, float tolerance, float curveWidth) {
-        CurvePoint toSearch = new CurvePoint(tap);
+        GameCurvePoint toSearch = new GameCurvePoint(tap);
 
         // Here is some heuristic applied: I searching for the closest point
         // by Ordinate in array. It fast, but it's not a Euclidean distance
@@ -200,7 +200,7 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
         // TO EGOR FROM THE FUTURE: if that became a problem, I think, it will be okay
         // solution to just scan some fixed number of points near closest by Ordinate.
         // So asymptotic will be kept...
-        int nearest = binarySearch(toSearch, CurvePoint.ORDINATE_COMPARATOR);
+        int nearest = binarySearch(toSearch, GameCurvePoint.ORDINATE_COMPARATOR);
         assert points[nearest] != null;
 
         boolean result = false;
@@ -225,8 +225,8 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
     }
 
     @Override
-    public Iterator<CurvePoint> iterator() {
-        return new Iterator<CurvePoint>() {
+    public Iterator<GameCurvePoint> iterator() {
+        return new Iterator<GameCurvePoint>() {
             private boolean hasNext = size() > 0;
             private int curIndex = start;
             @Override
@@ -235,10 +235,10 @@ public final class PointsCycledArray implements Iterable<CurvePoint> {
             }
 
             @Override
-            public CurvePoint next() {
+            public GameCurvePoint next() {
                 if (!hasNext)
                     throw new UnresolvedAddressException();
-                CurvePoint toReturn = points[curIndex];
+                GameCurvePoint toReturn = points[curIndex];
                 curIndex += 1;
                 if (curIndex >= points.length)
                     curIndex = 0;

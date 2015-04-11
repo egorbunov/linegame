@@ -32,7 +32,7 @@ public class RandomContinuousCurve extends Curve {
         randomizer = new Random();
         points = new PointsCycledArray((int) (HEIGHT / MINIMAL_Y_DISTANCE));
 
-        for (CurvePoint p : startingCurve) {
+        for (GameCurvePoint p : startingCurve) {
             points.addLast(p);
         }
 
@@ -43,7 +43,7 @@ public class RandomContinuousCurve extends Curve {
         super();
         randomizer = new Random();
         points = new PointsCycledArray((int) (HEIGHT / MINIMAL_Y_DISTANCE));
-        generatePoints(new CurvePoint(WIDTH / 2.0f, 0.0f));
+        generatePoints(new GameCurvePoint(WIDTH / 2.0f, 0.0f));
     }
 
     /**
@@ -52,7 +52,7 @@ public class RandomContinuousCurve extends Curve {
      * @param startingPoint point, which will be added firstly to the
      *                      end of the list
      */
-    private void generatePoints(CurvePoint startingPoint) {
+    private void generatePoints(GameCurvePoint startingPoint) {
         points.addLast(startingPoint);
         generatePoints();
     }
@@ -71,15 +71,15 @@ public class RandomContinuousCurve extends Curve {
         final float cx = p3.getX() - 2 * p2.getX() + p1.getX();
         final float cy = p3.getY() - 2 * p2.getY() + p1.getY();
         float ax, ay, abx, aby;
-        points.addLast(new CurvePoint(p1));
+        points.addLast(new GameCurvePoint(p1));
         for (float t = T_STEP; t < 1.0f; t += T_STEP) {
             ax = p1p2x * t + p1.getX();
             ay = p1p2y * t + p1.getY();
             abx = cx * t + p1p2x;
             aby = cy * t + p1p2y;
-            points.addLast(new CurvePoint(abx * t + ax, aby * t + ay));
+            points.addLast(new GameCurvePoint(abx * t + ax, aby * t + ay));
         }
-        points.addLast(new CurvePoint(p3));
+        points.addLast(new GameCurvePoint(p3));
 
     }
 
@@ -87,7 +87,7 @@ public class RandomContinuousCurve extends Curve {
     private Point lastTangentVec = new Point(0f, 1f);
 
     private void generatePoints() {
-        CurvePoint lastPoint = points.getLast();
+        GameCurvePoint lastPoint = points.getLast();
 
         /**
          * Because points y-coordinate is always increasing, overflow is possible (it's will take
@@ -97,7 +97,7 @@ public class RandomContinuousCurve extends Curve {
         final float BIG_FLOAT = Float.MAX_VALUE - 1000f;
         if (points.getFirst().getY() > BIG_FLOAT) {
             float toSub = points.getFirst().getY();
-            for (CurvePoint p : points) {
+            for (GameCurvePoint p : points) {
                 p.setY(p.getY() - toSub);
             }
         }
@@ -133,16 +133,17 @@ public class RandomContinuousCurve extends Curve {
     }
 
     @Override
-    public CurvePoint getLastPoint() {
+    public GameCurvePoint getLastPoint() {
         return points.getLast();
     }
 
+    // TODO: make point skip faster by using binary search
     @Override
     public void nextFrame(float toSkip) {
         // deleting skipped points
-        CurvePoint startPoint = points.deleteFirst();
-        CurvePoint curPoint = points.getFirst();
-        CurvePoint prevPoint = startPoint;
+        GameCurvePoint startPoint = points.deleteFirst();
+        GameCurvePoint curPoint = points.getFirst();
+        GameCurvePoint prevPoint = startPoint;
         while (curPoint.getY() - startPoint.getY() < toSkip) {
             points.deleteFirst();
             prevPoint = curPoint;
@@ -152,7 +153,7 @@ public class RandomContinuousCurve extends Curve {
         // adding first point if needed
         if (curPoint.getY() - startPoint.getY() != toSkip) {
             float ratio = (startPoint.getY() - prevPoint.getY() + toSkip) / (curPoint.getY() - prevPoint.getY());
-            CurvePoint toAdd = new CurvePoint(MyMath.segmentPoint(prevPoint.getPoint(), curPoint.getPoint(), ratio));
+            GameCurvePoint toAdd = new GameCurvePoint(MyMath.segmentPoint(prevPoint.getPoint(), curPoint.getPoint(), ratio));
             if (prevPoint.isTapped())
                 toAdd.setTapped();
             points.addFirst(toAdd);
@@ -162,22 +163,22 @@ public class RandomContinuousCurve extends Curve {
     }
 
     @Override
-    public Iterator<CurvePoint> iterator() {
-        return new Iterator<CurvePoint>() {
-            Iterator<CurvePoint> arrayIterator = points.iterator();
+    public Iterator<GameCurvePoint> iterator() {
+        return new Iterator<GameCurvePoint>() {
+            Iterator<GameCurvePoint> arrayIterator = points.iterator();
             @Override
             public boolean hasNext() {
                 return arrayIterator.hasNext();
             }
 
             @Override
-            public CurvePoint next() {
-                CurvePoint notTransformed = arrayIterator.next();
+            public GameCurvePoint next() {
+                GameCurvePoint notTransformed = arrayIterator.next();
                 if (notTransformed == null) {
                     Log.e(this.getClass().getName(), "NULL!!!!!!!!!!! WHY?????????????????????? HOOOORSEEEE!!!!!!!!");
                     return null;
                 }
-                CurvePoint toReturn = new CurvePoint(new Point(notTransformed.getX(),
+                GameCurvePoint toReturn = new GameCurvePoint(new Point(notTransformed.getX(),
                         notTransformed.getY() - points.getFirst().getY()));
                 if (notTransformed.isTapped())
                     toReturn.setTapped();

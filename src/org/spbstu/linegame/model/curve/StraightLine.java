@@ -4,20 +4,20 @@ import java.util.Iterator;
 
 public class StraightLine extends Curve {
     static final int POINT_NUM = 120;
-    private CurvePoint[] points;
+    private GameCurvePoint[] points;
 
     public StraightLine() {
         super();
 
 
-        points = new CurvePoint[POINT_NUM];
-        points[0] = new CurvePoint(WIDTH / 2f, 0f);
+        points = new GameCurvePoint[POINT_NUM];
+        points[0] = new GameCurvePoint(WIDTH / 2f, 0f);
 
         float dy = HEIGHT / (float) POINT_NUM;
         for (int i = 1; i < POINT_NUM - 1; ++i) {
-            points[i] = new CurvePoint(points[i - 1].getX(), points[i - 1].getY() + dy);
+            points[i] = new GameCurvePoint(points[i - 1].getX(), points[i - 1].getY() + dy);
         }
-        points[POINT_NUM - 1] = new CurvePoint(WIDTH / 2f, HEIGHT);
+        points[POINT_NUM - 1] = new GameCurvePoint(WIDTH / 2f, HEIGHT);
     }
 
 
@@ -26,7 +26,7 @@ public class StraightLine extends Curve {
         super.tap(x, y, curveWidth);
 
         boolean ans = false;
-        for (CurvePoint p : points) {
+        for (GameCurvePoint p : points) {
             if (Math.abs(x - points[0].getX()) < curveWidth / 2f + TAP_TOLERANCE) {
                 ans = true;
                 p.setTapped();
@@ -39,7 +39,7 @@ public class StraightLine extends Curve {
     }
 
     @Override
-    public CurvePoint getLastPoint() {
+    public GameCurvePoint getLastPoint() {
         return points[2];
     }
 
@@ -50,8 +50,8 @@ public class StraightLine extends Curve {
 
 
     @Override
-    public Iterator<CurvePoint> iterator() {
-        return new Iterator<CurvePoint>() {
+    public Iterator<GameCurvePoint> iterator() {
+        return new Iterator<GameCurvePoint>() {
             private int curIndex = 0;
             @Override
             public boolean hasNext() {
@@ -59,7 +59,7 @@ public class StraightLine extends Curve {
             }
 
             @Override
-            public CurvePoint next() {
+            public GameCurvePoint next() {
                 return points[curIndex++];
             }
 

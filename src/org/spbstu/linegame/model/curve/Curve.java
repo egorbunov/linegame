@@ -12,7 +12,7 @@ package org.spbstu.linegame.model.curve;
  * Also, because of Curve is Iterable, which means some arrangement of Curve points, first point
  * must have 0 y-coordinate and last must have 1 x-coordinate
  */
-public abstract class Curve implements Iterable<CurvePoint> {
+public abstract class Curve implements Iterable<GameCurvePoint> {
     protected static final float WIDTH = 1f;
     protected static final float HEIGHT = 1f;
     protected static final float TAP_TOLERANCE = 0.03f;
@@ -50,7 +50,7 @@ public abstract class Curve implements Iterable<CurvePoint> {
      * That method is used for changing various Curves continuously
      * @return last point of the Curve
      */
-    public abstract CurvePoint getLastPoint();
+    public abstract GameCurvePoint getLastPoint();
 
     /**
      * call of that function indicates logically, that curve need to be "continued"

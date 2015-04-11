@@ -47,7 +47,7 @@ public class LineGameLogic {
     /**
      * How much height of one screen is already skipped
      */
-    private float heightSkipped;
+    private float heightPassed = 0.0f;
 
 
     private void resumeGame() {
@@ -123,7 +123,7 @@ public class LineGameLogic {
 
     /**
      * Running task, which will check if nobody touches the screen and
-     * if so, call setCurveNotTapped() method (which actually makes line width less)
+     * if so, call setGameNotTapped() method (which actually makes line width less)
      * Creating and running that task in onTouchEvent(...) method guarantees that at the
      * start (just after "NewGame" button pushed) the line stays with it's starting width and
      * game is actually starts only after first tap.
@@ -154,7 +154,7 @@ public class LineGameLogic {
                 }
             }
         };
-        lineThinningTask.run();
+        new Thread(lineThinningTask).start();
     }
 
     public void fieldResize(float width, float height) {
@@ -211,13 +211,10 @@ public class LineGameLogic {
     }
 
     private void increaseScore() {
-        passedDistance += GameConstraints.SCORE_DELTA;
-        // notifying listeners, that passedDistance changed
-        for (LogicListener listener : logicListeners)
-            listener.onScoreChanged(passedDistance);
+
     }
 
-    public void setCurveNotTapped() {
+    public void setGameNotTapped() {
         isGameTapped = false;
     }
 
@@ -244,6 +241,19 @@ public class LineGameLogic {
     public void nextCurveFrame() {
         if (!gameState.equals(LineGameState.PAUSED))
             currentCurve.nextFrame(gameConstraints.getScrollSpeed());
+
+        heightPassed += gameConstraints.getScrollSpeed();
+
+        if (heightPassed >= 1.0f) {
+            passedDistance += 1;
+
+            for (LogicListener l : logicListeners) {
+                l.onDistanceChanged(passedDistance);
+            }
+
+            heightPassed = 0.0f;
+        }
+
     }
 
     private void destroyThinningThread() {

@@ -6,6 +6,7 @@ package org.spbstu.linegame.logic;
  * Github username: egorbunov
  */
 public enum Bonus {
+    NONE,
     DOUBLE_THINNING_SPEED,
     DOUBLE_THICKENING_SPEED,
     INVISIBLE_LINE,

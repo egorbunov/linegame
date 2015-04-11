@@ -5,12 +5,10 @@ import android.content.Context;
 import android.graphics.*;
 import android.view.SurfaceHolder;
 
-import android.widget.TextView;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
-import org.spbstu.linegame.model.curve.CurvePoint;
-import org.spbstu.svg.PathParser;
+import org.spbstu.linegame.model.curve.GameCurvePoint;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -101,6 +99,12 @@ class LineGameDrawingThread extends Thread {
         }
     }
 
+
+    private Path mainPath = new Path();
+    private Path tappedPath = new Path();
+
+
+
     /**
      * Drawing line - main object of the view
      * @param canvas - just canvas
@@ -111,10 +115,11 @@ class LineGameDrawingThread extends Thread {
 
         Curve curve = gameLogic.getCurve();
 
-        CurvePoint prevPoint = null;
+        GameCurvePoint prevPoint = null;
         Path mainPath = new Path();
+        mainPath.reset();
         Path tappedPath = new Path();
-        for (CurvePoint curPoint : curve) {
+        for (GameCurvePoint curPoint : curve) {
             if (prevPoint == null) {
                 mainPath.moveTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));
                 tappedPath.moveTo(scaleWidth(curPoint.getX()), scaleHeight(curPoint.getY()));

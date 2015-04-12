@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_menu_btn_color">#ffffa124</color>
+    <color name="main_menu_btn_stroke_color">#ffe07000</color>
+    <color name="main_menu_text_color">#fffff7f7</color>
+    <color name="main_background_color">#ff00e0dc</color>
+
+    <color name="score_text_color">#ff000000</color>
+    <color name="pausing_text_color">#ff000000</color>
+    <color name="tap_to_play_string_color">#ff000000</color>
+    <color name="game_over_text_color">#ff000000</color>
+
+    <color name="splash_screen_text_color">#ffff1300</color>
+    <color name="splash_screen_main_background_color">#ff00e0dc</color>
+    <color name="splash_scr_rect_color">#ffffa124</color>
+    <color name="splash_scr_rect_stroke_color">#ffe07000</color>
+    <color name="splash_text_back_color">#ffff8400</color>
+    <color name="splash_text_back_stroke_color">#ff009e9a</color>
+    <color name="splash_text_color">#fffff7f7</color>
+
+    <color name="apple_main_color">#ff008000</color>
+    <color name="apple_leaf_color">#7fb442</color>
+    <color name="apple_stick_color">#663300</color>
+
+    <color name="tapped_line_color">#ffff9100</color>
+    <color name="main_line_color">#fffffcfc</color>
+    <!-- color of part of lines with bonis on them -->
+    <color name="double_thinning_bonus_color">#ff5d00cc</color>
+    <color name="double_thickening_bonus_color">#ff85ff00</color>
+    <color name="invisible_bonus_color">#ff8e8e8e</color>
+    <color name="impossible_to_miss_bonus_color">#ffff3300</color>
+    <color name="sudden_game_over_bonus_color">#ff000000</color>
+
+
+
+
+
+</resources>

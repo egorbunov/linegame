@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StartingText" parent="@android:style/TextAppearance">
+    </style>
+
+    <style name="main_menu_text_style">
+        <item name="android:textColor">@color/main_menu_text_color</item>
+        <item name="android:textSize">@dimen/menu_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="splash_screen_text_style">
+        <item name="android:textSize">@dimen/splash_screen_font_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/splash_text_color</item>
+    </style>
+</resources>

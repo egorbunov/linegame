@@ -35,4 +35,9 @@ public class Point {
         x = x / dist;
         y = y / dist;
     }
+
+    @Override
+    public String toString() {
+        return "{ " + x + ", " + y + " }";
+    }
 }

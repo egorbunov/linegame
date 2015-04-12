@@ -5,8 +5,6 @@
     <color name="main_menu_text_color">#fffff7f7</color>
     <color name="main_background_color">#ff00e0dc</color>
 
-    <color name="tapped_line_color">#ffff9100</color>
-    <color name="main_line_color">#fffffcfc</color>
     <color name="score_text_color">#ff000000</color>
     <color name="pausing_text_color">#ff000000</color>
     <color name="tap_to_play_string_color">#ff000000</color>
@@ -24,4 +22,17 @@
     <color name="apple_leaf_color">#7fb442</color>
     <color name="apple_stick_color">#663300</color>
 
-    </resources>
+    <color name="tapped_line_color">#ffff9100</color>
+    <color name="main_line_color">#fffffcfc</color>
+    <!-- color of part of lines with bonis on them -->
+    <color name="double_thinning_bonus_color">#ff5d00cc</color>
+    <color name="double_thickening_bonus_color">#ff85ff00</color>
+    <color name="invisible_bonus_color">#ff8e8e8e</color>
+    <color name="impossible_to_miss_bonus_color">#ffff3300</color>
+    <color name="sudden_game_over_bonus_color">#ff000000</color>
+
+
+
+
+
+</resources>

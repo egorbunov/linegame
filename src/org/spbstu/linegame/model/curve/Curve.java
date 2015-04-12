@@ -1,5 +1,7 @@
 package org.spbstu.linegame.model.curve;
 
+import org.spbstu.linegame.logic.BonusGenerator;
+
 /**
  * That abstract class describes game curve.
  * Class implements Iterable<CurvePoint>, which provides user ability to iterate through points

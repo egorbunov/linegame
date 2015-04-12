@@ -1,15 +1,15 @@
 package org.spbstu.linegame.logic;
 
-import org.spbstu.linegame.model.curve.Curve;
-import org.spbstu.linegame.model.curve.RandomContinuousCurve;
-import org.spbstu.linegame.model.curve.StraightLine;
+import android.util.Log;
+import org.spbstu.linegame.model.curve.*;
 import org.spbstu.linegame.utils.MortalRunnable;
 
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LineGameLogic {
+public class LineGameLogic implements BonusClickListener {
     final GameConstraints gameConstraints;
+    private final BonusGenerator bonusGenerator;
 
     /**
      * Listeners will be notified if any important event happens
@@ -101,7 +101,10 @@ public class LineGameLogic {
     }
 
     private void startGame() {
-        currentCurve = new RandomContinuousCurve(currentCurve);
+        PointsCycledArray points = new PointsCycledArray((int) (height / GameConstraints.MINIMAL_Y_DISTANCE));
+        currentCurve = new RandomContinuousCurve(points, currentCurve, gameConstraints.getRandomCurveParams(), bonusGenerator);
+
+        points.addBounsListener(this);
 
         isGameTapped = false;
         gameState = LineGameState.STARTING;
@@ -118,6 +121,12 @@ public class LineGameLogic {
         logicListeners = new LinkedList<>();
         width = height = 1f;
         gameConstraints = new GameConstraints();
+
+        bonusGenerator = new BonusGenerator(gameConstraints.getBonusProbability(),
+                GameConstraints.MIN_BONUS_POINT_NUM,
+                GameConstraints.MAX_BONUS_POINT_NUM);
+
+
 
     }
 
@@ -162,7 +171,6 @@ public class LineGameLogic {
             throw new IllegalArgumentException();
         this.width = width;
         this.height = height;
-        gameConstraints.setSizes(width, height);
     }
 
     public Curve getCurve() {
@@ -172,6 +180,10 @@ public class LineGameLogic {
 
     public float getLineThickness() {
         return gameConstraints.getLineThickness();
+    }
+
+    public GameConstraints getGameConstraints() {
+        return gameConstraints;
     }
 
     public void tapCurve(float x, float y) {
@@ -187,18 +199,20 @@ public class LineGameLogic {
             resumeGame();
         }
 
-        if (currentCurve.tap(x / width, y / height, gameConstraints.getLineThickness() / width)) {
+        if (currentCurve.tap(x / width, y / height, gameConstraints.getLineThickness() / width)
+                || (gameConstraints.getImpossibleToMissTimer() > 0)) {
             curveTapped();
         }
-        else
+        else {
             tapMissed();
+        }
     }
 
     /**
      * There all the bad for player stuff happens. More tapMissed() => closer the game over
      */
     private void tapMissed() {
-        decreaseLineWidth();
+       decreaseLineWidth();
     }
 
     /**
@@ -238,7 +252,17 @@ public class LineGameLogic {
         }
     }
 
+    private int lastLevel = 0;
+
     public void nextCurveFrame() {
+        // A little of bonus processing work:
+        // ------------------------------
+
+        gameConstraints.decImpossibleToMissTimer();
+        gameConstraints.decInvesibleLineTimer();
+
+        // ------------------------------
+
         if (!gameState.equals(LineGameState.PAUSED))
             currentCurve.nextFrame(gameConstraints.getScrollSpeed());
 
@@ -246,12 +270,17 @@ public class LineGameLogic {
 
         if (heightPassed >= 1.0f) {
             passedDistance += 1;
-
             for (LogicListener l : logicListeners) {
                 l.onDistanceChanged(passedDistance);
             }
-
             heightPassed = 0.0f;
+
+            if (passedDistance - lastLevel == 2) {
+                lastLevel = passedDistance;
+                gameConstraints.incCurveXBound();
+                gameConstraints.decCurveYBound();
+                gameConstraints.incSpeed();
+            }
         }
 
     }
@@ -260,6 +289,32 @@ public class LineGameLogic {
         if (lineThinningTask != null) {
             lineThinningTask.kill();
             lineThinningTask = null; // TODO: it's ok?
+        }
+    }
+
+    // TODO: delete
+    public RandomCurveParams getCurveParams() {
+        return gameConstraints.getRandomCurveParams();
+    }
+
+    @Override
+    public void onBonusCliked(Bonus b) {
+        switch (b) {
+            case IMPOSSIBLE_TO_MISS:
+                gameConstraints.incImpossibleToMissTimer();
+                break;
+            case SUDDEN_GAME_OVER:
+                finishTheGame();
+                break;
+            case INVISIBLE_LINE:
+                gameConstraints.incInvisibleLineTimer();
+                break;
+            case INCREASE_THICKENING_SPEED:
+                gameConstraints.incLineThickeningSpeed();
+                break;
+            case DECREASE_THICKENING_SPEED:
+                gameConstraints.decLineThickeningSpeed();
+                break;
         }
     }
 }

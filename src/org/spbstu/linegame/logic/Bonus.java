@@ -7,8 +7,8 @@ package org.spbstu.linegame.logic;
  */
 public enum Bonus {
     NONE,
-    DOUBLE_THINNING_SPEED,
-    DOUBLE_THICKENING_SPEED,
+    DECREASE_THICKENING_SPEED,
+    INCREASE_THICKENING_SPEED,
     INVISIBLE_LINE,
     IMPOSSIBLE_TO_MISS,
     SUDDEN_GAME_OVER

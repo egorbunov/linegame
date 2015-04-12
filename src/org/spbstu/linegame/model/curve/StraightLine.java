@@ -1,5 +1,7 @@
 package org.spbstu.linegame.model.curve;
 
+import org.spbstu.linegame.logic.BonusGenerator;
+
 import java.util.Iterator;
 
 public class StraightLine extends Curve {

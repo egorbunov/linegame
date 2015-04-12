@@ -1,4 +1,4 @@
-package org.spbstu.linegame;
+package org.spbstu.linegame.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +10,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import org.spbstu.LogicEventToUiSender;
+import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
 import org.spbstu.linegame.logic.LogicListener;
 import org.spbstu.linegame.view.LineGameView;
 
 public class LineGameFragment extends Fragment implements LogicListener {
-    private static final int SCORE_ANIMATION_VALUE = 1000;
+    private static final int DISTANCE_ANIMATION_VALUE = 10;
     int lastScoreAnimationValue = 0;
 
     private LineGameLogic gameLogic;
@@ -133,14 +134,27 @@ public class LineGameFragment extends Fragment implements LogicListener {
         centeredTextView.setTextColor(getResources().getColor(R.color.game_over_text_color));
         centeredTextView.startAnimation(gameOverTextAnimation);
         centeredTextView.setVisibility(View.VISIBLE);
+        gameOverTextAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                gameView.setOnTouchListener(new View.OnTouchListener() {
+                    public boolean onTouch(View v, MotionEvent event) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        return true;
+                    }
+                });
+            }
 
-        gameView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                getActivity().getSupportFragmentManager().popBackStack();
-                return true;
+            @Override
+            public void onAnimationRepeat(Animation animation) {
             }
         });
+
+
     }
 
     @Override
@@ -163,7 +177,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
     public void onDistanceChanged(int newDistance) {
         if (scoreValueTextView != null) {
             scoreValueTextView.setText(Integer.toString(newDistance));
-            if (newDistance - lastScoreAnimationValue >= SCORE_ANIMATION_VALUE) {
+            if (newDistance - lastScoreAnimationValue >= DISTANCE_ANIMATION_VALUE) {
                 scoreValueTextView.startAnimation(scoreAnimation);
                 lastScoreAnimationValue = newDistance;
             }
@@ -181,5 +195,13 @@ public class LineGameFragment extends Fragment implements LogicListener {
         centeredTextView.clearAnimation();
         centeredTextView.startAnimation(textPulseAnimation); // It's here, because ...
         centeredTextView.setVisibility(View.VISIBLE);
+    }
+
+    public static class MenuFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.menu_fragment_layout, null);
+        }
     }
 }

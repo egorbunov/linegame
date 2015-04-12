@@ -10,9 +10,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="112.3389mm"
+   height="88.900002mm"
+   viewBox="0 0 398.05121 315"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="221.31305"
-     inkscape:cy="872.9097"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="-0.53915413"
+     inkscape:cy="171.12072"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -35,7 +35,11 @@
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:snap-midpoints="true" />
+     inkscape:snap-midpoints="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
   <defs
      id="defs4">
     <linearGradient
@@ -71,70 +75,78 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      id="layer1"
      inkscape:groupmode="layer"
-     inkscape:label="Кривая">
+     inkscape:label="Кривая"
+     transform="translate(23.286091,-21.269058)">
     <path
        inkscape:connector-curvature="0"
        id="path4024"
        d="m 78.346434,329.62475 c -15.15434,-5.7785 -23.88941,-27.21131 -35.16923,-86.29303 -8.09995,-42.42609 -15.51858,-65.91479 -22.86378,-72.39077 -1.8943,-1.67014 -1.97392,-1.65853 -5.65175,0.82451 -7.46995,5.04325 -18.96304,21.38489 -27.52193,39.1325 -4.79227,9.93716 -7.23554,12.80971 -9.20489,10.8221 -0.89073,-0.899 -1.45171,-16.91669 -1.12873,-32.22918 l 0.22964,-10.88718 4.81259,-7.01019 c 17.33509,-25.25089 38.85032,-32.2939 55.22303,-18.07727 4.13214,3.58799 5.96796,6.22099 10.06749,14.43914 6.85261,13.7371 10.38742,26.4322 18.99437,68.21739 9.00448,43.71514 13.19736,58.92488 18.59702,67.46096 l 1.91698,3.03044 2.75107,-5.26761 c 6.31683,-12.09508 14.684396,-42.45858 24.632796,-89.38523 4.45271,-21.00345 9.16664,-41.41821 13.22446,-57.27157 11.16094,-43.60441 24.08965,-69.220633 38.36631,-76.016903 6.05046,-2.88027 14.37615,-3.73956 19.92329,-2.05629 16.97272,5.15035 27.10302,22.79155 38.92335,67.782203 4.00695,15.25131 13.96158,64.05696 15.24054,74.7215 0.53123,4.4296 1.57867,10.46996 2.32764,13.42303 0.74898,2.95306 2.81257,12.0136 4.58577,20.13453 5.73076,26.24593 10.39521,42.00708 14.97752,50.60901 l 1.88074,3.53052 1.89719,-4.13344 c 4.12333,-8.98357 9.27374,-34.21742 13.85958,-67.90345 1.59437,-11.71169 7.11669,-37.66948 9.76011,-45.87759 6.91884,-21.4838 16.83548,-33.81832 30.53775,-37.98348 5.3389,-1.62289 16.4124,-1.05588 22.16224,1.1348 5.71475,2.17731 14.65463,8.46274 19.30562,13.57335 7.20634,7.91848 8.40864,10.31004 9.25039,18.40055 0.42583,4.09285 1.60979,10.03871 2.63105,13.21304 1.50847,4.68876 1.85904,8.24772 1.86866,18.97081 l 0.0118,13.19931 -2.12733,0 c -1.73125,0 -2.52268,-0.95804 -4.2507,-5.14549 -1.16786,-2.83002 -4.76994,-10.14517 -8.00462,-16.25589 -8.83391,-16.68837 -17.26475,-27.60021 -25.06492,-32.44101 -5.83386,-3.62049 -8.7191,-3.35422 -13.18225,1.2166 -9.1348,9.35516 -14.66094,28.8164 -21.80425,76.78723 -4.93017,33.10853 -8.32621,48.08754 -13.3301,58.79541 -5.35311,11.45514 -10.53947,16.23839 -19.70544,18.1738 -7.26008,1.53298 -13.83485,-0.44511 -19.7109,-5.93024 -9.38835,-8.76377 -17.5306,-32.15755 -25.6596,-73.72357 -1.7807,-9.10529 -5.55675,-28.43444 -8.39121,-42.95368 -5.88257,-30.13288 -12.48208,-60.17376 -15.23559,-69.35229 -6.20891,-20.69675 -15.58087,-38.926773 -20.01204,-38.926773 -4.6334,0 -13.45473,15.716023 -20.09142,35.794733 -6.48767,19.62786 -9.7336,32.13247 -18.10844,69.76084 -14.04399,63.09999 -16.75601,74.1393 -22.14706,90.15021 -3.99871,11.87581 -9.57169,23.37241 -13.37598,27.59358 -6.658086,7.38769 -17.213596,10.05307 -26.216886,6.62003 z m 18.75916,-3.90414 c 6.920366,-4.46164 12.613016,-14.28237 18.449796,-31.82884 5.12322,-15.4014 8.08518,-27.19211 18.65849,-74.27406 5.02909,-22.39408 10.40269,-45.75014 11.94134,-51.90236 8.56174,-34.23397 17.84758,-58.35796 25.62881,-66.58202 5.02814,-5.314283 7.84771,-5.493313 11.91947,-0.75682 3.74195,4.35285 11.04189,19.03564 14.65656,29.4796 3.75258,10.84242 10.51181,40.40575 17.45373,76.33857 14.19278,73.46488 17.62479,87.46444 25.44786,103.80472 5.09058,10.63287 9.83191,15.6297 16.66866,17.56691 6.89785,1.95453 12.4906,0.54685 18.40312,-4.63201 10.06908,-8.81962 14.37106,-23.11189 21.8056,-72.44364 7.20067,-47.77992 13.08128,-67.72722 22.37904,-75.91067 6.9632,-6.12869 12.35878,-5.34511 21.67847,3.14829 7.65038,6.97209 14.2843,16.72167 23.43991,34.44854 l 7.29164,14.11791 0,-10.01875 c 0,-6.41003 -0.48107,-11.39991 -1.33558,-13.85321 -2.29544,-6.59026 -4.14797,-15.29853 -4.16211,-19.56496 -0.0175,-5.25773 -3.25953,-10.14092 -12.22132,-18.40744 -8.7001,-8.02514 -15.39395,-11.22778 -24.534,-11.7382 -9.90743,-0.55328 -16.05916,1.85747 -23.68665,9.28235 -11.98753,11.66912 -19.66677,34.81919 -25.94186,78.20516 -7.32506,50.64551 -12.86484,70.8012 -18.84522,68.56547 -3.48703,-1.30362 -10.00494,-19.9777 -15.58517,-44.6522 -5.40085,-23.88123 -6.11153,-26.92543 -6.94067,-29.72992 -0.43653,-1.47653 -1.2213,-6.12106 -1.74394,-10.32119 -2.39783,-19.26992 -12.77784,-68.19201 -18.88684,-89.01579 -8.65709,-29.50939 -13.24312,-39.476323 -22.16611,-48.174183 -5.4982,-5.35947 -10.16809,-7.76168 -16.27301,-8.37088 -17.07605,-1.704 -29.78132,12.72314 -41.92161,47.602983 -2.5696,7.38267 -6.31485,19.86608 -8.32275,27.74092 -2.0079,7.87484 -4.43388,17.33807 -5.39105,21.0294 -2.00479,7.7315 -3.88299,16.12112 -9.61613,42.95368 -9.002,42.13175 -15.832316,67.55616 -21.739676,80.92127 -5.61631,12.70662 -7.22087,13.15126 -12.53894,3.47458 -4.59595,-8.3627 -8.84969,-24.33107 -17.27725,-64.85794 -7.40732,-35.6207 -11.62773,-51.89159 -16.47335,-63.50936 -2.94882,-7.07004 -9.81398,-16.99004 -13.81607,-19.9639 -10.91791,-8.11285 -24.9068,-6.01394 -37.42073,5.61468 -5.04451,4.68762 -12.96739,14.3644 -15.20336,18.56894 -1.19415,2.2455 -2.24064,32.67615 -1.27247,37.002 0.67427,3.01269 0.79671,2.85447 6.92523,-8.94868 11.94141,-22.99841 24.49248,-38.41421 31.27567,-38.41421 3.71665,0 6.71381,2.95575 10.43517,10.29098 5.76619,11.36584 9.99934,27.1135 17.68046,65.77282 11.57328,58.24862 18.98511,76.6853 33.52463,83.39141 5.12283,2.36281 12.70421,1.74008 17.65221,-1.44995 z"
        style="fill:none;fill-opacity:1;stroke:none;stroke-opacity:1" />
     <circle
-       r="150"
        cy="178.76903"
        cx="183.29903"
        id="path6306"
        style="opacity:1;fill:#00e0dc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        inkscape:export-filename="F:\gitmain\linegame\res\drawable-ldpi\ic_launcher.png"
        inkscape:export-xdpi="10.285714"
-       inkscape:export-ydpi="10.285714" />
+       inkscape:export-ydpi="10.285714"
+       r="150" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="Кривая_оранжевая">
+     inkscape:label="Кривая_оранжевая"
+     transform="translate(23.286091,-21.269058)">
     <path
        id="path8745"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#fffff8;stroke-width:18.885;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:3;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#fffff8;stroke-width:18.88500023;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:3;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m 204.41311,113.90475 c 9.72309,32.76364 10.07649,43.65065 14.97153,74.29412 m 0,0 c 12.23902,76.61755 46.46821,78.5738 62.20415,31.14911 8.77652,-26.45051 22.32756,-60.79591 46.28878,-70.30818"
        inkscape:export-filename="F:\gitmain\linegame\res\drawable-ldpi\ic_launcher.png"
        inkscape:export-xdpi="10.285714"
-       inkscape:export-ydpi="10.285714" />
+       inkscape:export-ydpi="10.285714"
+       inkscape:connector-curvature="0" />
     <path
        style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ff9100;stroke-width:18.88510513;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:3;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m 90.131577,224.05178 c 16.495753,48.185 50.477073,37.47579 58.879313,-33.5939 2.70626,-22.89067 6.04597,-54.86279 11.53111,-76.49869 9.29712,-36.672067 32.29348,-39.06727 43.87111,-0.0544"
        id="path8970"
        inkscape:export-filename="F:\gitmain\linegame\res\drawable-ldpi\ic_launcher.png"
        inkscape:export-xdpi="10.285714"
-       inkscape:export-ydpi="10.285714" />
+       inkscape:export-ydpi="10.285714"
+       inkscape:connector-curvature="0" />
     <path
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ff9100;stroke-width:18.885;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:3;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ff9100;stroke-width:18.88500023;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:3;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m 38.097096,154.45934 c 25.335225,6.89607 41.827006,34.09971 52.034481,69.59244"
        id="path8968"
        inkscape:export-filename="F:\gitmain\linegame\res\drawable-ldpi\ic_launcher.png"
        inkscape:export-xdpi="10.285714"
-       inkscape:export-ydpi="10.285714" />
+       inkscape:export-ydpi="10.285714"
+       inkscape:connector-curvature="0" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="Рамка">
+     inkscape:label="Рамка"
+     transform="translate(23.286091,-21.269058)">
     <circle
-       r="150"
        cy="178.76906"
        cx="183.29869"
        id="path6306-5"
        style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ff9100;stroke-width:15;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        inkscape:export-filename="F:\gitmain\linegame\res\drawable-ldpi\ic_launcher.png"
        inkscape:export-xdpi="10.285714"
-       inkscape:export-ydpi="10.285714" />
+       inkscape:export-ydpi="10.285714"
+       r="150" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Фон" />
+     inkscape:label="Фон"
+     transform="translate(23.286091,-21.269058)" />
 </svg>

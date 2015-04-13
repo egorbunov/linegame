@@ -32,4 +32,6 @@
     <string name="str_depth">Applied Math Department</string>
     <string name="str_university">St.Petersburg State Polytechnical University</string>
     <string name="str_toweb">To site</string>
+    <string name="inc_speed_bonus_desc">Let\'s scroll faster, my friend!</string>
+    <string name="dec_speed_bonus_desc">Touch that colored part and line would let you relax by decreasing it\'s speed.</string>
 </resources>

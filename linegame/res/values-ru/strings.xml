@@ -30,4 +30,6 @@
     <string name="str_depth">Кафедра Прикладной Математики</string>
     <string name="str_university">Санкт-Петербургский Государственный Политехнический Университет</string>
     <string name="str_toweb">На сайт</string>
+    <string name="inc_speed_bonus_desc">Тыкни этот цвет и увеличь скорость линии, если соскучился!</string>
+    <string name="dec_speed_bonus_desc">Если коснёшься, то линия даст тебе отдохнуть уменьшив свою скорость.</string>
 </resources>

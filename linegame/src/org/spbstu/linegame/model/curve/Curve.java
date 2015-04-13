@@ -17,7 +17,7 @@ import org.spbstu.linegame.logic.BonusGenerator;
 public abstract class Curve implements Iterable<GameCurvePoint> {
     protected static final float WIDTH = 1f;
     protected static final float HEIGHT = 1f;
-    protected static final float TAP_TOLERANCE = 0.03f;
+    protected static final float TAP_TOLERANCE = 0.04f;
 
     protected float tapX;
     protected float tapY;

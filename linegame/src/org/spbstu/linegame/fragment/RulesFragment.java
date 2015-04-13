@@ -75,6 +75,19 @@ public class RulesFragment extends Fragment {
         suddenDeathBonusPaint.setColor(getResources().getColor(R.color.sudden_game_over_bonus_color));
         bonusLineSample.setPaint(suddenDeathBonusPaint);
 
+        bonusLineSample = (LineSample) view.findViewById(R.id.IncSpeedSample);
+        Paint increaseGameSpeedPaint = new Paint();
+        increaseGameSpeedPaint.set(mainCurvePaint);
+        increaseGameSpeedPaint.setColor(getResources().getColor(R.color.increase_game_speed_bonus_color));
+        bonusLineSample.setPaint(increaseGameSpeedPaint);
+
+        bonusLineSample = (LineSample) view.findViewById(R.id.DecSpeedSample);
+        Paint decreaseGameSpeedPaint = new Paint();
+        decreaseGameSpeedPaint.set(mainCurvePaint);
+        decreaseGameSpeedPaint.setColor(getResources().getColor(R.color.decrease_game_speed_bonus_color));
+        bonusLineSample.setPaint(decreaseGameSpeedPaint);
+
+
         return view;
     }
 

@@ -96,11 +96,22 @@ class LineGameDrawingThread extends Thread {
         suddenDeathBonusPaint.set(mainCurvePaint);
         suddenDeathBonusPaint.setColor(context.getResources().getColor(R.color.sudden_game_over_bonus_color));
 
+        Paint increaseGameSpeedPaint = new Paint();
+        increaseGameSpeedPaint.set(mainCurvePaint);
+        increaseGameSpeedPaint.setColor(context.getResources().getColor(R.color.increase_game_speed_bonus_color));
+
+        Paint decreaseGameSpeedPaint = new Paint();
+        decreaseGameSpeedPaint.set(mainCurvePaint);
+        decreaseGameSpeedPaint.setColor(context.getResources().getColor(R.color.decrease_game_speed_bonus_color));
+
         bonusPaintsMap.put(Bonus.DECREASE_THICKENING_SPEED.toString(), doubleThinningBonusPaint);
         bonusPaintsMap.put(Bonus.INCREASE_THICKENING_SPEED.toString(), doubleThickeningBonusPaint);
         bonusPaintsMap.put(Bonus.INVISIBLE_LINE.toString(), invisibleBonusPaint);
         bonusPaintsMap.put(Bonus.SUDDEN_GAME_OVER.toString(), suddenDeathBonusPaint);
         bonusPaintsMap.put(Bonus.IMPOSSIBLE_TO_MISS.toString(), impossibleToMissBonusPaint);
+        bonusPaintsMap.put(Bonus.INCREASE_GAME_SPEED.toString(), increaseGameSpeedPaint);
+        bonusPaintsMap.put(Bonus.DECREASE_GAME_SPEED.toString(), decreaseGameSpeedPaint);
+
     }
 
     public void kill() {

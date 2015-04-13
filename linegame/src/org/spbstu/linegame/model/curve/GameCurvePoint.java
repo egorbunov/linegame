@@ -52,7 +52,10 @@ public class GameCurvePoint extends TapableObject implements Comparable<GameCurv
     public void setY(float y) { point.setY(y);}
 
 
-
+    @Override
+    public String toString() {
+        return "( " + getX() + ", " + getY() + ")";
+    }
 
     @Override
     public int compareTo(GameCurvePoint another) {

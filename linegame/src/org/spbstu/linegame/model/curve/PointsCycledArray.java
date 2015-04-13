@@ -1,5 +1,6 @@
 package org.spbstu.linegame.model.curve;
 
+import android.util.Log;
 import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.BonusClickListener;
 import org.spbstu.linegame.utils.MyMath;
@@ -105,12 +106,30 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
         return toReturn;
     }
 
+    private void deleteKFirst(int k) {
+        if (start + k < points.length) {
+            // Arrays.fill(points, start, start + k, null);
+            start = start + k;
+        } else {
+            // Arrays.fill(points, start, points.length, null);
+            start = k + start - points.length;
+            // Arrays.fill(points, 0, start, null);
+        }
+        elementCount -= k;
+    }
+
     public GameCurvePoint skipYDist(float distToSkip) {
         int nearest = binarySearch(new GameCurvePoint(0, points[start].getY() + distToSkip),
                 GameCurvePoint.ORDINATE_COMPARATOR);
 
-        //if (points[nearest].getY())
-        return null;
+        //Log.d("EGOR.", "Nearest to = ( 0, " + (points[start].getY() + distToSkip) + " ) is : " + points[nearest].toString());
+
+        GameCurvePoint toRet = points[nearest];
+
+        deleteKFirst((nearest < start) ? (points.length - start + nearest) : (nearest - start));
+
+
+        return toRet;
     }
 
     public GameCurvePoint getLast() {
@@ -177,20 +196,22 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
                 throw new NullPointerException();
             }
             if (MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
+                if (points[cur].getY() > tap.getY()) {
+                    break;
+                }
                 res = true;
-
                 bonusTapped(points[cur]);
-
                 points[cur].setTapped();
             }
         }
-        if (start >= end) {
+        if (start >= end && !res) {
             for (int cur = 0; cur < end; ++cur) {
                 if (MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
+                    if (points[cur].getY() > tap.getY()) {
+                        break;
+                    }
                     res = true;
-
                     bonusTapped(points[cur]);
-
                     points[cur].setTapped();
                 }
             }
@@ -243,6 +264,8 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
                 cur = points.length - 1;
         }
         // going to the right (setting all point below nearest and also close to given one to be tapped)
+
+        /* No longer needed because of not continuous rendering of the point of tap
         cur = nearest;
         while (cur < end && MyMath.distance(tap, points[cur].getPoint()) <= tolerance + curveWidth / 3f) {
             result = true;
@@ -254,6 +277,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
             if (cur >= points.length && end < start)
                 cur = 0;
         }
+        */
 
         return result;
     }
@@ -296,4 +320,9 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
     private int lastElementIndex() {
         return end == 0 ? points.length - 1 : end - 1;
     }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
 }

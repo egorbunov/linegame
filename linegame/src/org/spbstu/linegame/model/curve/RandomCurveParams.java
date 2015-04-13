@@ -14,6 +14,20 @@ public class RandomCurveParams {
     public final static float MAX_CURVE_Y_BOUND_DELTA = 0.2f;
     public final static float CORNER_HANDLE_BOUND_RATIO = 1.15f;
 
+    /**
+     * Every segment of {@link org.spbstu.linegame.model.curve.RandomContinuousCurve} is a Bezier curve with 2 degree
+     * We need to sample that curve before rendering. So that variable equal to maximum sampling step.
+     *
+     * TODO: that variable actually must depend on specific screen resolution.
+     */
+    public static final float BEZIER2D_STEP = 0.009f;
+
+    /**
+     * Maximum perimetr of the Bezier curve segment.
+     *
+     * TODO: that can be error prone
+     */
+    public static final float MAX_SEGMENT_PERIMETR = 3f;
 
 
     /**

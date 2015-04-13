@@ -78,9 +78,11 @@ public class RandomContinuousCurve extends Curve {
     private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
         float perimetr = MyMath.distance(p1, p2) + MyMath.distance(p2, p3);
 
-        // Log.d("EGOR, PERIMETR=", String.valueOf(perimetr));
+        //Log.d("EGOR, PERIMETR=", String.valueOf(perimetr));
 
-        final float T_STEP = 0.025f / perimetr;
+        final float T_STEP = RandomCurveParams.BEZIER2D_STEP / perimetr;
+
+        //Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -214,24 +216,7 @@ public class RandomContinuousCurve extends Curve {
     @Override
     public void nextFrame(float toSkip) {
         // deleting skipped points
-        GameCurvePoint startPoint = points.deleteFirst();
-        GameCurvePoint curPoint = points.getFirst();
-        GameCurvePoint prevPoint = startPoint;
-        while (curPoint.getY() - startPoint.getY() < toSkip) {
-            points.deleteFirst();
-            prevPoint = curPoint;
-            curPoint = points.getFirst();
-        }
-
-        // adding first point if needed
-        if (curPoint.getY() - startPoint.getY() != toSkip) {
-            float ratio = (startPoint.getY() - prevPoint.getY() + toSkip) / (curPoint.getY() - prevPoint.getY());
-            GameCurvePoint toAdd = new GameCurvePoint(MyMath.segmentPoint(prevPoint.getPoint(), curPoint.getPoint(), ratio));
-            if (prevPoint.isTapped())
-                toAdd.setTapped();
-            points.addFirst(toAdd);
-        }
-
+        points.skipYDist(toSkip);
         generatePoints();
     }
 

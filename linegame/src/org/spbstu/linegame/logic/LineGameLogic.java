@@ -1,6 +1,5 @@
 package org.spbstu.linegame.logic;
 
-import android.util.Log;
 import org.spbstu.linegame.model.curve.*;
 import org.spbstu.linegame.utils.MortalRunnable;
 
@@ -102,7 +101,7 @@ public class LineGameLogic implements BonusClickListener {
     }
 
     private void startGame() {
-        PointsCycledArray points = new PointsCycledArray((int) (height / GameConstraints.MINIMAL_Y_DISTANCE));
+        PointsCycledArray points = new PointsCycledArray(GameConstraints.POINT_ON_SCREEN_CAPACITY);
         currentCurve = new RandomContinuousCurve(points, currentCurve, gameConstraints.getRandomCurveParams(), bonusGenerator);
 
         points.addBounsListener(this);
@@ -260,7 +259,7 @@ public class LineGameLogic implements BonusClickListener {
         // ------------------------------
 
         gameConstraints.decImpossibleToMissTimer();
-        gameConstraints.decInvesibleLineTimer();
+        gameConstraints.decInvisibleLineTimer();
 
         // ------------------------------
 
@@ -315,6 +314,12 @@ public class LineGameLogic implements BonusClickListener {
                 break;
             case DECREASE_THICKENING_SPEED:
                 gameConstraints.decLineThickeningSpeed();
+                break;
+            case INCREASE_GAME_SPEED:
+                gameConstraints.incSpeed();
+                break;
+            case DECREASE_GAME_SPEED:
+                gameConstraints.decSpeed();
                 break;
         }
     }

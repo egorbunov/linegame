@@ -13,13 +13,13 @@ import org.spbstu.linegame.model.curve.RandomCurveParams;
  */
 public class GameConstraints {
     // starting state
-    public final static float STARTING_LINE_WIDTH = 40.0f;
+    public final static float STARTING_LINE_WIDTH = 35.0f;
     public final static float GAME_OVER_LINE_WIDTH = 10.0f;
-    public final static float MAXIMUM_LINE_WIDTH = 100.0f;
-    public final static float LINE_WIDTH_DELTA = 1f;
+    public final static float MAXIMUM_LINE_WIDTH = 90.0f;
+    public final static float LINE_WIDTH_DELTA = 0.8f;
     public final static float LINE_THINNING_SPEED_DELTA = 0.1f;
     public final static float STARTING_CURVE_SPEED = 0.006f;
-    public final static float CURVE_SPEED_DELTA = 0.0004f;
+    public final static float CURVE_SPEED_DELTA = 0.0003f;
 
     public static final float STARTING_CURVE_Y_BOUND = 0.5f;
     public static final float CURVE_Y_BOUND_DELTA = 0.035f;
@@ -35,9 +35,9 @@ public class GameConstraints {
     /**
      * minimal distance between ordinates of successive points
      */
-    public static final float MINIMAL_Y_DISTANCE = 0.00025f;
+    public static final int POINT_ON_SCREEN_CAPACITY = 5000;
     private static final int INVISIBLE_LINE_TIMER_DELTA = 10;
-    public static final int GAME_HARDNESS_DIST_STEP = 2;
+    public static final int GAME_HARDNESS_DIST_STEP = 5;
 
 
     // variables responsible for game hardness
@@ -130,7 +130,9 @@ public class GameConstraints {
     }
 
     public void decSpeed() {
-        scrollSpeed -= CURVE_SPEED_DELTA;
+        if (scrollSpeed - CURVE_SPEED_DELTA > 0) {
+            scrollSpeed -= CURVE_SPEED_DELTA;
+        }
     }
 
     public float getLineThickness() {
@@ -189,7 +191,7 @@ public class GameConstraints {
         return invisibleLineTimer;
     }
 
-    public void decInvesibleLineTimer() {
+    public void decInvisibleLineTimer() {
         if (invisibleLineTimer > 0) {
             invisibleLineTimer -= 1;
         }

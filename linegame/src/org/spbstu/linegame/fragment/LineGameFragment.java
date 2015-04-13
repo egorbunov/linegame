@@ -1,5 +1,7 @@
 package org.spbstu.linegame.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import org.spbstu.LogicEventToUiSender;
+import org.spbstu.linegame.MainActivity;
 import org.spbstu.linegame.R;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.logic.LineGameState;
@@ -32,14 +35,6 @@ public class LineGameFragment extends Fragment implements LogicListener {
     private Animation scoreAnimation;
     private Animation textPulseAnimation;
     private Animation gameOverTextAnimation;
-
-
-    // need to save best score
-    private GameFinishedListener listener;
-
-    public void setOnGameFinishedListener(GameFinishedListener listener) {
-        this.listener = listener;
-    }
 
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +117,22 @@ public class LineGameFragment extends Fragment implements LogicListener {
             gameLogic.pauseGame();
             return true;
         }
-        listener.gameFinished(gameLogic.getPassedDistance());
+        updateBestScore();
+
+
         return false;
+    }
+
+    private void updateBestScore() {
+        // saving new best score
+        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int bestScore = Integer.valueOf(sharedPreferences.getString(MainActivity.BEST_SCORE_KEY, "0"));
+
+        if (bestScore < gameLogic.getPassedDistance()) {
+            SharedPreferences.Editor ed = sharedPreferences.edit();
+            ed.putString(MainActivity.BEST_SCORE_KEY, String.valueOf(gameLogic.getPassedDistance()));
+            ed.apply();
+        }
     }
 
     @Override
@@ -151,10 +160,8 @@ public class LineGameFragment extends Fragment implements LogicListener {
             public void onAnimationEnd(Animation animation) {
                 gameView.setOnTouchListener(new View.OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
-                        listener.gameFinished(gameLogic.getPassedDistance());
-
+                        updateBestScore();
                         getActivity().getSupportFragmentManager().popBackStack();
-
                         return true;
                     }
                 });

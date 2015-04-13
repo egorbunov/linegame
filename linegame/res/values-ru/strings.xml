@@ -23,4 +23,11 @@
     <string name="invis_bonus_desc">К сожалению, наша линия иногда куда-то уходит. А происходит это потому, что вы касаетесь её части, окрашенной в этот цвет.</string>
     <string name="no_miss_bonus_desc">Одно прикосновение к линии в таком цвете позволяет забыть о заботах: тыкай куда-угодно, линия всё равно почувствует и станет толще! Но лишь временно.</string>
     <string name="credits_btn_string">О разработчиках</string>
+
+    <!-- Default department splash screen stuff -->
+    <string name="dummy_button">To Site</string>
+    <string name="dummy_content">Print text here</string>
+    <string name="str_depth">Кафедра Прикладной Математики</string>
+    <string name="str_university">Санкт-Петербургский Государственный Политехнический Университет</string>
+    <string name="str_toweb">На сайт</string>
 </resources>

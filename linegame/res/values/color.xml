@@ -31,6 +31,10 @@
     <color name="impossible_to_miss_bonus_color">#ffff3300</color>
     <color name="sudden_game_over_bonus_color">#ff000000</color>
 
+    <!-- Default department splash screen stuff -->
+    <color name="black_overlay">#66000000</color>
+
+
 
 
 

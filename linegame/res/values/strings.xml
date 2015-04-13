@@ -25,4 +25,11 @@
     <string name="no_miss_bonus_desc">Tap on that kind of the line will let you not worrying abount catching the line, tap anythere, but for a while.</string>
     <string name="credits_btn_string">Credits</string>
     <string name="best_score_text">Best score:</string>
+
+    <!-- Default department splash screen stuff -->
+    <string name="dummy_button">To Site</string>
+    <string name="dummy_content">Print text here</string>
+    <string name="str_depth">Applied Math Department</string>
+    <string name="str_university">St.Petersburg State Polytechnical University</string>
+    <string name="str_toweb">To site</string>
 </resources>

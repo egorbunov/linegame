@@ -16,7 +16,6 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameDrawingThread extends Thread {
-    private float ADDITIONAL_BONUS_STROKE_WIDTH = 20f;
 
     private AtomicBoolean isThreadAlive;
 
@@ -65,45 +64,37 @@ class LineGameDrawingThread extends Thread {
         mainCurvePaint.setDither(true);
         mainCurvePaint.setStyle(Paint.Style.STROKE);
         mainCurvePaint.setStrokeJoin(Paint.Join.ROUND);
-        mainCurvePaint.setStrokeCap(Paint.Cap.ROUND);
+        mainCurvePaint.setStrokeCap(Paint.Cap.SQUARE);
         mainCurvePaint.setColor(mainCurveColor);
+        mainCurvePaint.setAntiAlias(true);
 
         tappedCurvePaint = new Paint();
         tappedCurveColor = context.getResources().getColor(R.color.tapped_line_color);
-        tappedCurvePaint.setDither(true);
-        tappedCurvePaint.setStyle(Paint.Style.STROKE);
-        tappedCurvePaint.setStrokeJoin(Paint.Join.ROUND);
-        tappedCurvePaint.setStrokeCap(Paint.Cap.ROUND);
+        tappedCurvePaint.set(mainCurvePaint);
         tappedCurvePaint.setColor(tappedCurveColor);
 
 
-        final float BLUR_RADIUS = 10;
         bonusPaintsMap = new TreeMap<>();
 
         Paint doubleThinningBonusPaint = new Paint();
         doubleThinningBonusPaint.set(mainCurvePaint);
-        doubleThinningBonusPaint.setColor(context.getResources().getColor(R.color.double_thinning_bonus_color));
-        doubleThinningBonusPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
+        doubleThinningBonusPaint.setColor(context.getResources().getColor(R.color.dec_thickening_bonus_color));
 
         Paint doubleThickeningBonusPaint = new Paint();
         doubleThickeningBonusPaint.set(mainCurvePaint);
-        doubleThickeningBonusPaint.setColor(context.getResources().getColor(R.color.double_thickening_bonus_color));
-        doubleThickeningBonusPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
+        doubleThickeningBonusPaint.setColor(context.getResources().getColor(R.color.inc_thickening_bonus_color));
 
         Paint invisibleBonusPaint = new Paint();
         invisibleBonusPaint.set(mainCurvePaint);
         invisibleBonusPaint.setColor(context.getResources().getColor(R.color.invisible_bonus_color));
-        invisibleBonusPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
 
         Paint impossibleToMissBonusPaint = new Paint();
         impossibleToMissBonusPaint.set(mainCurvePaint);
         impossibleToMissBonusPaint.setColor(context.getResources().getColor(R.color.impossible_to_miss_bonus_color));
-        impossibleToMissBonusPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
 
         Paint suddenDeathBonusPaint = new Paint();
         suddenDeathBonusPaint.set(mainCurvePaint);
         suddenDeathBonusPaint.setColor(context.getResources().getColor(R.color.sudden_game_over_bonus_color));
-        suddenDeathBonusPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
 
         bonusPaintsMap.put(Bonus.DECREASE_THICKENING_SPEED.toString(), doubleThinningBonusPaint);
         bonusPaintsMap.put(Bonus.INCREASE_THICKENING_SPEED.toString(), doubleThickeningBonusPaint);
@@ -219,17 +210,21 @@ class LineGameDrawingThread extends Thread {
             }
             mainCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
             canvas.drawPath(mainPath, mainCurvePaint);
-            tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
-            canvas.drawPath(tappedPath, tappedCurvePaint);
 
             for (Bonus b : Bonus.values()) {
                 if (!b.equals(Bonus.NONE)) {
                     Path curPath = bonusPaths.get(b.toString());
                     Paint paint = bonusPaintsMap.get(b.toString());
+                    float ADDITIONAL_BONUS_STROKE_WIDTH = 15f;
                     paint.setStrokeWidth(gameLogic.getLineThickness() + ADDITIONAL_BONUS_STROKE_WIDTH);
                     canvas.drawPath(curPath, paint);
                 }
             }
+
+            tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
+            canvas.drawPath(tappedPath, tappedCurvePaint);
+
+
         }
 
 

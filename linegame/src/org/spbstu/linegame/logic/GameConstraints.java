@@ -19,12 +19,12 @@ public class GameConstraints {
     public final static float LINE_WIDTH_DELTA = 1f;
     public final static float LINE_THINNING_SPEED_DELTA = 0.1f;
     public final static float STARTING_CURVE_SPEED = 0.006f;
-    public final static float CURVE_SPEED_DELTA = 0.0002f;
+    public final static float CURVE_SPEED_DELTA = 0.0004f;
 
     public static final float STARTING_CURVE_Y_BOUND = 0.5f;
-    public static final float CURVE_Y_BOUND_DELTA = 0.025f;
+    public static final float CURVE_Y_BOUND_DELTA = 0.035f;
     public static final float STARTING_CURVE_X_BOUND = 0.1f;
-    public static final float CURVE_X_BOUND_DELTA = 0.05f;
+    public static final float CURVE_X_BOUND_DELTA = 0.075f;
     public static final float INITIAL_BONUS_PROB = 0.25f;
 
     public static final int MAX_BONUS_POINT_NUM = 20;
@@ -37,6 +37,7 @@ public class GameConstraints {
      */
     public static final float MINIMAL_Y_DISTANCE = 0.00025f;
     private static final int INVISIBLE_LINE_TIMER_DELTA = 10;
+    public static final int GAME_HARDNESS_DIST_STEP = 2;
 
 
     // variables responsible for game hardness

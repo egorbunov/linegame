@@ -34,6 +34,13 @@ public class LineGameFragment extends Fragment implements LogicListener {
     private Animation gameOverTextAnimation;
 
 
+    // need to save best score
+    private GameFinishedListener listener;
+
+    public void setOnGameFinishedListener(GameFinishedListener listener) {
+        this.listener = listener;
+    }
+
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -115,6 +122,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
             gameLogic.pauseGame();
             return true;
         }
+        listener.gameFinished(gameLogic.getPassedDistance());
         return false;
     }
 
@@ -143,7 +151,10 @@ public class LineGameFragment extends Fragment implements LogicListener {
             public void onAnimationEnd(Animation animation) {
                 gameView.setOnTouchListener(new View.OnTouchListener() {
                     public boolean onTouch(View v, MotionEvent event) {
+                        listener.gameFinished(gameLogic.getPassedDistance());
+
                         getActivity().getSupportFragmentManager().popBackStack();
+
                         return true;
                     }
                 });
@@ -153,8 +164,6 @@ public class LineGameFragment extends Fragment implements LogicListener {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-
-
     }
 
     @Override
@@ -195,13 +204,5 @@ public class LineGameFragment extends Fragment implements LogicListener {
         centeredTextView.clearAnimation();
         centeredTextView.startAnimation(textPulseAnimation); // It's here, because ...
         centeredTextView.setVisibility(View.VISIBLE);
-    }
-
-    public static class MenuFragment extends Fragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.menu_fragment_layout, null);
-        }
     }
 }

@@ -39,6 +39,7 @@ public class LineGameLogic implements BonusClickListener {
     private LineGameState gameState;
     private float lastScrollSpeed; // I use that variable to correctly pause the game
 
+
     /**
      * Game passedDistance is stored in that variable.
      */
@@ -275,7 +276,7 @@ public class LineGameLogic implements BonusClickListener {
             }
             heightPassed = 0.0f;
 
-            if (passedDistance - lastLevel == 2) {
+            if (passedDistance - lastLevel == GameConstraints.GAME_HARDNESS_DIST_STEP) {
                 lastLevel = passedDistance;
                 gameConstraints.incCurveXBound();
                 gameConstraints.decCurveYBound();
@@ -298,7 +299,7 @@ public class LineGameLogic implements BonusClickListener {
     }
 
     @Override
-    public void onBonusCliked(Bonus b) {
+    public void onBonusClicked(Bonus b) {
         switch (b) {
             case IMPOSSIBLE_TO_MISS:
                 gameConstraints.incImpossibleToMissTimer();
@@ -317,4 +318,9 @@ public class LineGameLogic implements BonusClickListener {
                 break;
         }
     }
+
+    public int getPassedDistance() {
+        return passedDistance;
+    }
+
 }

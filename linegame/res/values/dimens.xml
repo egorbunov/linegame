@@ -29,6 +29,9 @@
     <dimen name="line_sample_height">100dp</dimen>
     <dimen name="rules_cell_padding">5dp</dimen>
     <dimen name="rules_text_size">15sp</dimen>
+    <dimen name="speaker_btn_size">50dp</dimen>
+    <dimen name="best_score_text_size">30sp</dimen>
+    <dimen name="dist_from_score_to_menu">20dp</dimen>
 
 
 </resources>

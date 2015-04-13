@@ -14,7 +14,7 @@
     <RelativeLayout
         android:layout_width="0dip"
         android:layout_height="fill_parent"
-        android:layout_weight="0.66">
+        android:layout_weight="0.60">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -22,6 +22,26 @@
             android:layout_centerInParent="true"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/best_score_text"
+                android:textSize="@dimen/best_score_text_size"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textColor="@color/main_menu_text_color"
+                />
+            <TextView
+                android:id="@+id/bestScoreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/best_score_text_size"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textColor="@color/main_menu_text_color"
+                android:layout_marginBottom="@dimen/dist_from_score_to_menu"
+                />
             <org.spbstu.linegame.custom.GravityButton
                 android:text="@string/new_game_button_string"
                 android:id="@+id/btnNewGame"
@@ -30,7 +50,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"
-                android:alpha="0.95"
                 android:onClick="onClick_btnNewGame"
                 android:layout_marginBottom="@dimen/main_menu_btn_v_margin"
                 />
@@ -42,12 +61,60 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/main_menu_btn_height"
                 android:layout_gravity="center_horizontal"
-                android:alpha="0.95"
                 android:onClick="onClick_btnRules"
                 android:layout_marginBottom="@dimen/main_menu_btn_v_margin"
                 />
-        </LinearLayout>
+            <org.spbstu.linegame.custom.GravityButton
+                android:text="@string/credits_btn_string"
+                android:id="@+id/btnCredits"
+                android:textAppearance="@style/main_menu_text_style"
+                android:background="@drawable/menu_button"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/main_menu_btn_height"
+                android:layout_gravity="center_horizontal"
+                android:onClick="onClick_btnCredits"
+                android:layout_marginBottom="@dimen/main_menu_btn_v_margin"
+                />
 
+            <LinearLayout
+                android:paddingTop="5dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_marginLeft="30dp"
+                    android:id="@+id/btnSoundSwitch"
+                    android:src="@drawable/speaker"
+                    android:textAppearance="@style/main_menu_text_style"
+                    android:background="@drawable/orange_rect"
+                    android:layout_width="@dimen/speaker_btn_size"
+                    android:layout_height="@dimen/speaker_btn_size"
+                    android:scaleType="fitCenter"
+                    android:padding="10dp"
+                    android:onClick="onClick_btnSwitchSound"
+                    />
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5">
+                </RelativeLayout>
+
+                <ImageButton
+                    android:layout_marginRight="30dp"
+                    android:id="@+id/btnScoreReset"
+                    android:src="@drawable/score_reset"
+                    android:textAppearance="@style/main_menu_text_style"
+                    android:background="@drawable/orange_rect"
+                    android:layout_width="@dimen/speaker_btn_size"
+                    android:layout_height="50dp"
+                    android:scaleType="fitCenter"
+                    android:padding="10dp"
+                    android:onClick="onClick_btnResetScore"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="0dip"

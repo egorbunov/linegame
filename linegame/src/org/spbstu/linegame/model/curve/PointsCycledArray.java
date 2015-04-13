@@ -201,7 +201,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
     private void bonusTapped(GameCurvePoint point) {
         if (!point.isTapped() && !point.getBonusType().equals(Bonus.NONE) &&
                 bonusClickListener != null) {
-            bonusClickListener.onBonusCliked(point.getBonusType());
+            bonusClickListener.onBonusClicked(point.getBonusType());
         }
     }
 

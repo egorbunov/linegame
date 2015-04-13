@@ -12,4 +12,17 @@
     <string name="dist_val_at_start">0</string>
     <string name="rules_btn_string">Rules</string>
     <string name="go_to_site_btn_string">To site</string>
+    <string name="rules_header_text">Rules</string>
+    <string name="rules_game_substr">Game</string>
+    <string name="about_game_text">As game start, you will see the line scrolling upwards. As long as you don\'t touch the screen line will become thinner and thinner and at some point you\'ll loose that line and game will be over! So if you\'re not cruel and at least a little care about line lifetime, you need to keep the line thick by touching it with your fingers! But be ware: with time line will scroll faster and perform more dangerous turns! Also, you\'ll notice, that line parts can be differently colored, check rules section below to learn all about line colors!</string>
+    <string name="rules_line_colors_subheader">Line colors</string>
+    <string name="main_line_description">Main color of the line. Line just as is!</string>
+    <string name="sudden_death_bonus_desc">Another anti-bonus color. Only one tap on the part of the line colored like this will cause line death!</string>
+    <string name="tapped_line_desc">That is the color of parts of the line, which you successively cought with your finger!</string>
+    <string name="dec_thick_speed_desc">If you touch part of the line colored like this, line become insensitive a little… It\'s getting harder to make it thicker.</string>
+    <string name="inc_thick_speed_desc">But that is the bonus which increase the speed with that your line becomes thicker. Make it thicker quicker!</string>
+    <string name="invis_bonus_desc">Unfortunately your favourite line can gone sometimes for a while…It happens if you tap on part of the line with that color.</string>
+    <string name="no_miss_bonus_desc">Tap on that kind of the line will let you not worrying abount catching the line, tap anythere, but for a while.</string>
+    <string name="credits_btn_string">Credits</string>
+    <string name="best_score_text">Best score:</string>
 </resources>

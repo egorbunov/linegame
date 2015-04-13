@@ -6,5 +6,5 @@ package org.spbstu.linegame.logic;
  * Github username: egorbunov
  */
 public interface BonusClickListener {
-    void onBonusCliked(Bonus b);
+    void onBonusClicked(Bonus b);
 }

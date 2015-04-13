@@ -50,17 +50,19 @@ public class AppleView extends View {
         applePaint.setDither(true);
         applePaint.setStyle(Paint.Style.FILL);
         applePaint.setColor(context.getResources().getColor(R.color.apple_main_color));
-        applePaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        applePaint.setAntiAlias(true);
 
         leafPaint.setDither(true);
         leafPaint.setStyle(Paint.Style.FILL);
         leafPaint.setColor(context.getResources().getColor(R.color.apple_leaf_color));
-        leafPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        leafPaint.setAntiAlias(true);
+
 
         stickPaint.setDither(true);
         stickPaint.setStyle(Paint.Style.FILL);
         stickPaint.setColor(context.getResources().getColor(R.color.apple_stick_color));
-        stickPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        stickPaint.setAntiAlias(true);
+
     }
 
     private void computeAnchorPoints() {

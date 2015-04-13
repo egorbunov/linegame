@@ -20,7 +20,7 @@ public class RandomCurveParams {
      *
      * TODO: that variable actually must depend on specific screen resolution.
      */
-    public static final float BEZIER2D_STEP = 0.009f;
+    public static final float BEZIER2D_STEP = 0.008f;
 
     /**
      * Maximum perimetr of the Bezier curve segment.

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="dep_site">http://amd.stu.neva.ru/</string>
+    <string name="dep_site" translatable="false">http://amd.stu.neva.ru/</string>
     <string name="splash_screen_head_string">Department of Applied Mathematics, SPbPU</string>
     <string name="app_name">LineGame</string>
     <string name="new_game_button_string">New game</string>
-    <string name="scores_table_button_string">Scores</string>
     <string name="tap_to_start_string">Tap and hold to play!</string>
     <string name="tap_to_continue_string">Tap to continue!</string>
     <string name="game_over_string">Game over!</string>
@@ -28,7 +27,7 @@
 
     <!-- Default department splash screen stuff -->
     <string name="dummy_button">To Site</string>
-    <string name="dummy_content">Print text here</string>
+    <string name="dummy_content">LineGame</string>
     <string name="str_depth">Applied Math Department</string>
     <string name="str_university">St.Petersburg State Polytechnical University</string>
     <string name="str_toweb">To site</string>

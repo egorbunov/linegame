@@ -3,7 +3,6 @@
     <string name="splash_screen_head_string">Кафедра прикладной математики, СПбГПУ</string>
     <string name="app_name">Линия</string>
     <string name="new_game_button_string">Новая игра</string>
-    <string name="scores_table_button_string">Рекорды</string>
     <string name="rules_btn_string">Правила</string>
     <string name="tap_to_start_string">Коснись экрана чтобы начать!</string>
     <string name="tap_to_continue_string">Коснись экрана для продолжения!</string>
@@ -14,7 +13,7 @@
     <string name="rules_header_text">Правила</string>
     <string name="rules_game_substr">Игра</string>
     <string name="about_game_text">В начале игры вы увидите на экране линию, которая движется! Если не касаться экрана, то линия будет становиться всё тоньше и тоньше, пока наконец не станет настолько тонкой, что игра и линии наступит конец. Поэтому, если вы хотя бы немножко заинтересованы во времени жизни нашей линии, то ваша цель — не дать линии стать тоньше. Касайтесь лини пальцем, чтобы достичь этого. Но будьте осторожны: со времен линия становится всё более и более проворной. Так же вы увидите, что некоторые части линии раскрашены в разные цвета, о них можно почитать в разделе ниже!</string>
-    <string name="rules_line_colors_subheader">Line colors</string>
+    <string name="rules_line_colors_subheader">Цвета линии</string>
     <string name="main_line_description">Основной цвет нашей линии. Линия как она есть!</string>
     <string name="sudden_death_bonus_desc">Ещё один отрицательный бонус. Только коснись части линии, окрашенной в этот цвет и конец игры неминуем!</string>
     <string name="tapped_line_desc">А в этот тёплый цвет линия раскрашивается в тех местах, где вы её коснулись.</string>
@@ -23,10 +22,11 @@
     <string name="invis_bonus_desc">К сожалению, наша линия иногда куда-то уходит. А происходит это потому, что вы касаетесь её части, окрашенной в этот цвет.</string>
     <string name="no_miss_bonus_desc">Одно прикосновение к линии в таком цвете позволяет забыть о заботах: тыкай куда-угодно, линия всё равно почувствует и станет толще! Но лишь временно.</string>
     <string name="credits_btn_string">О разработчиках</string>
+    <string name="best_score_text">Рекорд:</string>
 
     <!-- Default department splash screen stuff -->
-    <string name="dummy_button">To Site</string>
-    <string name="dummy_content">Print text here</string>
+    <string name="dummy_button">На сайт</string>
+    <string name="dummy_content">Игра Линия</string>
     <string name="str_depth">Кафедра Прикладной Математики</string>
     <string name="str_university">Санкт-Петербургский Государственный Политехнический Университет</string>
     <string name="str_toweb">На сайт</string>

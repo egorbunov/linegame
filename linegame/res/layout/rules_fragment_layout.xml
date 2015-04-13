@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:id="@+id/rules_fragment_layout"
+              android:background="@color/main_background_color"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <ScrollView
+        android:layout_marginBottom="@dimen/rules_rect_v_margin"
+        android:layout_marginTop="@dimen/rules_rect_v_margin"
+        android:layout_marginStart="@dimen/rules_rect_h_margin"
+        android:layout_marginEnd="@dimen/rules_rect_h_margin"
+        android:layout_gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/orange_rect"
+        android:paddingTop="@dimen/rules_padding"
+        android:paddingBottom="@dimen/rules_padding"
+        android:paddingLeft="@dimen/rules_padding"
+        android:paddingRight="@dimen/rules_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/rules_header_text"
+                android:textSize="@dimen/rules_head_text_size"
+                android:textAppearance="@style/main_menu_text_style"
+                android:textColor="@color/main_menu_text_color"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@color/main_background_color"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/sub_header_v_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/rules_game_substr"
+                android:textSize="@dimen/sub_header_text_size"
+                android:textAppearance="@style/main_menu_text_style"
+                android:textColor="@color/main_menu_text_color"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/about_game_text"
+                android:textSize="@dimen/rules_text_size"
+                android:textColor="@color/main_menu_text_color"
+                android:layout_marginBottom="@dimen/section_margin_v"
+                />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/main_background_color"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/sub_header_v_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/rules_line_colors_subheader"
+                android:textSize="@dimen/sub_header_text_size"
+                android:textAppearance="@style/main_menu_text_style"
+                android:textColor="@color/main_menu_text_color"
+                />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="*">
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/MainLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:text="@string/main_line_description"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/TappedLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:text="@string/tapped_line_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/DecThickSpeedLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dec_thick_speed_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/IncThickSpeedLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/inc_thick_speed_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/InvisibleBonusLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/invis_bonus_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/NoMissLineSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_miss_bonus_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        />
+                </TableRow>
+
+                <TableRow
+                    android:gravity="center_vertical">
+                    <org.spbstu.linegame.view.rules.LineSample
+                        android:background="@drawable/line_sample_rect"
+                        android:id="@+id/SuddenDeathSample"
+                        android:layout_width="@dimen/line_sample_wid"
+                        android:layout_height="@dimen/line_sample_height"/>
+
+                    <TextView
+                        android:layout_marginTop="@dimen/sub_header_v_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sudden_death_bonus_desc"
+                        android:textSize="@dimen/rules_text_size"
+                        android:textColor="@color/main_menu_text_color"
+                        android:gravity="center"
+                        />
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

@@ -32,10 +32,12 @@ public class MainActivity extends FragmentActivity implements GameFinishedListen
     LineGameFragment lineGameFragment;
 
     ImageView soundSwitchBtn;
+
     MediaPlayer mediaPlayer;
+    private boolean isMuted = true;
+
     private RulesFragment rulesFragment;
     private MenuFragment menuFragment;
-
 
     @Override
 
@@ -61,7 +63,10 @@ public class MainActivity extends FragmentActivity implements GameFinishedListen
         mediaPlayer = MediaPlayer.create(this, R.raw.line_game_music);
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+
+        if (isMuted) {
+            mediaPlayer.start();
+        }
     }
 
     @Override
@@ -79,7 +84,10 @@ public class MainActivity extends FragmentActivity implements GameFinishedListen
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.start();
+
+        if (isMuted) {
+            mediaPlayer.start();
+        }
     }
 
 
@@ -117,9 +125,11 @@ public class MainActivity extends FragmentActivity implements GameFinishedListen
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             soundSwitchBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.no_sound));
+            isMuted = false;
         } else {
             mediaPlayer.start();
             soundSwitchBtn.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.speaker));
+            isMuted = true;
         }
     }
 

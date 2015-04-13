@@ -34,7 +34,7 @@ public class SplashScreenActivity extends Activity {
             findViewById(R.id.btnGoToDepSite).setVisibility(View.GONE);
         }
 
-        AppleView apple = (AppleView) findViewById(R.id.appleView);
+        final AppleView apple = (AppleView) findViewById(R.id.appleView);
 
         Animation anim = new TranslateAnimation(0f, 0f, -2000f, 0f);
         anim.setDuration(2000);

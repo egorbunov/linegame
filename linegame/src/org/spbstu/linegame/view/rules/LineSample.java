@@ -42,7 +42,7 @@ public class LineSample extends View {
 
         if (paint != null) {
             paint.setStrokeWidth(width / 1.8f);
-            int Y_PADDING = 60;
+            int Y_PADDING = 40;
 
             Path path = new Path();
             path.moveTo(width / 2, Y_PADDING);

@@ -64,7 +64,7 @@ class LineGameDrawingThread extends Thread {
         mainCurvePaint.setDither(true);
         mainCurvePaint.setStyle(Paint.Style.STROKE);
         mainCurvePaint.setStrokeJoin(Paint.Join.ROUND);
-        mainCurvePaint.setStrokeCap(Paint.Cap.SQUARE);
+        mainCurvePaint.setStrokeCap(Paint.Cap.ROUND);
         mainCurvePaint.setColor(mainCurveColor);
         mainCurvePaint.setAntiAlias(true);
 

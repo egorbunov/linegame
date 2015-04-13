@@ -32,7 +32,7 @@ public class RulesFragment extends Fragment {
         mainCurvePaint.setDither(true);
         mainCurvePaint.setStyle(Paint.Style.STROKE);
         mainCurvePaint.setStrokeJoin(Paint.Join.ROUND);
-        mainCurvePaint.setStrokeCap(Paint.Cap.SQUARE);
+        mainCurvePaint.setStrokeCap(Paint.Cap.ROUND);
         mainCurvePaint.setColor(getResources().getColor(R.color.main_line_color));
         mainCurvePaint.setAntiAlias(true);
         mainLineView.setPaint(mainCurvePaint);

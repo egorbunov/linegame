@@ -175,7 +175,7 @@ class LineGameDrawingThread extends Thread {
         GameCurvePoint prevPoint = null;
         tappedPath.reset();
         for (Path p : bonusPaths) {
-            p.reset();
+            p.rewind();
         }
 
         float shiftY = curve.getYShift();

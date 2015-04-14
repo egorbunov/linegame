@@ -22,12 +22,6 @@ public class RandomCurveParams {
      */
     public static final float BEZIER2D_STEP = 0.008f;
 
-    /**
-     * Maximum perimetr of the Bezier curve segment.
-     *
-     * TODO: that can be error prone
-     */
-    public static final float MAX_SEGMENT_PERIMETR = 3f;
 
 
     /**

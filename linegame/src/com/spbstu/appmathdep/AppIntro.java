@@ -19,7 +19,7 @@ class V2d
 {
 	// Data
 	public	int	 x, y;	
-};
+}
 
 
 public class AppIntro 
@@ -36,15 +36,15 @@ public class AppIntro
 	static public final int APP_ORI_LANDSCAPE			= 0;
 	static public final int APP_ORI_PORTRAIT			= 1;
 
-	static public final int APP_STATE_START					= 0;
-	static public final int APP_STATE_CIRCLE_INC        	= 1;
-	static public final int APP_STATE_APPLE_2ND_RADIUS  	= 2;
-	static public final int APP_STATE_APPLE_FILL_OPA        = 3;
-	static public final int APP_STATE_APPLE_FILL_SHADER     = 4;
-	static public final int APP_STATE_GRAFT                 = 5;
-	static public final int APP_STATE_LEAF                  = 6;
+	private static final int APP_STATE_START					= 0;
+	private static final int APP_STATE_CIRCLE_INC        	= 1;
+	private static final int APP_STATE_APPLE_2ND_RADIUS  	= 2;
+	private static final int APP_STATE_APPLE_FILL_OPA        = 3;
+	private static final int APP_STATE_APPLE_FILL_SHADER     = 4;
+	private static final int APP_STATE_GRAFT                 = 5;
+	private static final int APP_STATE_LEAF                  = 6;
 	
-	static public final int APP_STATE_FINISHED				= 10;
+	private static final int APP_STATE_FINISHED				= 10;
 	
 	
 	
@@ -62,38 +62,40 @@ public class AppIntro
 	
 	
 	// DATA
-	long				m_curTime, m_prevTime;
-	int					m_renderCounter;
+	private long				m_curTime;
+	private long m_prevTime;
+	private int					m_renderCounter;
 	
-	Activity			m_ctx;
-	int					m_language;
-	int					m_appState;
-	int					m_timeState;
+	private final Activity			m_ctx;
+	private final int					m_language;
+	private int					m_appState;
+	private int					m_timeState;
 	
-	int					m_oriChanged;
+	private int					m_oriChanged;
 	
-	Path				m_pathAppleOutline;
-	Paint				m_paintGreenEmpty;
-	Paint				m_paintGreenFill;
-	Paint				m_paintGraftFill;
-	Paint				m_paintLeafFill;
-	Paint				m_paintTextWhite;
-	Paint				m_paintTextYell;
-	Paint				m_paintBitmap;
-	Path				m_pathAppleGraft;
-	Path				m_pathAppleLeaf;
+	private final Path				m_pathAppleOutline;
+	private final Paint				m_paintGreenEmpty;
+	private final Paint				m_paintGreenFill;
+	private final Paint				m_paintGraftFill;
+	private final Paint				m_paintLeafFill;
+	private final Paint				m_paintTextWhite;
+	private final Paint				m_paintTextYell;
+	private final Paint				m_paintBitmap;
+	private final Path				m_pathAppleGraft;
+	private final Path				m_pathAppleLeaf;
 	
-	String				m_strDepth;
-	String				m_strUniversity;
-	String				m_strWeb;
-	Bitmap				m_bitmapButtonWeb;
+	private final String				m_strDepth;
+	private final String				m_strUniversity;
+	private final String				m_strWeb;
+	private final Bitmap				m_bitmapButtonWeb;
 	
 	// Apple body parameters
-	int					m_scrW, m_scrH;
-	int					m_scrCenterX, m_scrCenterY;
-	float				m_appleRadiusBase;
-	float				m_appleRadiusMin;
-	V2d					m_point;
+	private int					m_scrW;
+	private int m_scrH;
+	private int					m_scrCenterX;
+	private int m_scrCenterY;
+	private float				m_appleRadiusBase;
+	private final V2d					m_point;
 	
 	
 	// METHODS
@@ -247,15 +249,9 @@ public class AppIntro
     {
         ConnectivityManager cm = (ConnectivityManager)m_ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         // test for connection
-        if (cm.getActiveNetworkInfo() != null
-                && cm.getActiveNetworkInfo().isAvailable()
-                && cm.getActiveNetworkInfo().isConnected()) 
-        {
-            return true;
-        } else 
-        {
-            return false;
-        }
+		return cm.getActiveNetworkInfo() != null
+				&& cm.getActiveNetworkInfo().isAvailable()
+				&& cm.getActiveNetworkInfo().isConnected();
     }
 	
 	
@@ -724,7 +720,7 @@ public class AppIntro
 		m_timeState += deltaTimeMs;
 	}		// func
 
-	public boolean	onTouch(int x, int y, int touchType)
+	public boolean onTouch(int x, int y, int touchType)
 	{
 		int bw = (int)(m_appleRadiusBase * BUTTON_SCALE);
 		int bh = bw >> 2;

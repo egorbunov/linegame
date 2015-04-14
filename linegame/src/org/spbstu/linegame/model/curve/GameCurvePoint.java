@@ -14,25 +14,17 @@ public class GameCurvePoint extends TapableObject implements Comparable<GameCurv
         }
     };
 
-    public static final Comparator<GameCurvePoint> L2_COMPARATOR = new Comparator<GameCurvePoint>() {
-        final float SCALE_FACTOR = 500.0f; // TODO: Think about scale factor here
-        @Override
-        public int compare(GameCurvePoint a, GameCurvePoint b) {
-            return (int) (MyMath.distance(a.getPoint(), b.getPoint()) * SCALE_FACTOR);
-        }
-    };
+    private final Point point;
 
-    final Point point;
-
-    public Bonus getBonusType() {
-        return bonusType;
+    public char getBonusId() {
+        return bonusId;
     }
 
-    public void setBonusType(Bonus bonusType) {
-        this.bonusType = bonusType;
+    public void setBonusId(char bonusId) {
+        this.bonusId = bonusId;
     }
 
-    Bonus bonusType = Bonus.NONE;
+    private char bonusId = Bonus.NO_BONUS;
 
     public GameCurvePoint(float x, float y) {
         super();

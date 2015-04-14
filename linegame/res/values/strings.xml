@@ -17,11 +17,11 @@
     <string name="rules_line_colors_subheader">Line colors</string>
     <string name="main_line_description">Main color of the line. Line just as is!</string>
     <string name="sudden_death_bonus_desc">Another anti-bonus color. Only one tap on the part of the line colored like this will cause line death!</string>
-    <string name="tapped_line_desc">That is the color of parts of the line, which you successively cought with your finger!</string>
+    <string name="tapped_line_desc">That is the color of parts of the line, which you successively caught with your finger!</string>
     <string name="dec_thick_speed_desc">If you touch part of the line colored like this, line become insensitive a little… It\'s getting harder to make it thicker.</string>
     <string name="inc_thick_speed_desc">But that is the bonus which increase the speed with that your line becomes thicker. Make it thicker quicker!</string>
     <string name="invis_bonus_desc">Unfortunately your favourite line can gone sometimes for a while…It happens if you tap on part of the line with that color.</string>
-    <string name="no_miss_bonus_desc">Tap on that kind of the line will let you not worrying abount catching the line, tap anythere, but for a while.</string>
+    <string name="no_miss_bonus_desc">Tap on that kind of the line will let you not worrying about catching the line, tap anywhere, but for a while.</string>
     <string name="credits_btn_string">Credits</string>
     <string name="best_score_text">Best score:</string>
 

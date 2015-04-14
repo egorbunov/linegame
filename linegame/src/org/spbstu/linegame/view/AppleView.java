@@ -23,7 +23,7 @@ public class AppleView extends View {
     private float leafTranslation[] = {0.0f, 0.0f}; // Translation of the leaf to be on the right place near the apple
     private float stickTranslation[] = {0.0f, 0.0f}; // Translation of the stick to be on the right place near the apple
 
-    private float toCenterTranslation[] = {0.0f, 0.0f};
+    private final float[] toCenterTranslation = {0.0f, 0.0f};
 
     private final Paint applePaint;
     private final Paint leafPaint;
@@ -32,16 +32,16 @@ public class AppleView extends View {
     private int width = 0;
     private int height = 0;
 
-    private float leafAnchor[] = {0.0f, 0, 0f};  // point, relatively to that leaf will be scaled
-    private float appleAnchor[] = {0.0f, 0, 0f}; // point, relatively to that apple will be scaled
-    private float stickAnchor[] = {0.0f, 0, 0f}; // point, relatively to that stick will be scaled
+    private final float[] leafAnchor = {0.0f, 0, 0f};  // point, relatively to that leaf will be scaled
+    private final float[] appleAnchor = {0.0f, 0, 0f}; // point, relatively to that apple will be scaled
+    private final float[] stickAnchor = {0.0f, 0, 0f}; // point, relatively to that stick will be scaled
 
-    float[] leafPoint = {0.0f, 0.0f}; // anchor point of the leaf moved to the correct position near apple
-    float[] stickPoint = {0.0f, 0.0f}; // anchor point of the stick moved to the correct position near apple
+    private final float[] leafPoint = {0.0f, 0.0f}; // anchor point of the leaf moved to the correct position near apple
+    private final float[] stickPoint = {0.0f, 0.0f}; // anchor point of the stick moved to the correct position near apple
 
-    private Matrix appleTransformMat = new Matrix();
-    private Matrix leafTransformMat = new Matrix();
-    private Matrix stickTransformMat = new Matrix();
+    private final Matrix appleTransformMat = new Matrix();
+    private final Matrix leafTransformMat = new Matrix();
+    private final Matrix stickTransformMat = new Matrix();
     private float maxScaleFactor = 1.0f;
 
 
@@ -174,11 +174,8 @@ public class AppleView extends View {
         return appleRect;
     }
 
-    RectF ttt;
     private void computeToCenterTranslation() {
         RectF rect = getAppleRect();
-
-        ttt = getAppleRect();
 
         toCenterTranslation[0] = width / 2 - rect.centerX();
         toCenterTranslation[1] = height / 2 - rect.centerY();
@@ -190,7 +187,7 @@ public class AppleView extends View {
     }
 
 
-    boolean isAnimationInProgress = false;
+    private boolean isAnimationInProgress = false;
 
     private float curScale = 0.3f;
     private float curAngle = -10f;
@@ -210,8 +207,8 @@ public class AppleView extends View {
         appleTransformMat.reset();
     }
 
-    float[] newLeafPoint = {0.0f, 0.0f};
-    float[] newStickPoint = {0.0f, 0.0f};
+    private final float[] newLeafPoint = {0.0f, 0.0f};
+    private final float[] newStickPoint = {0.0f, 0.0f};
 
     private void prepareApple(float scaleFactor, float leafRotation) {
         resetApple();

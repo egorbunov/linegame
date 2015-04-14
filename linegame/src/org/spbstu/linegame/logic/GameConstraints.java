@@ -1,6 +1,5 @@
 package org.spbstu.linegame.logic;
 
-import android.util.Log;
 import org.spbstu.linegame.model.curve.RandomCurveParams;
 
 /**
@@ -16,21 +15,21 @@ public class GameConstraints {
     public final static float STARTING_LINE_WIDTH = 35.0f;
     public final static float GAME_OVER_LINE_WIDTH = 10.0f;
     public final static float MAXIMUM_LINE_WIDTH = 90.0f;
-    public final static float LINE_WIDTH_DELTA = 0.8f;
-    public final static float LINE_THINNING_SPEED_DELTA = 0.1f;
+    private final static float LINE_WIDTH_DELTA = 0.8f;
+    private final static float LINE_THINNING_SPEED_DELTA = 0.1f;
     public final static float STARTING_CURVE_SPEED = 0.006f;
-    public final static float CURVE_SPEED_DELTA = 0.0003f;
+    private final static float CURVE_SPEED_DELTA = 0.0004f;
 
-    public static final float STARTING_CURVE_Y_BOUND = 0.5f;
-    public static final float CURVE_Y_BOUND_DELTA = 0.035f;
-    public static final float STARTING_CURVE_X_BOUND = 0.1f;
-    public static final float CURVE_X_BOUND_DELTA = 0.075f;
-    public static final float INITIAL_BONUS_PROB = 0.25f;
+    private static final float STARTING_CURVE_Y_BOUND = 0.5f;
+    private static final float CURVE_Y_BOUND_DELTA = 0.09f;
+    private static final float STARTING_CURVE_X_BOUND = 0.1f;
+    private static final float CURVE_X_BOUND_DELTA = 0.09f;
+    private static final float INITIAL_BONUS_PROB = 0.25f;
 
     public static final int MAX_BONUS_POINT_NUM = 20;
     public static final int MIN_BONUS_POINT_NUM = 5;
 
-    public static final int IMPOSSIBLE_TO_MISS_TIMER_DELTA = 20;
+    private static final int IMPOSSIBLE_TO_MISS_TIMER_DELTA = 20;
 
     /**
      * minimal distance between ordinates of successive points
@@ -38,6 +37,7 @@ public class GameConstraints {
     public static final int POINT_ON_SCREEN_CAPACITY = 5000;
     private static final int INVISIBLE_LINE_TIMER_DELTA = 10;
     public static final int GAME_HARDNESS_DIST_STEP = 5;
+    private static final float MIN_CURVE_SPEED = 0.002f;
 
 
     // variables responsible for game hardness
@@ -54,7 +54,7 @@ public class GameConstraints {
      */
     private float scrollSpeed = STARTING_CURVE_SPEED;  // in [0, 1]
 
-    private RandomCurveParams randomCurveParams = new RandomCurveParams(STARTING_CURVE_X_BOUND, STARTING_CURVE_Y_BOUND);
+    private final RandomCurveParams randomCurveParams = new RandomCurveParams(STARTING_CURVE_X_BOUND, STARTING_CURVE_Y_BOUND);
 
     /**
      * Probability of generating a bonus (any bonus).
@@ -85,15 +85,6 @@ public class GameConstraints {
             impossibleToMissTimer -= 1;
     }
 
-    public void incLineThinningSpeed() {
-        lineThinningSpeed += LINE_THINNING_SPEED_DELTA;
-    }
-
-    public void decLineThinningSpeed() {
-        if (lineThinningSpeed - LINE_THINNING_SPEED_DELTA > 0)
-            lineThinningSpeed -= LINE_THINNING_SPEED_DELTA;
-    }
-
     public void incLineThickeningSpeed() {
         lineThickeningSpeed += LINE_THINNING_SPEED_DELTA;
     }
@@ -103,20 +94,9 @@ public class GameConstraints {
             lineThickeningSpeed -= LINE_THINNING_SPEED_DELTA;
     }
 
-
     public void decCurveYBound() {
         if (randomCurveParams.curveYBound - CURVE_Y_BOUND_DELTA >= RandomCurveParams.MIN_CURVE_Y_BOUND)
             randomCurveParams.curveYBound -= CURVE_Y_BOUND_DELTA;
-    }
-
-    public void decCurveXBound() {
-        if (randomCurveParams.curveXBound - CURVE_X_BOUND_DELTA >= 0)
-            randomCurveParams.curveXBound -= CURVE_X_BOUND_DELTA;
-    }
-
-    public void incCurveYBound() {
-        if (randomCurveParams.curveYBound + CURVE_Y_BOUND_DELTA <= 1.0f)
-            randomCurveParams.curveYBound += CURVE_Y_BOUND_DELTA;
     }
 
     public void incCurveXBound() {
@@ -130,7 +110,7 @@ public class GameConstraints {
     }
 
     public void decSpeed() {
-        if (scrollSpeed - CURVE_SPEED_DELTA > 0) {
+        if (scrollSpeed - CURVE_SPEED_DELTA > MIN_CURVE_SPEED) {
             scrollSpeed -= CURVE_SPEED_DELTA;
         }
     }
@@ -159,14 +139,6 @@ public class GameConstraints {
         lineThickness -= lineThinningSpeed;
     }
 
-    public float getCurveXBound() {
-        return randomCurveParams.curveXBound;
-    }
-
-    public float getCurveYBound() {
-        return randomCurveParams.curveYBound;
-    }
-
     public RandomCurveParams getRandomCurveParams() {
         return randomCurveParams;
     }
@@ -175,16 +147,8 @@ public class GameConstraints {
         return bonusProbability;
     }
 
-    public void setBonusProbability(float bonusProbability) {
-        this.bonusProbability = bonusProbability;
-    }
-
     public int getImpossibleToMissTimer() {
         return impossibleToMissTimer;
-    }
-
-    public void setImpossibleToMissTimer(int impossibleToMissTimer) {
-        this.impossibleToMissTimer = impossibleToMissTimer;
     }
 
     public int getInvisibleLineTimer() {

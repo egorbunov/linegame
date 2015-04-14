@@ -1,9 +1,9 @@
 package org.spbstu.linegame.model.curve;
 
 public abstract  class TapableObject {
-    boolean isTapped;
+    private boolean isTapped;
 
-    public TapableObject() {
+    TapableObject() {
         isTapped = false;
     }
 

@@ -20,10 +20,10 @@ import org.spbstu.linegame.R;
  * Github username: egorbunov
  */
 public class MenuFragment extends Fragment {
-    TextView bestScoreView = null;
+    private TextView bestScoreView = null;
 
     private MediaPlayer mediaPlayer;
-    ImageButton soundSwitchBtn;
+    private ImageButton soundSwitchBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,11 +45,6 @@ public class MenuFragment extends Fragment {
         }
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     public void updateBestScore() {

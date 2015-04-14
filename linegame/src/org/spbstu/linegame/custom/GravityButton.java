@@ -3,7 +3,6 @@ package org.spbstu.linegame.custom;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.Button;
 
 /**
@@ -11,7 +10,7 @@ import android.widget.Button;
  * Email: egor-mailbox@ya.ru
  * Github username: egorbunov
  */
-public class GravityButton extends Button {
+class GravityButton extends Button {
     public GravityButton(Context context) {
         super(context);
     }

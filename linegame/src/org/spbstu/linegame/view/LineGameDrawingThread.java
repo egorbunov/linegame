@@ -11,13 +11,11 @@ import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.GameCurvePoint;
 
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameDrawingThread extends Thread {
 
-    private AtomicBoolean isThreadAlive;
+    private final AtomicBoolean isThreadAlive;
 
     private final SurfaceHolder surfaceHolder;
     private Rect surfaceFrame;
@@ -26,18 +24,23 @@ class LineGameDrawingThread extends Thread {
 
     private final int backgroundColor;
 
-    private Paint mainCurvePaint;
     private Paint tappedCurvePaint;
 
     /**
      * To draw parts of curve with bonus on them, which player can catch if tap the curve
      * on the bonus place I need separate paths.
+     *
+     * Also line with no bonus - it's just a line with it's main color.
      */
-    private Map<String, Paint> bonusPaintsMap;
+    private Paint[] bonusPaintsMap;
 
-    private Path mainPath = new Path();
-    private Path tappedPath = new Path();
-    private Map<String, Path> bonusPaths = new TreeMap<>();
+    /**
+     * All Paths including path for main line but except the tap trace.
+     * Now actually main line not drawing fully. It contains of bonus and no-bonus parts.
+     */
+    private final Path[] bonusPaths;
+    private final Path tappedPath = new Path();
+
     private int mainCurveColor;
     private int tappedCurveColor;
 
@@ -49,17 +52,16 @@ class LineGameDrawingThread extends Thread {
 
         backgroundColor = context.getResources().getColor(R.color.main_background_color);
 
-        for (Bonus b : Bonus.values()) {
-            if (!b.equals(Bonus.NONE)) {
-                bonusPaths.put(b.toString(), new Path());
-            }
+        bonusPaths = new Path[Bonus.getBonusNum()];
+        for (char b : Bonus.ALL_BONUSES) {
+            bonusPaths[b] = new Path();
         }
 
         preparePaints(context);
     }
 
     private void preparePaints(Context context) {
-        mainCurvePaint = new Paint();
+        Paint mainCurvePaint = new Paint();
         mainCurveColor = context.getResources().getColor(R.color.main_line_color);
         mainCurvePaint.setDither(true);
         mainCurvePaint.setStyle(Paint.Style.STROKE);
@@ -74,7 +76,7 @@ class LineGameDrawingThread extends Thread {
         tappedCurvePaint.setColor(tappedCurveColor);
 
 
-        bonusPaintsMap = new TreeMap<>();
+        bonusPaintsMap = new Paint[Bonus.getBonusNum()];
 
         Paint doubleThinningBonusPaint = new Paint();
         doubleThinningBonusPaint.set(mainCurvePaint);
@@ -104,14 +106,14 @@ class LineGameDrawingThread extends Thread {
         decreaseGameSpeedPaint.set(mainCurvePaint);
         decreaseGameSpeedPaint.setColor(context.getResources().getColor(R.color.decrease_game_speed_bonus_color));
 
-        bonusPaintsMap.put(Bonus.DECREASE_THICKENING_SPEED.toString(), doubleThinningBonusPaint);
-        bonusPaintsMap.put(Bonus.INCREASE_THICKENING_SPEED.toString(), doubleThickeningBonusPaint);
-        bonusPaintsMap.put(Bonus.INVISIBLE_LINE.toString(), invisibleBonusPaint);
-        bonusPaintsMap.put(Bonus.SUDDEN_GAME_OVER.toString(), suddenDeathBonusPaint);
-        bonusPaintsMap.put(Bonus.IMPOSSIBLE_TO_MISS.toString(), impossibleToMissBonusPaint);
-        bonusPaintsMap.put(Bonus.INCREASE_GAME_SPEED.toString(), increaseGameSpeedPaint);
-        bonusPaintsMap.put(Bonus.DECREASE_GAME_SPEED.toString(), decreaseGameSpeedPaint);
-
+        bonusPaintsMap[Bonus.NO_BONUS] = mainCurvePaint;
+        bonusPaintsMap[Bonus.DECREASE_THICKENING_SPEED] =  doubleThinningBonusPaint;
+        bonusPaintsMap[Bonus.INCREASE_THICKENING_SPEED] =  doubleThickeningBonusPaint;
+        bonusPaintsMap[Bonus.INVISIBLE_LINE] =  invisibleBonusPaint;
+        bonusPaintsMap[Bonus.SUDDEN_DEATH] =  suddenDeathBonusPaint;
+        bonusPaintsMap[Bonus.IMPOSSIBLE_TO_MISS] =  impossibleToMissBonusPaint;
+        bonusPaintsMap[Bonus.INCREASE_GAME_SPEED] =  increaseGameSpeedPaint;
+        bonusPaintsMap[Bonus.DECREASE_GAME_SPEED] =  decreaseGameSpeedPaint;
     }
 
     public void kill() {
@@ -171,25 +173,22 @@ class LineGameDrawingThread extends Thread {
         Curve curve = gameLogic.getCurve();
 
         GameCurvePoint prevPoint = null;
-        mainPath.reset();
         tappedPath.reset();
-        for (Path p : bonusPaths.values()) {
+        for (Path p : bonusPaths) {
             p.reset();
         }
 
+        float shiftY = curve.getYShift();
+
         float sx, sy; // scaled point coordinates
         for (GameCurvePoint curPoint : curve) {
-            sy = scaleHeight(curPoint.getY());
+            sy = scaleHeight(curPoint.getY() + shiftY);
             sx = scaleWidth(curPoint.getX());
             if (prevPoint == null) {
-                mainPath.moveTo(sx, sy);
                 tappedPath.moveTo(sx, sy);
-                for (Path p : bonusPaths.values()) {
+                for (Path p : bonusPaths) {
                     p.moveTo(sx, sy);
                 }
-            }
-            else {
-                mainPath.lineTo(sx, sy);
             }
 
         	if (curPoint.isTapped()) {
@@ -198,15 +197,12 @@ class LineGameDrawingThread extends Thread {
                 tappedPath.moveTo(sx, sy);
             }
 
-
-            for (Bonus b : Bonus.values()) {
-                if (!b.equals(Bonus.NONE)) {
-                    Path curPath = bonusPaths.get(b.toString());
-                    if (curPoint.getBonusType().equals(b)) {
-                        curPath.lineTo(sx, sy);
-                    } else {
-                        curPath.moveTo(sx, sy);
-                    }
+            for (char b : Bonus.ALL_BONUSES) {
+                Path curPath = bonusPaths[b];
+                if (curPoint.getBonusId() == b) {
+                    curPath.lineTo(sx, sy);
+                } else {
+                    curPath.moveTo(sx, sy);
                 }
             }
 
@@ -215,21 +211,16 @@ class LineGameDrawingThread extends Thread {
 
         if (gameLogic.getGameConstraints().getInvisibleLineTimer() == 0) {
             if (gameLogic.getGameConstraints().getImpossibleToMissTimer() > 0) {
-                mainCurvePaint.setColor(tappedCurveColor);
+                bonusPaintsMap[Bonus.NO_BONUS].setColor(tappedCurveColor);
             } else {
-                mainCurvePaint.setColor(mainCurveColor);
+                bonusPaintsMap[Bonus.NO_BONUS].setColor(mainCurveColor);
             }
-            mainCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
-            canvas.drawPath(mainPath, mainCurvePaint);
 
-            for (Bonus b : Bonus.values()) {
-                if (!b.equals(Bonus.NONE)) {
-                    Path curPath = bonusPaths.get(b.toString());
-                    Paint paint = bonusPaintsMap.get(b.toString());
-                    float ADDITIONAL_BONUS_STROKE_WIDTH = 15f;
-                    paint.setStrokeWidth(gameLogic.getLineThickness() + ADDITIONAL_BONUS_STROKE_WIDTH);
-                    canvas.drawPath(curPath, paint);
-                }
+            for (char b : Bonus.ALL_BONUSES) {
+                Path curPath = bonusPaths[b];
+                Paint paint = bonusPaintsMap[b];
+                paint.setStrokeWidth(gameLogic.getLineThickness());
+                canvas.drawPath(curPath, paint);
             }
 
             tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
@@ -238,10 +229,8 @@ class LineGameDrawingThread extends Thread {
 
         }
 
-
-        // TODO: delete
         /*
-
+        TODO: delete
         Paint tmp = new Paint();
         tmp.setColor(Color.RED);
         tmp.setStrokeWidth(2);

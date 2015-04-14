@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -64,7 +63,7 @@ public class SplashScreenActivity extends Activity {
         anim.start();
     }
 
-    boolean isGameStarted = false;
+    private boolean isGameStarted = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

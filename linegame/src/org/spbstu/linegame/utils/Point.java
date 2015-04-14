@@ -28,14 +28,6 @@ public class Point {
         this.y = y;
     }
 
-    public void normalize() {
-        float dist = (float) Math.sqrt(x * x + y * y);
-        if (dist == 0.0f)
-            return;
-        x = x / dist;
-        y = y / dist;
-    }
-
     @Override
     public String toString() {
         return "{ " + x + ", " + y + " }";

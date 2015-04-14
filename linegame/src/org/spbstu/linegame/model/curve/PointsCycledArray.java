@@ -1,6 +1,5 @@
 package org.spbstu.linegame.model.curve;
 
-import android.util.Log;
 import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.BonusClickListener;
 import org.spbstu.linegame.utils.MyMath;
@@ -29,9 +28,9 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
     private int start;
     private int end;
     private int elementCount;
-    private int capacity;
+    private final int capacity;
 
-    BonusClickListener bonusClickListener;
+    private BonusClickListener bonusClickListener;
 
     public void addBounsListener(BonusClickListener listener) {
         bonusClickListener = listener;
@@ -48,7 +47,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
         elementCount = 0;
     }
 
-    public synchronized void addLast(GameCurvePoint point) {
+    public void addLast(GameCurvePoint point) {
         if (point == null) {
             throw new NullPointerException();
         }
@@ -71,7 +70,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
             end = 0;
     }
 
-    public synchronized void addFirst(GameCurvePoint point) {
+    public void addFirst(GameCurvePoint point) {
         if (point == null) {
             throw new NullPointerException();
         }
@@ -91,7 +90,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
         points[start] = point;
     }
 
-    public synchronized GameCurvePoint deleteFirst() {
+    public GameCurvePoint deleteFirst() {
         if (start == end)
             return null;
         elementCount -= 1;
@@ -219,13 +218,6 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
         return res;
     }
 
-    private void bonusTapped(GameCurvePoint point) {
-        if (!point.isTapped() && !point.getBonusType().equals(Bonus.NONE) &&
-                bonusClickListener != null) {
-            bonusClickListener.onBonusClicked(point.getBonusType());
-        }
-    }
-
     /**
      * Binary search of points close to given one
      *
@@ -320,6 +312,15 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
     private int lastElementIndex() {
         return end == 0 ? points.length - 1 : end - 1;
     }
+
+    private void bonusTapped(GameCurvePoint point) {
+        if (!point.isTapped() && point.getBonusId() != Bonus.NO_BONUS &&
+                bonusClickListener != null) {
+
+            bonusClickListener.onBonusClicked(point.getBonusId());
+        }
+    }
+
 
     public int getCapacity() {
         return capacity;

@@ -1,6 +1,5 @@
 package org.spbstu.linegame.fragment;
 
-import android.graphics.BlurMaskFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,12 +15,6 @@ import org.spbstu.linegame.view.rules.LineSample;
  * Github username: egorbunov
  */
 public class RulesFragment extends Fragment {
-    private final static float BLUR_RADIUS = 15;
-
-    public void onCreate (Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

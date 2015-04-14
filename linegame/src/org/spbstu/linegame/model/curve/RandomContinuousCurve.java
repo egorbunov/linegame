@@ -1,7 +1,6 @@
 package org.spbstu.linegame.model.curve;
 
 import android.util.Log;
-import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.BonusGenerator;
 import org.spbstu.linegame.utils.MyMath;
 import org.spbstu.linegame.utils.Point;
@@ -20,7 +19,7 @@ public class RandomContinuousCurve extends Curve {
      */
     private Random randomizer;
     private RandomCurveParams params;
-    private BonusGenerator bonusGenerator;
+    private final BonusGenerator bonusGenerator;
 
     public RandomContinuousCurve(PointsCycledArray points, Curve startingCurve, RandomCurveParams params, BonusGenerator bonusGenerator) {
         super();
@@ -45,30 +44,6 @@ public class RandomContinuousCurve extends Curve {
         nextFrame(0.0f);
     }
 
-    public RandomContinuousCurve(PointsCycledArray points, RandomCurveParams params, BonusGenerator bonusGenerator) {
-        super();
-        this.bonusGenerator = bonusGenerator;
-
-        if (params == null)
-            throw new NullPointerException();
-
-        this.params = params;
-
-        randomizer = new Random();
-        generatePoints(new GameCurvePoint(WIDTH / 2.0f, 0.0f));
-    }
-
-    /**
-     * That method is generates new curve points and adds them to
-     * the point's list (to the end).
-     * @param startingPoint point, which will be added firstly to the
-     *                      end of the list
-     */
-    private void generatePoints(GameCurvePoint startingPoint) {
-        points.addLast(startingPoint);
-        generatePoints();
-    }
-
     /**
      * Generate 2d Bezier curve points (something like De Casteljau's algorithm)
      * @param p1 first control point
@@ -76,13 +51,13 @@ public class RandomContinuousCurve extends Curve {
      * @param p3 second control point
      */
     private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
-        float perimetr = MyMath.distance(p1, p2) + MyMath.distance(p2, p3);
+        float perimeter = MyMath.distance(p1, p2) + MyMath.distance(p2, p3);
 
-        //Log.d("EGOR, PERIMETR=", String.valueOf(perimetr));
+        // Log.d("EGOR, PERIMETER=", String.valueOf(perimetr));
 
-        final float T_STEP = RandomCurveParams.BEZIER2D_STEP / perimetr;
+        final float T_STEP = RandomCurveParams.BEZIER2D_STEP / perimeter;
 
-        //Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
+        // Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -90,7 +65,7 @@ public class RandomContinuousCurve extends Curve {
         final float cy = p3.getY() - 2 * p2.getY() + p1.getY();
         float ax, ay, abx, aby;
 
-        Bonus b = bonusGenerator.generateRandomBonus();
+        char b = bonusGenerator.generateRandomBonus();
         int num = bonusGenerator.getNumOfPointsInBonus();
 
         // Log.d("EGOR:", "Bonus = " + b.toString() + "; num_p = " + num);
@@ -103,7 +78,7 @@ public class RandomContinuousCurve extends Curve {
             aby = cy * t + p1p2y;
             GameCurvePoint p = new GameCurvePoint(abx * t + ax, aby * t + ay);
             if (num > 0) {
-                p.setBonusType(b);
+                p.setBonusId(b);
                 num--;
             }
             points.addLast(p);
@@ -162,6 +137,10 @@ public class RandomContinuousCurve extends Curve {
 
     }
 
+    /**
+     * That method is generates new curve points and adds them to
+     * the point's list (to the end).
+     */
     private void generatePoints() {
         GameCurvePoint lastPoint = points.getLast();
         /**
@@ -202,9 +181,9 @@ public class RandomContinuousCurve extends Curve {
     @Override
     public boolean tap(float x, float y, float curveWidth) {
         super.tap(x, y, curveWidth);
-        if (points == null || points.size() < 1 || points.getFirst() == null) // TODO: think about that sometimes that condition is true!
-        	return false;
-        return points.setTapped(new Point(x, y + points.getFirst().getY()), Curve.TAP_TOLERANCE, curveWidth);
+        return !(points == null || points.size() < 1 || points.getFirst() == null) // TODO: think about that sometimes that condition is true!
+
+                && points.setTapped(new Point(x, y + points.getFirst().getY()), Curve.TAP_TOLERANCE, curveWidth);
     }
 
     @Override
@@ -222,32 +201,11 @@ public class RandomContinuousCurve extends Curve {
 
     @Override
     public Iterator<GameCurvePoint> iterator() {
-        return new Iterator<GameCurvePoint>() {
-            Iterator<GameCurvePoint> arrayIterator = points.iterator();
-            @Override
-            public boolean hasNext() {
-                return arrayIterator.hasNext();
-            }
+        return points.iterator();
+    }
 
-            @Override
-            public GameCurvePoint next() {
-                GameCurvePoint notTransformed = arrayIterator.next();
-                if (notTransformed == null) {
-                    Log.e(this.getClass().getName(), "NULL!!!!!!!!!!! WHY?????????????????????? HOOOORSEEEE!!!!!!!!");
-                    return null;
-                }
-                GameCurvePoint toReturn = new GameCurvePoint(new Point(notTransformed.getX(),
-                        notTransformed.getY() - points.getFirst().getY()));
-                if (notTransformed.isTapped())
-                    toReturn.setTapped();
-                toReturn.setBonusType(notTransformed.bonusType);
-                return toReturn;
-            }
-
-            @Override
-            public void remove() {
-                arrayIterator.remove();
-            }
-        };
+    @Override
+    public float getYShift() {
+        return - points.getFirst().getY();
     }
 }

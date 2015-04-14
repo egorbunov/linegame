@@ -2,14 +2,12 @@ package org.spbstu.linegame;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.ImageButton;
 import com.spbstu.appmathdep.DepSplashScreenActivity;
 import org.spbstu.linegame.fragment.LineGameFragment;
 import org.spbstu.linegame.fragment.MenuFragment;
@@ -30,8 +28,8 @@ public class MainActivity extends FragmentActivity {
     private static final String RULES_FRAGMENT_TAG = "RULES_FRAGMENT";
     private static final String MENU_FRAGMENT_TAG = "MENU_FRAGMENT";
 
-    MediaPlayer mediaPlayer;
-    boolean isMuted = false;
+    private MediaPlayer mediaPlayer;
+    private boolean isMuted = false;
 
     private MenuFragment menuFragment;
     private LineGameFragment lineGameFragment;

@@ -2,25 +2,6 @@ package org.spbstu.linegame.utils;
 
 public class MyMath {
     /**
-     * Rotates direction around (0, 0) by specified angle
-     * @param phi - angle in radians
-     */
-    public static Point rotate(Point direction, float phi) {
-        float sin = (float) Math.sin(phi);
-        float cos = (float) Math.cos(phi);
-        return new Point(direction.getX() * cos - direction.getY() * sin,
-                direction.getX() * sin + direction.getY() * cos);
-    }
-
-    /**
-     * Moves given point along the direction by length = length(direction) * coefficient
-     */
-    public static Point move(Point point, Point direction, float coef) {
-        return new Point(point.getX() + direction.getX() * coef,
-                point.getY() + direction.getY() * coef);
-    }
-
-    /**
      * Euclidean distance btw 2d points
      */
     public static float distance(Point x, Point y) {
@@ -42,5 +23,13 @@ public class MyMath {
      */
     public static float angle(Point direction) {
         return (float) Math.atan2(direction.getY(), direction.getX());
+    }
+
+    public static void normalize(Point p) {
+        float dist = (float) Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY());
+        if (dist == 0.0f)
+            return;
+        p.setX(p.getX() / dist);
+        p.setX(p.getY() / dist);
     }
 }

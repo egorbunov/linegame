@@ -22,7 +22,7 @@ public class LogicEventToUiSender implements LogicListener {
         ON_GAME_STARTED,
         ON_SCORE_CHANGED,
         ON_GAME_CONTINUED,
-        ON_GAME_INITIALIZED;
+        ON_GAME_INITIALIZED
     }
 
     static class GameMsgHandler extends Handler {
@@ -67,7 +67,7 @@ public class LogicEventToUiSender implements LogicListener {
         }
     }
 
-    private GameMsgHandler handler = new GameMsgHandler();
+    private final GameMsgHandler handler = new GameMsgHandler();
 
     public LogicEventToUiSender() {}
 

@@ -22,7 +22,7 @@ import android.content.res.*;
 //****************************************************************
 class RefreshHandler extends Handler 
 {
-	AppView m_gameView;
+	private final AppView m_gameView;
 	
 	public RefreshHandler(AppView v)
 	{
@@ -40,7 +40,7 @@ class RefreshHandler extends Handler
     	this.removeMessages(0);
         sendMessageDelayed(obtainMessage(0), delayMillis);
     }
-};
+}
 
 // ****************************************************************
 // class AppView
@@ -52,11 +52,11 @@ class AppView extends View
 	
 
 	// DATA
-	DepSplashScreenActivity m_app;
-	RefreshHandler	m_handler;
-	long			m_startTime;
-	int				m_lineLen;
-	boolean			m_active;
+	private final DepSplashScreenActivity m_app;
+	private final RefreshHandler	m_handler;
+	private final long			m_startTime;
+	private final int				m_lineLen;
+	private boolean			m_active;
 	
 	// METHODS
 	public AppView(DepSplashScreenActivity app)
@@ -122,8 +122,8 @@ public class DepSplashScreenActivity extends Activity implements  OnCompletionLi
 	// *************************************************
 	// DATA
 	// *************************************************
-	AppIntro				m_app;
-	AppView				    m_appView;
+	private AppIntro				m_app;
+	private AppView				    m_appView;
 	
 
 	// *************************************************

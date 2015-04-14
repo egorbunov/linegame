@@ -1,5 +1,6 @@
 package org.spbstu.linegame.logic;
 
+import android.util.Log;
 import org.spbstu.linegame.model.curve.*;
 import org.spbstu.linegame.utils.MortalRunnable;
 
@@ -7,13 +8,13 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LineGameLogic implements BonusClickListener {
-    final GameConstraints gameConstraints;
+    private final GameConstraints gameConstraints;
     private final BonusGenerator bonusGenerator;
 
     /**
      * Listeners will be notified if any important event happens
      */
-    LinkedList<LogicListener> logicListeners;
+    private final LinkedList<LogicListener> logicListeners;
 
     /**
      * singleton runnable for thinning line width if no finger on touch screen
@@ -63,7 +64,7 @@ public class LineGameLogic implements BonusClickListener {
             gameConstraints.incLineThickness();
     }
 
-    public void finishTheGame() {
+    private void finishTheGame() {
         destroyThinningThread();
         gameConstraints.setScrollSpeed(0.0f);
         gameState = LineGameState.FINISHED;
@@ -140,7 +141,7 @@ public class LineGameLogic implements BonusClickListener {
     private void createThinningThread() {
         lineThinningTask = new MortalRunnable() {
 
-            private AtomicBoolean isThreadRunning = new AtomicBoolean(true);
+            private final AtomicBoolean isThreadRunning = new AtomicBoolean(true);
 
             @Override
             public void kill() {
@@ -221,12 +222,8 @@ public class LineGameLogic implements BonusClickListener {
      */
     private void curveTapped() {
         increaseLineWidth();
-        increaseScore();
     }
 
-    private void increaseScore() {
-
-    }
 
     public void setGameNotTapped() {
         isGameTapped = false;
@@ -254,7 +251,7 @@ public class LineGameLogic implements BonusClickListener {
 
     private int lastLevel = 0;
 
-    public void nextCurveFrame() {
+    private void nextCurveFrame() {
         // A little of bonus processing work:
         // ------------------------------
 
@@ -262,6 +259,8 @@ public class LineGameLogic implements BonusClickListener {
         gameConstraints.decInvisibleLineTimer();
 
         // ------------------------------
+
+        Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
 
         if (!gameState.equals(LineGameState.PAUSED))
             currentCurve.nextFrame(gameConstraints.getScrollSpeed());
@@ -292,34 +291,31 @@ public class LineGameLogic implements BonusClickListener {
         }
     }
 
-    // TODO: delete
-    public RandomCurveParams getCurveParams() {
-        return gameConstraints.getRandomCurveParams();
-    }
-
     @Override
-    public void onBonusClicked(Bonus b) {
+    public void onBonusClicked(char b) {
         switch (b) {
-            case IMPOSSIBLE_TO_MISS:
+            case Bonus.IMPOSSIBLE_TO_MISS:
                 gameConstraints.incImpossibleToMissTimer();
                 break;
-            case SUDDEN_GAME_OVER:
+            case Bonus.SUDDEN_DEATH:
                 finishTheGame();
                 break;
-            case INVISIBLE_LINE:
+            case Bonus.INVISIBLE_LINE:
                 gameConstraints.incInvisibleLineTimer();
                 break;
-            case INCREASE_THICKENING_SPEED:
+            case Bonus.INCREASE_THICKENING_SPEED:
                 gameConstraints.incLineThickeningSpeed();
                 break;
-            case DECREASE_THICKENING_SPEED:
+            case Bonus.DECREASE_THICKENING_SPEED:
                 gameConstraints.decLineThickeningSpeed();
                 break;
-            case INCREASE_GAME_SPEED:
+            case Bonus.INCREASE_GAME_SPEED:
                 gameConstraints.incSpeed();
+                Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
                 break;
-            case DECREASE_GAME_SPEED:
+            case Bonus.DECREASE_GAME_SPEED:
                 gameConstraints.decSpeed();
+                Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
                 break;
         }
     }

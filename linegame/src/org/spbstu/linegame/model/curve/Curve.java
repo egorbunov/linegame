@@ -1,7 +1,5 @@
 package org.spbstu.linegame.model.curve;
 
-import org.spbstu.linegame.logic.BonusGenerator;
-
 /**
  * That abstract class describes game curve.
  * Class implements Iterable<CurvePoint>, which provides user ability to iterate through points
@@ -15,16 +13,9 @@ import org.spbstu.linegame.logic.BonusGenerator;
  * must have 0 y-coordinate and last must have 1 x-coordinate
  */
 public abstract class Curve implements Iterable<GameCurvePoint> {
-    protected static final float WIDTH = 1f;
-    protected static final float HEIGHT = 1f;
-    protected static final float TAP_TOLERANCE = 0.04f;
-
-    protected float tapX;
-    protected float tapY;
-
-    public Curve() {
-        tapX = tapY = -1f;
-    }
+    static final float WIDTH = 1f;
+    static final float HEIGHT = 1f;
+    static final float TAP_TOLERANCE = 0.04f;
 
     /**
      * indicates, that point (x, y) was tapped, so the curve may be tapped
@@ -35,8 +26,6 @@ public abstract class Curve implements Iterable<GameCurvePoint> {
      * @return true, if point lies on line and else false
      */
     public boolean tap(float x, float y, float curveWidth) {
-        tapX = x;
-        tapY = y;
 
         return false;
     }
@@ -44,9 +33,7 @@ public abstract class Curve implements Iterable<GameCurvePoint> {
     /**
      * indicates, that curve cannot be tapped (finger is not on the screen)
      */
-    public void setNotTapped() {
-        tapX = tapY = -1;
-    }
+    public void setNotTapped() {}
 
     /**
      * That method is used for changing various Curves continuously
@@ -59,4 +46,13 @@ public abstract class Curve implements Iterable<GameCurvePoint> {
      * @param toSkip - how much of height should be scrolled, value \in [0, 1]
      */
     public abstract void nextFrame(float toSkip);
+
+    /**
+     * That method is special for {@link RandomContinuousCurve} curve. Because it stores it's points in {@link PointsCycledArray}
+     * and all points are generated with increasing Y-coordinate, so to draw them on canvas we need to know the Y-coordinate
+     * of the first point
+     */
+    public float getYShift() {
+        return 0.0f;
+    }
 }

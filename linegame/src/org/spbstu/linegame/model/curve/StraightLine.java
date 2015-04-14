@@ -1,12 +1,10 @@
 package org.spbstu.linegame.model.curve;
 
-import org.spbstu.linegame.logic.BonusGenerator;
-
 import java.util.Iterator;
 
 public class StraightLine extends Curve {
-    static final int POINT_NUM = 120;
-    private GameCurvePoint[] points;
+    private static final int POINT_NUM = 120;
+    private final GameCurvePoint[] points;
 
     public StraightLine() {
         super();

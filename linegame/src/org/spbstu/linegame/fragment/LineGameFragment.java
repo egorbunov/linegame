@@ -21,10 +21,10 @@ import org.spbstu.linegame.view.LineGameView;
 
 public class LineGameFragment extends Fragment implements LogicListener {
     private static final int DISTANCE_ANIMATION_VALUE = 10;
-    int lastScoreAnimationValue = 0;
+    private int lastScoreAnimationValue = 0;
 
     private LineGameLogic gameLogic;
-    LineGameView gameView;
+    private LineGameView gameView;
 
     // nested Views
     private TextView centeredTextView;
@@ -101,9 +101,12 @@ public class LineGameFragment extends Fragment implements LogicListener {
 
     @Override
     public void onResume() {
+        super.onResume();
+
         if (!gameLogic.getGameState().equals(LineGameState.STARTING))
             textPulseAnimation.startNow();
-        super.onResume();
+
+        gameView.startDrawingThread();
     }
 
     /**
@@ -143,6 +146,8 @@ public class LineGameFragment extends Fragment implements LogicListener {
                 !gameLogic.getGameState().equals(LineGameState.PAUSED) &&
                 !gameLogic.getGameState().equals(LineGameState.FINISHED))
             gameLogic.pauseGame();
+
+        gameView.destroyDrawingThread();
     }
 
     @Override

@@ -15,7 +15,7 @@ import android.view.ViewTreeObserver;
  */
 public class LineSample extends View {
 
-    Paint paint = null;
+    private Paint paint = null;
     private int width;
     private int height;
 

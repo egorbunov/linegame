@@ -53,11 +53,11 @@ public class RandomContinuousCurve extends Curve {
     private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
         float perimeter = MyMath.distance(p1, p2) + MyMath.distance(p2, p3);
 
-        // Log.d("EGOR, PERIMETER=", String.valueOf(perimetr));
+        Log.d("EGOR, PERIMETER=", String.valueOf(perimeter));
 
-        final float T_STEP = RandomCurveParams.BEZIER2D_STEP / perimeter;
+        final float T_STEP = params.bezier2DStep / perimeter;
 
-        // Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
+        Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -137,6 +137,22 @@ public class RandomContinuousCurve extends Curve {
 
     }
 
+    private void generateNextHandlePointSimple(Point out, final Point cornerPoint, float sign, float lastTangent) {
+        float x = WIDTH / 2 + sign * (params.curveXBound / 2);
+        float y = cornerPoint.getY() + (lastTangent == 0 ? 0 : params.curveXBound / (2 * lastTangent));
+
+        out.setX(x);
+        out.setY(y);
+    }
+
+    private void generateSecondCornerPointSimple(Point out, final Point handle, float sign) {
+        float x = WIDTH / 2;
+        float y = handle.getY() + nextFloat(params.curveYBound, params.curveYBound + RandomCurveParams.MAX_CURVE_Y_BOUND_DELTA);
+
+        out.setX(x);
+        out.setY(y);
+    }
+
     /**
      * That method is generates new curve points and adds them to
      * the point's list (to the end).
@@ -160,9 +176,9 @@ public class RandomContinuousCurve extends Curve {
         Point handlePoint = new Point(0.0f, 0.0f);
         Point secondCorner = new Point(0.0f, 0.0f);
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            generateNextHandlePoint(handlePoint, lastPoint.getPoint(), sign, lastTangent);
+            generateNextHandlePointSimple(handlePoint, lastPoint.getPoint(), sign, lastTangent);
             sign = -sign;
-            generateSecondCornerPoint(secondCorner, handlePoint, sign);
+            generateSecondCornerPointSimple(secondCorner, handlePoint, sign);
 
             lastTangent = (Math.abs(secondCorner.getX() - handlePoint.getX()))
                     / (Math.abs(secondCorner.getY() - handlePoint.getY()));

@@ -1,5 +1,6 @@
 package org.spbstu.linegame.model.curve;
 
+import android.util.Log;
 import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.BonusClickListener;
 import org.spbstu.linegame.utils.MyMath;
@@ -57,6 +58,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
             if (points[lastElementIndex()].compareTo(point) == 0)
                 return;
             // array must be sorted by y-coordinate
+            /* TODO: UNCOMMENT!!!!!! */
             if (points[lastElementIndex()].compareTo(point) > 0)
                 throw new IllegalArgumentException();
         }

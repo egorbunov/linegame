@@ -17,8 +17,8 @@ public class GameConstraints {
     public final static float MAXIMUM_LINE_WIDTH = 90.0f;
     private final static float LINE_WIDTH_DELTA = 0.8f;
     private final static float LINE_THINNING_SPEED_DELTA = 0.1f;
-    public final static float STARTING_CURVE_SPEED = 0.006f;
-    private final static float CURVE_SPEED_DELTA = 0.0004f;
+    public final static float STARTING_CURVE_SPEED = 0.005f;
+    private final static float CURVE_SPEED_DELTA = 0.0005f;
 
     private static final float STARTING_CURVE_Y_BOUND = 0.5f;
     private static final float CURVE_Y_BOUND_DELTA = 0.09f;
@@ -36,8 +36,9 @@ public class GameConstraints {
      */
     public static final int POINT_ON_SCREEN_CAPACITY = 5000;
     private static final int INVISIBLE_LINE_TIMER_DELTA = 10;
-    public static final int GAME_HARDNESS_DIST_STEP = 5;
+    public static final int GAME_HARDNESS_DIST_STEP = 3;
     private static final float MIN_CURVE_SPEED = 0.002f;
+    public static final long LOGIC_DELAY_MILLIS = 15;
 
 
     // variables responsible for game hardness
@@ -106,13 +107,18 @@ public class GameConstraints {
     }
 
     public void incSpeed() {
-        scrollSpeed += CURVE_SPEED_DELTA;
+        //scrollSpeed += CURVE_SPEED_DELTA;
+        if (randomCurveParams.bezier2DStep + RandomCurveParams.BEZIER2D_STEP_DELTA < 1.0)
+            randomCurveParams.bezier2DStep += RandomCurveParams.BEZIER2D_STEP_DELTA;
     }
 
     public void decSpeed() {
-        if (scrollSpeed - CURVE_SPEED_DELTA > MIN_CURVE_SPEED) {
-            scrollSpeed -= CURVE_SPEED_DELTA;
-        }
+//        if (scrollSpeed - CURVE_SPEED_DELTA > MIN_CURVE_SPEED) {
+//            scrollSpeed -= CURVE_SPEED_DELTA;
+//        }
+        if (randomCurveParams.bezier2DStep - RandomCurveParams.BEZIER2D_STEP_DELTA > 0f)
+            randomCurveParams.bezier2DStep -= RandomCurveParams.BEZIER2D_STEP_DELTA;
+
     }
 
     public float getLineThickness() {

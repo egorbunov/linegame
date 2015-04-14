@@ -13,6 +13,7 @@ public class RandomCurveParams {
     public final static float MAX_HANDLE_X_BOUND = 0.90f;
     public final static float MAX_CURVE_Y_BOUND_DELTA = 0.2f;
     public final static float CORNER_HANDLE_BOUND_RATIO = 1.15f;
+    public final static float BEZIER2D_STEP_DELTA = 0.0015f;
 
     /**
      * Every segment of {@link org.spbstu.linegame.model.curve.RandomContinuousCurve} is a Bezier curve with 2 degree
@@ -20,7 +21,7 @@ public class RandomCurveParams {
      *
      * TODO: that variable actually must depend on specific screen resolution.
      */
-    public static final float BEZIER2D_STEP = 0.008f;
+    public static final float BEZIER2D_INIT_STEP = 0.006f;
 
 
 
@@ -41,6 +42,7 @@ public class RandomCurveParams {
      * how can bezier corner point abscissa be
      */
     public float maxCornerXValue;
+    public float bezier2DStep = BEZIER2D_INIT_STEP;
 
     public RandomCurveParams(float initCurveXBound, float initCurveYBound) {
         curveXBound = initCurveXBound;

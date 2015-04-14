@@ -65,7 +65,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
         scoreValueTextView = (TextView) view.findViewById(R.id.ScoreValueTextView);
         scoreValueTextView.setVisibility(View.GONE);
 
-        gameView = (LineGameView)view.findViewById(R.id.LineGameView);
+        gameView = (LineGameView) view.findViewById(R.id.LineGameView);
 
         gameView.setLogic(gameLogic);
 

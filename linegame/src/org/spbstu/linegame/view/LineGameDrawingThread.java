@@ -14,16 +14,13 @@ import org.spbstu.linegame.model.curve.GameCurvePoint;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameDrawingThread extends Thread {
-
-    private final AtomicBoolean isThreadAlive;
+    private boolean isThreadAlive; // TODO: maybe need to be Atomic
 
     private final SurfaceHolder surfaceHolder;
     private Rect surfaceFrame;
     private LineGameLogic gameLogic;
 
-
     private final int backgroundColor;
-
     private Paint tappedCurvePaint;
 
     /**
@@ -45,7 +42,7 @@ class LineGameDrawingThread extends Thread {
     private int tappedCurveColor;
 
     public LineGameDrawingThread(SurfaceHolder surfaceHolder, final Context context) {
-        isThreadAlive = new AtomicBoolean(true);
+        isThreadAlive = true;
 
         this.surfaceHolder = surfaceHolder;
         this.surfaceFrame = surfaceHolder.getSurfaceFrame();
@@ -117,7 +114,7 @@ class LineGameDrawingThread extends Thread {
     }
 
     public void kill() {
-        isThreadAlive.set(false);
+        isThreadAlive = false;
     }
 
     public void setGameLogic(LineGameLogic gameLogic) {
@@ -142,7 +139,7 @@ class LineGameDrawingThread extends Thread {
         super.run();
         Canvas canvas = null;
 
-        while(isThreadAlive.get()) {
+        while(isThreadAlive) {
             // drawing all the game stuff
             try {
                 canvas = surfaceHolder.lockCanvas(null);
@@ -169,6 +166,9 @@ class LineGameDrawingThread extends Thread {
     private void drawLogic(Canvas canvas) {
         if (canvas == null)
             return;
+
+        gameLogic.nextGameFrame();
+
 
         Curve curve = gameLogic.getCurve();
 
@@ -225,8 +225,6 @@ class LineGameDrawingThread extends Thread {
 
             tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
             canvas.drawPath(tappedPath, tappedCurvePaint);
-
-
         }
 
         /*

@@ -59,4 +59,6 @@ public class LineGameView extends SurfaceView implements SurfaceHolder.Callback 
         if (gameDrawingThread != null)
             gameDrawingThread.kill();
     }
+
+
 }

@@ -39,6 +39,8 @@ public class LineGameLogic implements BonusClickListener {
     private LineGameState gameState;
     private float lastScrollSpeed; // I use that variable to correctly pause the game
 
+    //LineGameTask mainGameThreadTask;
+
 
     /**
      * Game passedDistance is stored in that variable.
@@ -50,11 +52,11 @@ public class LineGameLogic implements BonusClickListener {
      */
     private float heightPassed = 0.0f;
 
-
     private void resumeGame() {
         createThinningThread();
         gameConstraints.setScrollSpeed(lastScrollSpeed);
         gameState = LineGameState.RUNNING;
+
         for (LogicListener listener : logicListeners)
             listener.onGameContinued();
     }
@@ -64,21 +66,12 @@ public class LineGameLogic implements BonusClickListener {
             gameConstraints.incLineThickness();
     }
 
-    private void finishTheGame() {
-        destroyThinningThread();
-        gameConstraints.setScrollSpeed(0.0f);
-        gameState = LineGameState.FINISHED;
-        for (LogicListener listener : logicListeners)
-            listener.onGameEnd();
-    }
-
     private void decreaseLineWidth() {
         gameConstraints.decLineThickness();
         if (gameConstraints.getLineThickness() <= GameConstraints.GAME_OVER_LINE_WIDTH) {
             finishTheGame();
         }
     }
-
 
     /**
      * Method must be called on the very beginning of the game. Game
@@ -116,6 +109,28 @@ public class LineGameLogic implements BonusClickListener {
 
         for (LogicListener listener : logicListeners)
             listener.onGameStarted();
+
+    }
+
+    public void pauseGame() {
+        if (!gameState.equals(LineGameState.PAUSED)) {
+            destroyThinningThread();
+            gameState = LineGameState.PAUSED;
+            lastScrollSpeed = gameConstraints.getScrollSpeed();
+            gameConstraints.setScrollSpeed(0.0f);
+
+            for (LogicListener listener : logicListeners)
+                listener.onGamePaused();
+
+        }
+    }
+
+    private void finishTheGame() {
+        destroyThinningThread();
+        gameConstraints.setScrollSpeed(0.0f);
+        gameState = LineGameState.FINISHED;
+        for (LogicListener listener : logicListeners)
+            listener.onGameEnd();
     }
 
     public LineGameLogic() {
@@ -126,8 +141,6 @@ public class LineGameLogic implements BonusClickListener {
         bonusGenerator = new BonusGenerator(gameConstraints.getBonusProbability(),
                 GameConstraints.MIN_BONUS_POINT_NUM,
                 GameConstraints.MAX_BONUS_POINT_NUM);
-
-
 
     }
 
@@ -175,7 +188,6 @@ public class LineGameLogic implements BonusClickListener {
     }
 
     public Curve getCurve() {
-        this.nextCurveFrame();
         return currentCurve;
     }
 
@@ -224,7 +236,6 @@ public class LineGameLogic implements BonusClickListener {
         increaseLineWidth();
     }
 
-
     public void setGameNotTapped() {
         isGameTapped = false;
     }
@@ -237,30 +248,17 @@ public class LineGameLogic implements BonusClickListener {
         logicListeners.addLast(newListener);
     }
 
-    public void pauseGame() {
-        if (!gameState.equals(LineGameState.PAUSED)) {
-            destroyThinningThread();
-            gameState = LineGameState.PAUSED;
-            lastScrollSpeed = gameConstraints.getScrollSpeed();
-            gameConstraints.setScrollSpeed(0.0f);
-
-            for (LogicListener listener : logicListeners)
-                listener.onGamePaused();
-        }
-    }
-
     private int lastLevel = 0;
 
-    private void nextCurveFrame() {
+    public void nextGameFrame() {
+        //Log.d("EGOR speed", String.valueOf(gameConstraints.getScrollSpeed()));
+
         // A little of bonus processing work:
         // ------------------------------
-
         gameConstraints.decImpossibleToMissTimer();
         gameConstraints.decInvisibleLineTimer();
 
         // ------------------------------
-
-        Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
 
         if (!gameState.equals(LineGameState.PAUSED))
             currentCurve.nextFrame(gameConstraints.getScrollSpeed());
@@ -311,11 +309,9 @@ public class LineGameLogic implements BonusClickListener {
                 break;
             case Bonus.INCREASE_GAME_SPEED:
                 gameConstraints.incSpeed();
-                Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
                 break;
             case Bonus.DECREASE_GAME_SPEED:
                 gameConstraints.decSpeed();
-                Log.d("EGOR ", String.valueOf(gameConstraints.getScrollSpeed()));
                 break;
         }
     }

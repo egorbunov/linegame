@@ -53,11 +53,11 @@ public class RandomContinuousCurve extends Curve {
     private void generateBezier2DCurve(Point p1, Point p2, Point p3) {
         float perimeter = MyMath.distance(p1, p2) + MyMath.distance(p2, p3);
 
-        Log.d("EGOR, PERIMETER=", String.valueOf(perimeter));
+        // Log.d("EGOR, PERIMETER=", String.valueOf(perimeter));
 
         final float T_STEP = params.bezier2DStep / perimeter;
 
-        Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
+        // Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -176,9 +176,9 @@ public class RandomContinuousCurve extends Curve {
         Point handlePoint = new Point(0.0f, 0.0f);
         Point secondCorner = new Point(0.0f, 0.0f);
         while (lastPoint.getY() < HEIGHT + points.getFirst().getY()) {
-            generateNextHandlePointSimple(handlePoint, lastPoint.getPoint(), sign, lastTangent);
+            generateNextHandlePoint(handlePoint, lastPoint.getPoint(), sign, lastTangent);
             sign = -sign;
-            generateSecondCornerPointSimple(secondCorner, handlePoint, sign);
+            generateSecondCornerPoint(secondCorner, handlePoint, sign);
 
             lastTangent = (Math.abs(secondCorner.getX() - handlePoint.getX()))
                     / (Math.abs(secondCorner.getY() - handlePoint.getY()));

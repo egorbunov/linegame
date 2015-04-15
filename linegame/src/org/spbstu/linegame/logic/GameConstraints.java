@@ -17,8 +17,8 @@ public class GameConstraints {
     public final static float MAXIMUM_LINE_WIDTH = 90.0f;
     private final static float LINE_WIDTH_DELTA = 0.8f;
     private final static float LINE_THINNING_SPEED_DELTA = 0.1f;
-    public final static int STARTING_CURVE_SPEED = 1; // num of points to skip
-    private final static int CURVE_SPEED_DELTA = 1;
+    public final static float STARTING_CURVE_SPEED = 0.01f;
+    private final static float CURVE_SPEED_DELTA = 0.0005f;
 
     private static final float STARTING_CURVE_Y_BOUND = 0.5f;
     private static final float CURVE_Y_BOUND_DELTA = 0.09f;
@@ -26,19 +26,25 @@ public class GameConstraints {
     private static final float CURVE_X_BOUND_DELTA = 0.09f;
     private static final float INITIAL_BONUS_PROB = 0.25f;
 
-    public static final int MAX_BONUS_POINT_NUM = 20;
+    public static final int MAX_BONUS_POINT_NUM = 30;
     public static final int MIN_BONUS_POINT_NUM = 5;
 
-    private static final int IMPOSSIBLE_TO_MISS_TIMER_DELTA = 20;
+    private static final int IMPOSSIBLE_TO_MISS_TIMER_DELTA = 10;
 
     /**
      * minimal distance between ordinates of successive points
      */
     public static final int POINT_ON_SCREEN_CAPACITY = 5000;
     private static final int INVISIBLE_LINE_TIMER_DELTA = 10;
-    public static final int GAME_HARDNESS_DIST_STEP = 200; // in points
+    public static final float GAME_DIST_STEP = 1.0f; // in points
     private static final float MIN_CURVE_SPEED = 0.002f;
+    public static final int INCREASE_HARDNESS_STEP = 5;
+    public static final float PROB_STEP = 0.02f;
 
+    public static final int LINE_THINNING_THREAD_INIT_DELAY = 30;
+    public static final int LINE_THINNING_THREAD_DELAY_DELTA = 1;
+
+    public static final int LINE_THINNING_THREAD_DELAY_MIN = 5;
 
     // variables responsible for game hardness
     /**
@@ -73,6 +79,7 @@ public class GameConstraints {
      */
     private int impossibleToMissTimer = 0;
     private int invisibleLineTimer = 0;
+    private long thinningThreadDelay = LINE_THINNING_THREAD_INIT_DELAY;
 
     public GameConstraints() {}
 
@@ -107,17 +114,17 @@ public class GameConstraints {
 
     public void incSpeed() {
         scrollSpeed += CURVE_SPEED_DELTA;
-        /*if (randomCurveParams.bezier2DStep + RandomCurveParams.BEZIER2D_STEP_DELTA < 1.0)
-            randomCurveParams.bezier2DStep += RandomCurveParams.BEZIER2D_STEP_DELTA;*/
+        /* BAD APPROACH: if (randomCurveParams.bezier2DStep + RandomCurveParams.BEZIER_STEP_DELTA < 0.03)
+            randomCurveParams.bezier2DStep += RandomCurveParams.BEZIER_STEP_DELTA;
+            */
     }
 
     public void decSpeed() {
         if (scrollSpeed - CURVE_SPEED_DELTA > MIN_CURVE_SPEED) {
             scrollSpeed -= CURVE_SPEED_DELTA;
         }
-        /*if (randomCurveParams.bezier2DStep - RandomCurveParams.BEZIER2D_STEP_DELTA > 0f)
-            randomCurveParams.bezier2DStep -= RandomCurveParams.BEZIER2D_STEP_DELTA;*/
-
+        /* BAD APPROACH: if (randomCurveParams.bezier2DStep -  RandomCurveParams.BEZIER_STEP_DELTA > RandomCurveParams.BEZIER2D_INIT_STEP - 0.005)
+            randomCurveParams.bezier2DStep -= RandomCurveParams.BEZIER_STEP_DELTA;*/
     }
 
     public float getLineThickness() {
@@ -168,5 +175,19 @@ public class GameConstraints {
 
     public void incInvisibleLineTimer() {
         invisibleLineTimer += INVISIBLE_LINE_TIMER_DELTA;
+    }
+
+    public long getThinningThreadDelay() {
+        return thinningThreadDelay;
+    }
+
+    public void incThinningThreadDelay() {
+        thinningThreadDelay += LINE_THINNING_THREAD_DELAY_DELTA;
+    }
+
+    public void decThinningThreadDelay() {
+        if (thinningThreadDelay - LINE_THINNING_THREAD_DELAY_DELTA > LINE_THINNING_THREAD_DELAY_MIN) {
+            thinningThreadDelay -= LINE_THINNING_THREAD_DELAY_DELTA;
+        }
     }
 }

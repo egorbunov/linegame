@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class BonusGenerator {
     private final Random random = new Random();
-    private final float bonusProbability;
+    private float bonusProbability;
     private final int minBonusPointNum;
     private final int maxBonusPointNum;
     /**
@@ -22,6 +22,13 @@ public class BonusGenerator {
         this.maxBonusPointNum = maxBonusPointNum;
     }
 
+    public void setBonusProbability(float prob) {
+        bonusProbability = prob;
+    }
+
+    public float getBonusProbability() {
+        return bonusProbability;
+    }
     public char generateRandomBonus() {
         if (random.nextFloat() < (1 - bonusProbability)) {
             return Bonus.NO_BONUS;

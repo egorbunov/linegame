@@ -236,6 +236,7 @@ class LineGameDrawingThread extends Thread {
             }
 
             if (curPoint.bonusId == Bonus.NO_BONUS) {
+                curBonus = -1;
                 if (lastMoveMainX != -1) {
                     bonusPaths[0].moveTo(lastMoveMainX, lastMoveMainY);
                     lastMoveMainX = -1;

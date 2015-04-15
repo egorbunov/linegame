@@ -217,8 +217,8 @@ public class RandomContinuousCurve extends Curve {
     // TODO: make point skip faster by using binary search
     @Override
     public void nextFrame(float toSkip) {
-        // deleting skipped points
-        points.deleteKFirst((int) toSkip);
+        points.skipYDist(toSkip);
+        // points.deleteKFirst((int) toSkip);
 
         generatePoints();
     }

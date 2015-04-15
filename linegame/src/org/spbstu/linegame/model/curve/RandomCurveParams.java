@@ -25,7 +25,7 @@ public class RandomCurveParams {
      * TODO: that variable actually must depend on specific screen resolution.
      */
     public static final float BEZIER2D_INIT_STEP = 0.0110f;
-
+    public static final float BEZIER_STEP_DELTA = 0.002f;
 
 
     /**

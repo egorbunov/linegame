@@ -16,11 +16,6 @@ public class LineGameLogic implements BonusClickListener {
      */
     private final LinkedList<LogicListener> logicListeners;
 
-    /**
-     * singleton runnable for thinning line width if no finger on touch screen
-     */
-    private MortalRunnable lineThinningTask;
-    private static final int LINE_THINNING_THREAD_DELAY = 25;
 
     /**
      * That is a boolean variable., which indicates if the finger is down on the screen now.
@@ -40,6 +35,11 @@ public class LineGameLogic implements BonusClickListener {
     private float lastScrollSpeed; // I use that variable to correctly pause the game
 
     //LineGameTask mainGameThreadTask;
+
+    /**
+     * singleton runnable for thinning line width if no finger on touch screen
+     */
+    LineThinningTask lineThinningTask;
 
 
     /**
@@ -152,31 +152,7 @@ public class LineGameLogic implements BonusClickListener {
      * game is actually starts only after first tap.
      */
     private void createThinningThread() {
-        lineThinningTask = new MortalRunnable() {
-
-            private final AtomicBoolean isThreadRunning = new AtomicBoolean(true);
-
-            @Override
-            public void kill() {
-                isThreadRunning.set(false);
-            }
-
-            @Override
-            public void run() {
-                while (isThreadRunning.get()) {
-                    try {
-                        Thread.sleep(LINE_THINNING_THREAD_DELAY);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace(); // TODO: is it ok just to print stack trace?
-                    }
-                    // next call actually make line thinner (if nobody touches the screen)
-                    if (!isGameTapped && gameState.equals(LineGameState.RUNNING)) {
-                        currentCurve.setNotTapped();
-                        tapMissed();
-                    }
-                }
-            }
-        };
+        lineThinningTask = new LineThinningTask(this);
         new Thread(lineThinningTask).start();
     }
 
@@ -223,8 +199,10 @@ public class LineGameLogic implements BonusClickListener {
 
     /**
      * There all the bad for player stuff happens. More tapMissed() => closer the game over
+     *
+     * Package local because of line thinning task
      */
-    private void tapMissed() {
+    void tapMissed() {
        decreaseLineWidth();
     }
 
@@ -265,19 +243,31 @@ public class LineGameLogic implements BonusClickListener {
 
         heightPassed += gameConstraints.getScrollSpeed();
 
-        if (heightPassed >= GameConstraints.GAME_HARDNESS_DIST_STEP) {
+        if (heightPassed >= GameConstraints.GAME_DIST_STEP) {
             passedDistance += 1;
+
             for (LogicListener l : logicListeners) {
                 l.onDistanceChanged(passedDistance);
             }
+
             heightPassed = 0.0f;
 
-            if (passedDistance - lastLevel == GameConstraints.GAME_HARDNESS_DIST_STEP) {
+            if (passedDistance - lastLevel == GameConstraints.INCREASE_HARDNESS_STEP) {
                 lastLevel = passedDistance;
                 gameConstraints.incCurveXBound();
                 gameConstraints.decCurveYBound();
                 gameConstraints.incSpeed();
+                gameConstraints.decThinningThreadDelay();
+
+                bonusGenerator.setBonusProbability((bonusGenerator.getBonusProbability() - GameConstraints.PROB_STEP) > 0.0f ?
+                        (bonusGenerator.getBonusProbability() - GameConstraints.PROB_STEP) : bonusGenerator.getBonusProbability());
+
+                Log.d("EGOR", "Thin delay = " + gameConstraints.getThinningThreadDelay());
+
             }
+
+            Log.d("EGOR: ", "CurveXBonud = " + gameConstraints.getRandomCurveParams().curveXBound + "; " +
+                    "CurveYBound = " + gameConstraints.getRandomCurveParams().curveYBound);
         }
 
     }
@@ -320,4 +310,7 @@ public class LineGameLogic implements BonusClickListener {
         return passedDistance;
     }
 
+    public boolean isGameTapped() {
+        return isGameTapped;
+    }
 }

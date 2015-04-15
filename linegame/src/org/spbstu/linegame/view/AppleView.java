@@ -177,8 +177,8 @@ public class AppleView extends View {
     private void computeToCenterTranslation() {
         RectF rect = getAppleRect();
 
-        toCenterTranslation[0] = width / 2 - rect.centerX();
-        toCenterTranslation[1] = height / 2 - rect.centerY();
+        toCenterTranslation[0] = width / 2.0f - rect.centerX();
+        toCenterTranslation[1] = height / 2.0f - rect.centerY();
     }
 
     public void startAppleAnimation() {

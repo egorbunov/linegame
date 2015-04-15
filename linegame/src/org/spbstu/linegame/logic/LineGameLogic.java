@@ -265,7 +265,7 @@ public class LineGameLogic implements BonusClickListener {
 
         heightPassed += gameConstraints.getScrollSpeed();
 
-        if (heightPassed >= 1.0f) {
+        if (heightPassed >= GameConstraints.GAME_HARDNESS_DIST_STEP) {
             passedDistance += 1;
             for (LogicListener l : logicListeners) {
                 l.onDistanceChanged(passedDistance);

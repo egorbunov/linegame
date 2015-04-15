@@ -1,11 +1,14 @@
 package org.spbstu.linegame.model.curve;
 
 import android.util.Log;
+import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.BonusGenerator;
 import org.spbstu.linegame.utils.MyMath;
 import org.spbstu.linegame.utils.Point;
 
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomContinuousCurve extends Curve {
@@ -57,7 +60,7 @@ public class RandomContinuousCurve extends Curve {
 
         final float T_STEP = params.bezier2DStep / perimeter;
 
-        // Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
+        Log.d("EGOR.", "Point count on curve = " + 1 / T_STEP + "; Points in array = " + points.size() + "; CAPACITY = " + points.getCapacity());
 
         final float p1p2x = p2.getX() - p1.getX();
         final float p1p2y = p2.getY() - p1.getY();
@@ -68,9 +71,10 @@ public class RandomContinuousCurve extends Curve {
         char b = bonusGenerator.generateRandomBonus();
         int num = bonusGenerator.getNumOfPointsInBonus();
 
-        // Log.d("EGOR:", "Bonus = " + b.toString() + "; num_p = " + num);
+        Log.d("EGOR:", "Bonus = " + Bonus.BONUS_NAME_BY_ID[b] + "; num_p = " + num);
 
-        points.addLast(new GameCurvePoint(p1));
+        GameCurvePoint tmp = new GameCurvePoint(p1);
+        points.addLast(tmp);
         for (float t = T_STEP; t < 1.0f; t += T_STEP) {
             ax = p1p2x * t + p1.getX();
             ay = p1p2y * t + p1.getY();
@@ -81,10 +85,13 @@ public class RandomContinuousCurve extends Curve {
                 p.setBonusId(b);
                 num--;
             }
+
+            if (p.getY() <= points.getLast().getY())
+                continue;
             points.addLast(p);
         }
-        points.addLast(new GameCurvePoint(p3));
-
+        tmp = new GameCurvePoint(p3);
+        points.addLast(tmp);
     }
 
     private float nextFloat(float l, float r) {
@@ -211,9 +218,12 @@ public class RandomContinuousCurve extends Curve {
     @Override
     public void nextFrame(float toSkip) {
         // deleting skipped points
-        points.skipYDist(toSkip);
+        points.deleteKFirst((int) toSkip);
+
         generatePoints();
     }
+
+
 
     @Override
     public Iterator<GameCurvePoint> iterator() {
@@ -223,5 +233,10 @@ public class RandomContinuousCurve extends Curve {
     @Override
     public float getYShift() {
         return - points.getFirst().getY();
+    }
+
+    @Override
+    public int getPointNum() {
+        return points.size();
     }
 }

@@ -1,6 +1,7 @@
 package org.spbstu.linegame.model.curve;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class StraightLine extends Curve {
     private static final int POINT_NUM = 120;
@@ -48,6 +49,11 @@ public class StraightLine extends Curve {
         // there is no next frame for straight line, because it's straight
     }
 
+    @Override
+    public int getPointNum() {
+        return POINT_NUM;
+    }
+
 
     @Override
     public Iterator<GameCurvePoint> iterator() {
@@ -60,6 +66,9 @@ public class StraightLine extends Curve {
 
             @Override
             public GameCurvePoint next() {
+                if (curIndex >= points.length) {
+                    throw new NoSuchElementException();
+                }
                 return points[curIndex++];
             }
 

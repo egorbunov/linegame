@@ -88,6 +88,8 @@ public class LineGameFragment extends Fragment implements LogicListener {
                     case MotionEvent.ACTION_CANCEL:
                         gameLogic.setGameNotTapped();
                         break;
+                    default:
+                        break;
                 }
                 return true;
             }
@@ -129,7 +131,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
     private void updateBestScore() {
         // saving new best score
         SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int bestScore = Integer.valueOf(sharedPreferences.getString(MainActivity.BEST_SCORE_KEY, "0"));
+        int bestScore = Integer.parseInt(sharedPreferences.getString(MainActivity.BEST_SCORE_KEY, "0"));
 
         if (bestScore < gameLogic.getPassedDistance()) {
             SharedPreferences.Editor ed = sharedPreferences.edit();
@@ -159,6 +161,7 @@ public class LineGameFragment extends Fragment implements LogicListener {
         gameOverTextAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
+                gameView.setOnTouchListener(null);
             }
 
             @Override

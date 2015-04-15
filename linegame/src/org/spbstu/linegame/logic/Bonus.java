@@ -27,6 +27,11 @@ public class Bonus {
             SUDDEN_DEATH, DECREASE_GAME_SPEED, INCREASE_GAME_SPEED
     };
 
+    public final static String[] BONUS_NAME_BY_ID = {
+            "NO_BONUS", "DECREASE_THICKENING_SPEED", "INCREASE_THICKENING_SPEED", "INVISIBLE_LINE", "IMPOSSIBLE_TO_MISS",
+            "SUDDEN_DEATH", "DECREASE_GAME_SPEED", "INCREASE_GAME_SPEED"
+    };
+
     public static char getBonusNum() {
         return (char) (ALL_BONUSES.length);
     }

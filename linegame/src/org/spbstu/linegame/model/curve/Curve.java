@@ -1,5 +1,9 @@
 package org.spbstu.linegame.model.curve;
 
+import org.spbstu.linegame.utils.Point;
+
+import java.util.List;
+
 /**
  * That abstract class describes game curve.
  * Class implements Iterable<CurvePoint>, which provides user ability to iterate through points
@@ -55,4 +59,6 @@ public abstract class Curve implements Iterable<GameCurvePoint> {
     public float getYShift() {
         return 0.0f;
     }
+
+    public abstract int getPointNum();
 }

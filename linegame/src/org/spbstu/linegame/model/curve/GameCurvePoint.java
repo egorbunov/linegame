@@ -24,7 +24,8 @@ public class GameCurvePoint extends TapableObject implements Comparable<GameCurv
         this.bonusId = bonusId;
     }
 
-    private char bonusId = Bonus.NO_BONUS;
+    public char bonusId = Bonus.NO_BONUS;
+
 
     public GameCurvePoint(float x, float y) {
         super();
@@ -36,8 +37,8 @@ public class GameCurvePoint extends TapableObject implements Comparable<GameCurv
         this.point = point;
     }
 
-    public float getX() {return point.getX();}
-    public float getY() {return point.getY();}
+    public float getX() {return point.x;}
+    public float getY() {return point.y;}
     public Point getPoint() {return point; }
 
     public void setX(float x) { point.setX(x);}

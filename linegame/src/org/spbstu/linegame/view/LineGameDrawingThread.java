@@ -2,7 +2,10 @@ package org.spbstu.linegame.view;
 
 
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.view.SurfaceHolder;
 
 import org.spbstu.linegame.R;
@@ -10,7 +13,9 @@ import org.spbstu.linegame.logic.Bonus;
 import org.spbstu.linegame.logic.LineGameLogic;
 import org.spbstu.linegame.model.curve.Curve;
 import org.spbstu.linegame.model.curve.GameCurvePoint;
+import org.spbstu.linegame.utils.Point;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 class LineGameDrawingThread extends Thread {
@@ -41,6 +46,11 @@ class LineGameDrawingThread extends Thread {
     private int mainCurveColor;
     private int tappedCurveColor;
 
+    // for drawing by lines
+    private static final int INIT_POINT_NUM = 250;
+    MyLines tappedLines = new MyLines(INIT_POINT_NUM);
+    MyLines[] bonusLines = new MyLines[Bonus.getBonusNum()];
+
     public LineGameDrawingThread(SurfaceHolder surfaceHolder, final Context context) {
         isThreadAlive = true;
 
@@ -54,18 +64,21 @@ class LineGameDrawingThread extends Thread {
             bonusPaths[b] = new Path();
         }
 
+        for (int i = 0; i < bonusLines.length; ++i) {
+            bonusLines[i] = new MyLines(INIT_POINT_NUM);
+        }
+
         preparePaints(context);
     }
 
     private void preparePaints(Context context) {
         Paint mainCurvePaint = new Paint();
         mainCurveColor = context.getResources().getColor(R.color.main_line_color);
-        mainCurvePaint.setDither(true);
+        mainCurvePaint.setDither(false);
         mainCurvePaint.setStyle(Paint.Style.STROKE);
         mainCurvePaint.setStrokeJoin(Paint.Join.ROUND);
         mainCurvePaint.setStrokeCap(Paint.Cap.ROUND);
         mainCurvePaint.setColor(mainCurveColor);
-        mainCurvePaint.setAntiAlias(true);
 
         tappedCurvePaint = new Paint();
         tappedCurveColor = context.getResources().getColor(R.color.tapped_line_color);
@@ -169,7 +182,11 @@ class LineGameDrawingThread extends Thread {
 
         gameLogic.nextGameFrame();
 
+        //drawLogicWithLines(canvas);
+        drawLogicWithPaths(canvas);
+    }
 
+    private void drawLogicWithPaths(Canvas canvas) {
         Curve curve = gameLogic.getCurve();
 
         GameCurvePoint prevPoint = null;
@@ -180,30 +197,54 @@ class LineGameDrawingThread extends Thread {
 
         float shiftY = curve.getYShift();
 
+        float lastMoveTappedX = -1, lastMoveTappedY = -1;
+        float lastMoveMainX = -1, lastMoveMainY = -1;
+        int curBonus = -1;
+
         float sx, sy; // scaled point coordinates
         for (GameCurvePoint curPoint : curve) {
             sy = scaleHeight(curPoint.getY() + shiftY);
             sx = scaleWidth(curPoint.getX());
             if (prevPoint == null) {
-                tappedPath.moveTo(sx, sy);
+                lastMoveTappedX = sx;
+                lastMoveTappedY = sy;
                 for (Path p : bonusPaths) {
                     p.moveTo(sx, sy);
                 }
+                prevPoint = curPoint;
+                continue;
             }
 
-        	if (curPoint.isTapped()) {
+            if (curPoint.isTapped()) {
+                if (lastMoveTappedX != -1) {
+                    tappedPath.moveTo(lastMoveTappedX, lastMoveTappedY);
+                    lastMoveTappedX = -1;
+                }
                 tappedPath.lineTo(sx, sy);
             } else {
-                tappedPath.moveTo(sx, sy);
+                lastMoveTappedX = sx;
+                lastMoveTappedY = sy;
             }
 
-            for (char b : Bonus.ALL_BONUSES) {
-                Path curPath = bonusPaths[b];
-                if (curPoint.getBonusId() == b) {
-                    curPath.lineTo(sx, sy);
-                } else {
-                    curPath.moveTo(sx, sy);
+            if (curPoint.bonusId != Bonus.NO_BONUS) {
+                if (curBonus == -1 || curBonus != curPoint.bonusId) {
+                    bonusPaths[curPoint.bonusId].moveTo(sx, sy);
+                    curBonus = curPoint.bonusId;
                 }
+                if (curBonus == curPoint.bonusId)
+                    bonusPaths[curBonus].lineTo(sx, sy);
+            }
+
+            if (curPoint.bonusId == Bonus.NO_BONUS) {
+                if (lastMoveMainX != -1) {
+                    bonusPaths[0].moveTo(lastMoveMainX, lastMoveMainY);
+                    lastMoveMainX = -1;
+                }
+                bonusPaths[0].lineTo(sx, sy);
+            }
+            else {
+                lastMoveMainX = sx;
+                lastMoveMainY = sy;
             }
 
             prevPoint = curPoint;
@@ -226,23 +267,70 @@ class LineGameDrawingThread extends Thread {
             tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
             canvas.drawPath(tappedPath, tappedCurvePaint);
         }
-
-        /*
-        TODO: delete
-        Paint tmp = new Paint();
-        tmp.setColor(Color.RED);
-        tmp.setStrokeWidth(2);
-        RandomCurveParams p = gameLogic.getCurveParams();
-        if (p != null) {
-            canvas.drawLine(scaleWidth(0.5f - p.curveXBound / 2f), 0.0f, scaleWidth(0.5f - p.curveXBound / 2f), scaleHeight(1.0f), tmp);
-            canvas.drawLine(scaleWidth(0.5f + p.curveXBound / 2f), 0.0f, scaleWidth(0.5f + p.curveXBound / 2f), scaleHeight(1.0f), tmp);
-            tmp.setColor(Color.GREEN);
-            canvas.drawLine(scaleWidth(0.5f - p.maxCornerXValue / 2f), 0.0f, scaleWidth(0.5f - p.maxCornerXValue / 2f), scaleHeight(1.0f), tmp);
-            canvas.drawLine(scaleWidth(0.5f + p.maxCornerXValue / 2f), 0.0f, scaleWidth(0.5f + p.maxCornerXValue / 2f), scaleHeight(1.0f), tmp);
-        }
-        */
-
     }
+
+    private void drawLogicWithLines(Canvas canvas) {
+        Curve curve = gameLogic.getCurve();
+
+        GameCurvePoint prevPoint = null;
+        tappedLines.reset();
+        tappedLines.resize(curve.getPointNum());
+        for (MyLines p : bonusLines) {
+            p.reset();
+            p.resize(curve.getPointNum());
+        }
+
+        float shiftY = curve.getYShift();
+
+        float sx, sy; // scaled point coordinates
+        for (GameCurvePoint curPoint : curve) {
+            sy = scaleHeight(curPoint.getY() + shiftY);
+            sx = scaleWidth(curPoint.getX());
+            if (prevPoint == null) {
+                tappedLines.moveTo(sx, sy);
+                for (MyLines p : bonusLines) {
+                    p.moveTo(sx, sy);
+                }
+            }
+
+            if (curPoint.isTapped()) {
+                tappedLines.lineTo(sx, sy);
+            } else {
+                tappedLines.moveTo(sx, sy);
+            }
+
+            char bonus = curPoint.getBonusId();
+            for (char b : Bonus.ALL_BONUSES) {
+                MyLines curPath = bonusLines[b];
+                if (bonus == b) {
+                    curPath.lineTo(sx, sy);
+                } else {
+                    curPath.moveTo(sx, sy);
+                }
+            }
+
+            prevPoint = curPoint;
+        }
+
+        if (gameLogic.getGameConstraints().getInvisibleLineTimer() == 0) {
+            if (gameLogic.getGameConstraints().getImpossibleToMissTimer() > 0) {
+                bonusPaintsMap[Bonus.NO_BONUS].setColor(tappedCurveColor);
+            } else {
+                bonusPaintsMap[Bonus.NO_BONUS].setColor(mainCurveColor);
+            }
+
+            for (char b : Bonus.ALL_BONUSES) {
+                MyLines curPath = bonusLines[b];
+                Paint paint = bonusPaintsMap[b];
+                paint.setStrokeWidth(gameLogic.getLineThickness());
+                canvas.drawLines(curPath.lines, 0, curPath.size, paint);
+            }
+
+            tappedCurvePaint.setStrokeWidth(gameLogic.getLineThickness());
+            canvas.drawLines(tappedLines.lines, 0, tappedLines.size, tappedCurvePaint);
+        }
+    }
+
 
     /**
      * Scales the value in [0, 1] to [0, surface.width()]

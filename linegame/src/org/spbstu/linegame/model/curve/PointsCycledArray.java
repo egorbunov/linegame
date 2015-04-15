@@ -23,7 +23,7 @@ import java.util.Iterator;
  * Also that class can signal listeners, that bonus was clicked!!! =)
  */
 public final class PointsCycledArray implements Iterable<GameCurvePoint> {
-    private GameCurvePoint[] points;
+    final GameCurvePoint[] points;
     // because array is cycled we need to store end and start
     // start can be > end
     private int start;
@@ -107,7 +107,7 @@ public final class PointsCycledArray implements Iterable<GameCurvePoint> {
         return toReturn;
     }
 
-    private void deleteKFirst(int k) {
+    public void deleteKFirst(int k) {
         if (start + k < points.length) {
             // Arrays.fill(points, start, start + k, null);
             start = start + k;

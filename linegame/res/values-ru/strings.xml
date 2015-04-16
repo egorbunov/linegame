@@ -4,7 +4,7 @@
     <string name="app_name">Линия</string>
     <string name="new_game_button_string">Новая игра</string>
     <string name="rules_btn_string">Правила</string>
-    <string name="tap_to_start_string">Коснись экрана чтобы начать!</string>
+    <string name="tap_to_start_string">Коснись экрана, чтобы начать!</string>
     <string name="tap_to_continue_string">Коснись экрана для продолжения!</string>
     <string name="game_over_string">Вы проиграли!</string>
     <string name="dist_text_string">расстояние</string>
